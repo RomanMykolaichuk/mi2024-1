@@ -1,6 +1,6 @@
 # MI2024 Interactive — master matrix
 
-> Статусна матриця reusable інтерактивного web-шару. Вихідні назви не вигадуються: `verified`, `verified-from-task`, `source-derived` і `source-gap` зберігають походження назви.
+> Статусна матриця reusable інтерактивного web-шару. Вихідні назви не вигадуються: `verified`, `verified-from-task`, `verified-user-supplied`, `source-derived` і, якщо виникне, `source-gap` зберігають походження назви.
 
 ## Архітектурний принцип
 
@@ -36,7 +36,7 @@
 | 4.7 | `Theme4/Group lesson 7` · deep learning | analysis | DL experiment mission | **implemented** |
 | 4.8 | `Theme4/practice8` · TensorFlow | analysis | TensorFlow task mission | **implemented** |
 | 4.9 | `Theme4/Group lesson 9` · graphical information | analysis | Convolution Lab | **implemented** |
-| 4.10 | окремого primary source не знайдено | analysis | не вигадується | **source-gap** |
+| 4.10 | `Theme4/Practice 10/{content,task,sample}.ipynb` · **Практичне використання методів глибокого навчання в межах виконання індивідуальних (групових) проектів** · `verified-user-supplied` | analysis/project | Architecture Lab + Individual/Group Project Missions + readiness gate | **implemented** |
 | 4.11 | `Theme4/aLection11` · перспективні напрями | analysis/enablement | Frontier method selector | **implemented** |
 | 4.12 | `Theme4/Group lesson 12` · Transfer Learning + RL | analysis | Transfer/RL Lab | **implemented** |
 | 4.13 | `Theme4/Practice 13` · model repositories in projects | project | Project Design Mission | **implemented** |
@@ -68,7 +68,7 @@
 `data-quality-lab`, `eda-explorer`, `transformation-lab`, `split-leakage-lab`, `readiness-scorecard`
 
 ### Theme 4 — analysis / AI
-`method-selector`, `metric-tradeoff-lab`, `neural-network-lab`, `convolution-lab`, `transfer-rl-lab`, `text-analysis-lab`
+`method-selector`, `metric-tradeoff-lab`, `neural-network-lab`, `convolution-lab`, `transfer-rl-lab`, `text-analysis-lab`; 4.10 додатково повторно використовує core `workflow-mission-lab`, `decision-tradeoff` та shared `readiness-scorecard`.
 
 ### Theme 5 — visualization
 `visual-encoding-lab`, `dashboard-builder`, `design-critique-lab`, `audience-adaptation-lab`, `visualization-mission-lab`, `insight-brief-lab`
@@ -81,7 +81,9 @@
 - Browser simulation не підміняє live scraping, реальний PostgreSQL, Jupyter, Apps Script або зовнішні API.
 - Scaling/imputation/feature selection, що навчаються з даних, fit-яться лише на train після split.
 - Held-out test не використовується для model/hyperparameter selection.
+- DL project має baseline, clean evaluation, error analysis, reproducibility та limitations; high training score не є самодостатнім результатом.
+- Груповий DL project має один shared problem/experiment protocol, review history та integrated final run.
 - GenAI output відокремлюється від source evidence та проходить human review.
 - Visual encoding визначається analytical question/data/audience, а не декоративністю.
 - Secrets та sensitive data не зберігаються у Git/static web-layer.
-- `source-derived` і `source-gap` не маскуються під verified source titles.
+- Provenance labels (`verified-user-supplied`, `source-derived`, `source-gap`) не маскуються під інший тип джерела.
