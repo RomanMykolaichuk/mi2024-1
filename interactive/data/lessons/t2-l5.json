@@ -1,0 +1,94 @@
+{
+  "id": "t2-l5",
+  "title": "Реляційна база даних та SQL",
+  "type": "practice",
+  "pipeline": {
+    "active": "storage",
+    "stages": [
+      {"id":"sources","label":"Джерела","description":"Первинні джерела і файли, з яких надходять дані.","output":"необроблені дані"},
+      {"id":"collection","label":"Збір","description":"Фіксація та отримання даних із визначених джерел.","output":"зібраний масив"},
+      {"id":"storage","label":"Зберігання","description":"Структурування даних у реляційній схемі, контроль ключів і цілісності.","output":"пов’язані таблиці, придатні до SQL-запитів"},
+      {"id":"preparation","label":"Підготовка","description":"Очищення, узгодження форматів і підготовка ознак.","output":"якісний набір даних"},
+      {"id":"analysis","label":"Аналіз","description":"Запити, агрегації та моделі перетворюють дані на показники.","output":"метрики й аналітичні результати"},
+      {"id":"visualization","label":"Візуалізація","description":"Результати подаються у графіках, таблицях і dashboards.","output":"зрозуміле представлення"},
+      {"id":"decision","label":"Підтримка рішення","description":"Аналітик інтерпретує результат у контексті задачі.","output":"обґрунтований висновок"}
+    ]
+  },
+  "schema": {
+    "variants": [
+      {
+        "label":"Оперативні підрозділи","title":"Officers ↔ Units","context":"Побудуйте зв’язок між довідником підрозділів і записами про призначення персоналу.",
+        "parent":{"name":"units","columns":["unit_id","unit_name","base_location","commander"],"pk":"unit_id"},
+        "child":{"name":"officers","columns":["id","name","rank","unit_id","date_assigned"],"fk":"unit_id"},
+        "feedback":"units.unit_id є PRIMARY KEY, а officers.unit_id — FOREIGN KEY, тому один підрозділ може мати багато пов’язаних записів персоналу.",
+        "ddl":"CREATE TABLE units (\n  unit_id integer PRIMARY KEY,\n  unit_name varchar(100) NOT NULL,\n  base_location varchar(100),\n  commander varchar(100)\n);\n\nCREATE TABLE officers (\n  id integer GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  name varchar(100) NOT NULL,\n  rank varchar(50),\n  unit_id integer NOT NULL REFERENCES units(unit_id),\n  date_assigned date NOT NULL\n);"
+      },
+      {
+        "label":"Логістика","title":"Logistics Personnel ↔ Logistics Units","context":"Пов’яжіть персонал логістичного забезпечення з відповідними логістичними підрозділами.",
+        "parent":{"name":"logistics_units","columns":["logistics_unit_id","logistics_unit_name","supplies_available","base_location"],"pk":"logistics_unit_id"},
+        "child":{"name":"logistics_personnel","columns":["id","name","position","logistics_unit_id","date_assigned"],"fk":"logistics_unit_id"},
+        "feedback":"Ключ підрозділу зберігається один раз у довіднику та використовується як FK у таблиці персоналу.",
+        "ddl":"CREATE TABLE logistics_units (\n  logistics_unit_id integer PRIMARY KEY,\n  logistics_unit_name varchar(100) NOT NULL,\n  supplies_available integer,\n  base_location varchar(100)\n);\n\nCREATE TABLE logistics_personnel (\n  id integer GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  name varchar(100) NOT NULL,\n  position varchar(100),\n  logistics_unit_id integer REFERENCES logistics_units(logistics_unit_id),\n  date_assigned date\n);"
+      },
+      {
+        "label":"Операції","title":"Operations Staff ↔ Operations","context":"Спроєктуйте зв’язок між операціями та персоналом, який до них призначений.",
+        "parent":{"name":"operations","columns":["operation_id","operation_name","commander","operation_start_date","operation_end_date"],"pk":"operation_id"},
+        "child":{"name":"operations_staff","columns":["id","name","role","operation_id","date_assigned"],"fk":"operation_id"},
+        "feedback":"operations.operation_id ідентифікує операцію; operations_staff.operation_id забезпечує зв’язок many-to-one.",
+        "ddl":"CREATE TABLE operations (\n  operation_id integer PRIMARY KEY,\n  operation_name varchar(100) NOT NULL,\n  commander varchar(100),\n  operation_start_date date,\n  operation_end_date date\n);\n\nCREATE TABLE operations_staff (\n  id integer GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  name varchar(100) NOT NULL,\n  role varchar(100),\n  operation_id integer REFERENCES operations(operation_id),\n  date_assigned date\n);"
+      },
+      {
+        "label":"Техніка","title":"Equipment Personnel ↔ Equipment","context":"Визначте ключі для обліку техніки та призначеного до неї персоналу.",
+        "parent":{"name":"equipment","columns":["equipment_id","equipment_type","condition","last_inspection_date"],"pk":"equipment_id"},
+        "child":{"name":"equipment_personnel","columns":["id","name","role","equipment_id","assigned_unit"],"fk":"equipment_id"},
+        "feedback":"equipment_id пов’язує довідковий запис про техніку з персоналом без дублювання характеристик техніки в кожному рядку.",
+        "ddl":"CREATE TABLE equipment (\n  equipment_id integer PRIMARY KEY,\n  equipment_type varchar(100) NOT NULL,\n  condition varchar(50),\n  last_inspection_date date\n);\n\nCREATE TABLE equipment_personnel (\n  id integer GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  name varchar(100) NOT NULL,\n  role varchar(100),\n  equipment_id integer REFERENCES equipment(equipment_id),\n  assigned_unit varchar(100)\n);"
+      },
+      {
+        "label":"Озброєння","title":"Weapons Personnel ↔ Weapons","context":"Побудуйте реляційний зв’язок для навчального обліку категорій озброєння та відповідального персоналу.",
+        "parent":{"name":"weapons","columns":["weapon_id","weapon_type","ammunition_available","last_inspection_date"],"pk":"weapon_id"},
+        "child":{"name":"weapons_personnel","columns":["id","name","rank","weapon_id","assigned_unit"],"fk":"weapon_id"},
+        "feedback":"weapon_id є стабільним ідентифікатором, через який таблиці поєднуються без повторення опису об’єкта.",
+        "ddl":"CREATE TABLE weapons (\n  weapon_id integer PRIMARY KEY,\n  weapon_type varchar(100) NOT NULL,\n  ammunition_available integer,\n  last_inspection_date date\n);\n\nCREATE TABLE weapons_personnel (\n  id integer GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  name varchar(100) NOT NULL,\n  rank varchar(50),\n  weapon_id integer REFERENCES weapons(weapon_id),\n  assigned_unit varchar(100)\n);"
+      },
+      {
+        "label":"Навчання","title":"Training Personnel ↔ Training Programs","context":"Цей варіант використовується далі у SQL Mission Lab. Визначте зв’язок між навчальними програмами та учасниками.",
+        "parent":{"name":"training_programs","columns":["training_program_id","program_name","instructor","start_date","end_date"],"pk":"training_program_id"},
+        "child":{"name":"training_personnel","columns":["id","name","rank","training_program_id","date_enrolled"],"fk":"training_program_id"},
+        "feedback":"training_programs.training_program_id — PK; training_personnel.training_program_id — FK. Така схема дозволяє JOIN і агрегацію учасників за програмами.",
+        "ddl":"CREATE TABLE training_programs (\n  training_program_id integer PRIMARY KEY,\n  program_name varchar(100) NOT NULL,\n  instructor varchar(100),\n  start_date date,\n  end_date date\n);\n\nCREATE TABLE training_personnel (\n  id integer GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  name varchar(100) NOT NULL,\n  rank varchar(50),\n  training_program_id integer NOT NULL REFERENCES training_programs(training_program_id),\n  date_enrolled date NOT NULL\n);"
+      }
+    ]
+  },
+  "missions": {
+    "missions": [
+      {
+        "concept":"SELECT","title":"Базова вибірка","task":"Виведіть id, name і rank усіх учасників навчання.","starter":"SELECT \nFROM training_personnel;","required":["SELECT","ID","NAME","RANK","FROM TRAINING_PERSONNEL"],"hint":"Після SELECT перелічіть три поля через кому.","solution":"SELECT id, name, rank\nFROM training_personnel;","feedback":"SELECT визначає, які атрибути потраплять у результат.","columns":["id","name","rank"],"rows":[[1,"Учасник-01","Captain"],[2,"Учасник-02","Lieutenant"],[3,"Учасник-03","Sergeant"]],"insight":"Навіть базова вибірка має відповідати конкретному інформаційному запиту — не обов’язково тягнути всі поля таблиці."
+      },
+      {
+        "concept":"WHERE","title":"Фільтрація","task":"Знайдіть учасників зі званням Lieutenant.","starter":"SELECT name, rank\nFROM training_personnel\nWHERE ;","required":["SELECT","FROM TRAINING_PERSONNEL","WHERE","RANK","LIEUTENANT"],"hint":"У WHERE порівняйте поле rank із текстовим значенням у лапках.","solution":"SELECT name, rank\nFROM training_personnel\nWHERE rank = 'Lieutenant';","feedback":"WHERE звужує набір до записів, що відповідають умові.","columns":["name","rank"],"rows":[["Учасник-02","Lieutenant"],["Учасник-04","Lieutenant"]],"insight":"Фільтрація перетворює загальний масив на релевантну підмножину для конкретного аналітичного питання."
+      },
+      {
+        "concept":"JOIN","title":"Поєднання двох таблиць","task":"Покажіть ім’я учасника разом із назвою його навчальної програми.","starter":"SELECT tp.name, p.program_name\nFROM training_personnel tp\nJOIN training_programs p ON ;","required":["FROM TRAINING_PERSONNEL","JOIN TRAINING_PROGRAMS","TP.TRAINING_PROGRAM_ID","P.TRAINING_PROGRAM_ID"],"hint":"З’єднайте однойменний ідентифікатор програми у двох таблицях.","solution":"SELECT tp.name, p.program_name\nFROM training_personnel tp\nJOIN training_programs p\n  ON tp.training_program_id = p.training_program_id;","feedback":"JOIN використовує PK/FK, щоб відновити повний контекст без дублювання довідникових даних.","columns":["name","program_name"],"rows":[["Учасник-01","Аналітика даних"],["Учасник-02","Основи SQL"],["Учасник-03","Аналітика даних"]],"insight":"Саме реляційний зв’язок дозволяє об’єднати факти з довідниковим контекстом."
+      },
+      {
+        "concept":"GROUP BY","title":"Агрегація","task":"Порахуйте кількість учасників у кожній програмі.","starter":"SELECT p.program_name, COUNT(*) AS participants\nFROM training_personnel tp\nJOIN training_programs p ON tp.training_program_id = p.training_program_id\nGROUP BY ;","required":["COUNT(*)","JOIN TRAINING_PROGRAMS","GROUP BY","P.PROGRAM_NAME"],"hint":"У GROUP BY має бути неагреговане поле program_name.","solution":"SELECT p.program_name, COUNT(*) AS participants\nFROM training_personnel tp\nJOIN training_programs p ON tp.training_program_id = p.training_program_id\nGROUP BY p.program_name;","feedback":"GROUP BY формує аналітичний показник на рівні категорії, а не окремого запису.","columns":["program_name","participants"],"rows":[["Аналітика даних",3],["Основи SQL",2],["Візуалізація",1]],"insight":"Агрегація — міст від транзакційних записів до показників, які можна порівнювати та інтерпретувати."
+      },
+      {
+        "concept":"ORDER BY","title":"Ранжування результату","task":"Виведіть учасників від найновішого за датою зарахування до найдавнішого.","starter":"SELECT name, date_enrolled\nFROM training_personnel\nORDER BY ;","required":["ORDER BY","DATE_ENROLLED","DESC"],"hint":"Для спадного порядку використайте DESC.","solution":"SELECT name, date_enrolled\nFROM training_personnel\nORDER BY date_enrolled DESC;","feedback":"ORDER BY не змінює склад набору, але змінює спосіб його читання та пріоритизації.","columns":["name","date_enrolled"],"rows":[["Учасник-06","2026-09-18"],["Учасник-05","2026-09-14"],["Учасник-04","2026-09-10"]],"insight":"Сортування часто є останнім кроком перед переглядом, звітом або передачею результату користувачу."
+      },
+      {
+        "concept":"SUBQUERY","title":"Запит із вкладеною умовою","task":"Знайдіть учасників програм, що завершуються не раніше 1 жовтня 2026 року.","starter":"SELECT name\nFROM training_personnel\nWHERE training_program_id IN (\n  SELECT training_program_id\n  FROM training_programs\n  WHERE \n);","required":["WHERE TRAINING_PROGRAM_ID IN","SELECT TRAINING_PROGRAM_ID","FROM TRAINING_PROGRAMS","END_DATE >=","2026-10-01"],"hint":"У внутрішньому запиті відфільтруйте training_programs за end_date.","solution":"SELECT name\nFROM training_personnel\nWHERE training_program_id IN (\n  SELECT training_program_id\n  FROM training_programs\n  WHERE end_date >= DATE '2026-10-01'\n);","feedback":"Підзапит спочатку формує множину релевантних program_id, а зовнішній запит використовує її як умову.","columns":["name"],"rows":[["Учасник-01"],["Учасник-03"],["Учасник-06"]],"insight":"Складніший SQL корисний лише тоді, коли структура запиту прямо відображає логіку аналітичного питання."
+      }
+    ]
+  },
+  "quiz": {
+    "questions": [
+      {"prompt":"Для чого FOREIGN KEY у таблиці training_personnel?","options":["Щоб замінити PRIMARY KEY","Щоб посилатися на існуючий запис training_programs і контролювати зв’язок","Щоб автоматично створити dashboard"],"answer":1},
+      {"prompt":"Яка конструкція SQL перетворює записи на показник за групами?","options":["GROUP BY разом з агрегатною функцією","ORDER BY без агрегування","CREATE TABLE"],"answer":0},
+      {"prompt":"Чому JOIN є природним наслідком нормалізованої реляційної схеми?","options":["Бо дані розподілені між пов’язаними таблицями і контекст відновлюється через ключі","Бо JOIN видаляє базу даних","Бо PostgreSQL не підтримує SELECT з однієї таблиці"],"answer":0},
+      {"prompt":"Який запис відповідає PostgreSQL, а не MySQL-діалекту?","options":["USE CompanyDB;","AUTO_INCREMENT","GENERATED ALWAYS AS IDENTITY"],"answer":2}
+    ],
+    "feedback":{"4":"Відмінно: схема, ключі та SQL пов’язані в один аналітичний workflow.","3":"Добре. Перегляньте ще раз одну з SQL-місій.","2":"Повторіть блок PK/FK і JOIN/GROUP BY.","1":"Рекомендується пройти SQL Mission Lab ще раз.","0":"Поверніться до schema builder і виконайте місії послідовно."}
+  }
+}
