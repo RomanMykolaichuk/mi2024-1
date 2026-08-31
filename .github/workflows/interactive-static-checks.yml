@@ -52,17 +52,20 @@ jobs:
               print(f'OK: {path}')
           PY
 
-      - name: Validate Theme 4 lesson timeboxes
+      - name: Validate Theme 4 lesson timeboxes and sources
         shell: bash
         run: |
           python3 - <<'PY'
           import json
           from pathlib import Path
+          from urllib.parse import urlsplit, unquote
 
           errors = []
           files = sorted(Path('interactive/data/lessons').glob('t4-l*.json'))
           if len(files) != 13:
               errors.append(f'Expected 13 Theme 4 lesson JSON files, found {len(files)}')
+
+          lesson_page_dir = Path('interactive/lessons').resolve()
 
           for path in files:
               data = json.loads(path.read_text(encoding='utf-8'))
@@ -84,11 +87,22 @@ jobs:
               if len(blocks) < 5:
                   errors.append(f'{path}: expected at least 5 active blocks')
 
+              for source in data.get('sources', []):
+                  href = source.get('href')
+                  if not href:
+                      continue
+                  parsed = urlsplit(href)
+                  if parsed.scheme or parsed.netloc:
+                      continue
+                  target = (lesson_page_dir / unquote(parsed.path)).resolve()
+                  if not target.is_file():
+                      errors.append(f'{path}: missing source material {href}')
+
               print(f'OK: {path} -> declared {minimum}–{maximum} min; planned {planned} min')
 
           if errors:
               print('\n'.join(f'ERROR: {error}' for error in errors))
-              raise SystemExit('Theme 4 timebox validation failed')
+              raise SystemExit('Theme 4 lesson validation failed')
           PY
 
       - name: Validate course catalog links
