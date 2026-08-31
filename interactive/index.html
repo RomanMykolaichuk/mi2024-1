@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="uk">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="MI2024 Interactive — інтерактивна карта технологій військової аналітики">
+  <title>MI2024 Interactive</title>
+  <link rel="stylesheet" href="./assets/css/main.css">
+</head>
+<body>
+  <main class="page-shell">
+    <header class="hero">
+      <p class="eyebrow">MI2024 · INTERACTIVE</p>
+      <h1>Технології військової аналітики</h1>
+      <p class="hero__lead">Від даних до аналітичного висновку та підтримки рішення.</p>
+    </header>
+
+    <section class="section-shell" aria-labelledby="course-map-title">
+      <div class="section-heading">
+        <p class="eyebrow">COURSE MAP</p>
+        <h2 id="course-map-title">Інтерактивні заняття</h2>
+        <p>Web-шар розвивається поступово поверх наявних notebooks, даних і навчальних матеріалів.</p>
+      </div>
+      <div data-component="course-catalog" data-source="./data/course.json"></div>
+    </section>
+  </main>
+
+  <script type="module" src="./js/app.js"></script>
+</body>
+</html>
