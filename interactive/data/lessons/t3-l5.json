@@ -1,0 +1,29 @@
+{
+  "id":"t3-l5","title":"Наскрізна підготовка даних до моделювання","type":"practice",
+  "mission":{"intro":"Пройдіть увесь цикл від вибору dataset до чесної оцінки простої моделі.","steps":[
+    {"id":"question","title":"Сформулювати аналітичне питання","task":"Визначте target, одиницю спостереження і критерій успіху.","evidence":"коротка постановка задачі","feedback":"Без питання неможливо визначити, які дані є релевантними."},
+    {"id":"audit","title":"Провести data audit","task":"Перевірте типи, пропуски, дублікати, аномалії та потенційні leakage-поля.","evidence":"audit table before preprocessing","feedback":"Ризики даних зафіксовано до трансформацій."},
+    {"id":"split","title":"Розділити train/test","task":"Зробіть split до fit будь-яких data-driven preprocessing steps.","evidence":"train/test sizes + random_state/strategy","feedback":"Test ізольовано від навчального pipeline."},
+    {"id":"prep","title":"Fit preprocessing на train","task":"Імпутація, encoding, scaling/selection виконуються з параметрами, отриманими лише з train.","evidence":"опис preprocessing pipeline","feedback":"Preprocessing не бачить test під час fit."},
+    {"id":"model","title":"Навчити baseline model","task":"Побудуйте просту регресійну або класифікаційну модель як контрольну точку.","evidence":"model + parameters","feedback":"Baseline створює точку порівняння для складніших методів."},
+    {"id":"evaluate","title":"Оцінити на test","task":"Виберіть метрики, що відповідають типу задачі, та поясніть їх зміст.","evidence":"test metrics + interpretation","feedback":"Оцінка відокремлена від навчання."},
+    {"id":"report","title":"Задокументувати результат","task":"Зафіксуйте dataset, preprocessing, split, model, metrics, limitations і висновок у notebook/README.","evidence":"відтворюваний GitHub artifact","feedback":"Результат готовий до перевірки іншою людиною."}],
+    "complete":"Наскрізний pipeline завершено: тепер можна порівнювати моделі, не втрачаючи контроль над походженням і підготовкою даних."},
+  "leakage":{"modes":[
+    {"id":"leaky","label":"Leakage pipeline","safe":false,"score":"INVALID","scoreLabel":"оцінка моделі","steps":[{"title":"Full data","note":"усі записи"},{"title":"Scale/select","note":"бачить test","risk":true},{"title":"Split","note":"занадто пізно","risk":true},{"title":"Train & score","note":"метрика завищена","risk":true}],"explanation":"Test influence виникає ще до навчання моделі, тому фінальна метрика вже не є незалежною."},
+    {"id":"safe","label":"Evaluation pipeline","safe":true,"score":"VALID","scoreLabel":"дизайн оцінювання","steps":[{"title":"Raw data","note":"audit"},{"title":"Split","note":"train/test"},{"title":"Fit prep on train","note":"parameters"},{"title":"Train model","note":"train only"},{"title":"Transform + score test","note":"independent evaluation"}],"explanation":"Всі параметри, що навчаються з даних, отримуються без доступу до test."}]},
+  "readiness":{"checks":[
+    {"id":"goal","title":"Є чітка аналітична мета","description":"Target і критерій успіху визначено.","weight":2},
+    {"id":"provenance","title":"Відоме походження даних","description":"Джерело, версія та дата/умови отримання задокументовані.","weight":1},
+    {"id":"quality","title":"Проблеми якості опрацьовані","description":"Пропуски, дублікати, аномалії та некоректні типи перевірені.","weight":2},
+    {"id":"split","title":"Test ізольований до preprocessing fit","description":"Split виконано до scaling/imputation/feature selection.","weight":3},
+    {"id":"pipeline","title":"Preprocessing відтворюваний","description":"Послідовність кроків і параметри зафіксовані.","weight":2},
+    {"id":"baseline","title":"Є baseline model","description":"Проста модель створює точку порівняння.","weight":1},
+    {"id":"metrics","title":"Метрики відповідають задачі","description":"Пояснено, що саме вимірює кожна метрика.","weight":2},
+    {"id":"limits","title":"Обмеження сформульовані","description":"Відомі слабкі місця dataset і pipeline не приховані.","weight":1}],
+    "verdicts":{"ready":"Pipeline методично готовий до переходу в Тему 4 — аналіз і моделювання.","partial":"Ще є ризики, які можуть зробити метрику моделі недостовірною.","notReady":"До моделювання зарано: спочатку закрийте критичні проблеми даних."}},
+  "quiz":{"questions":[
+    {"prompt":"Що є головною роллю baseline model?","options":["Одразу замінити всі складні моделі","Створити просту контрольну точку для порівняння","Приховати помилки preprocessing"],"answer":1},
+    {"prompt":"Чому test set не можна використовувати для feature selection?","options":["Це може передати інформацію про test у навчальний процес","Бо test завжди менший","Бо feature selection працює лише з SQL"],"answer":0},
+    {"prompt":"Що має містити відтворюваний звіт?","options":["Лише фінальну accuracy","Dataset/provenance, preprocessing, split, model, metrics, limitations і висновок","Лише screenshots"],"answer":1}],"feedback":{"3":"Тема 3 завершена — можна переходити до методів аналізу.","2":"Добре; перевірте isolation of test.","1":"Поверніться до end-to-end workflow.","0":"Повторіть 3.4–3.5 перед переходом до Теми 4."}}
+}
