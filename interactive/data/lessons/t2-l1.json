@@ -1,0 +1,116 @@
+{
+  "id":"t2-l1",
+  "number":"2.1",
+  "title":"Основи збору та зберігання даних для ІАЗ ОУВ",
+  "titleConfidence":"verified",
+  "type":"lecture",
+  "typeLabel":"лекція",
+  "lead":"Збір даних починається не з бібліотеки Python і не зі сховища. Спочатку аналітик визначає інформаційну потребу, канал отримання, provenance, мінімальні правила якості та лише після цього — формат і місце зберігання.",
+  "roadmap":{
+    "duration":{"min":35,"max":45},
+    "note":"Маршрут узгоджено з оновленим навчальним сайтом 2026: джерела, ETL, якість, вибір сховища та контроль дублікатів.",
+    "outcomes":[
+      "пояснювати роль збору та зберігання в аналітичному циклі ІАЗ",
+      "обирати канал збору за структурою, частотою та вимогами до provenance",
+      "будувати базовий ETL/ELT workflow із контролем якості",
+      "розрізняти CSV, JSON та XML як контракти обміну",
+      "обґрунтовувати первинне рішення щодо способу зберігання"
+    ],
+    "blocks":[
+      {"label":"Scenario","minutes":4,"title":"Від інформаційної потреби до потоку даних","description":"Визначити, що саме потрібно знати та які evidence мають це підтвердити."},
+      {"label":"Pipeline","minutes":6,"title":"Де починається data pipeline","description":"Sources → Collection → Storage → Preparation → Analysis → Decision."},
+      {"label":"Decision","minutes":8,"title":"Collection Method Selector","description":"Обрати канал збору для різних типів джерел і частоти оновлення."},
+      {"label":"Workflow","minutes":8,"title":"ETL / quality workflow","description":"Зібрати послідовність capture → validate → transform → provenance → store."},
+      {"label":"Format","minutes":7,"title":"CSV / JSON / XML","description":"Порівняти формати та їхню роль в інтеграції систем."},
+      {"label":"Check","minutes":7,"title":"Self-check і аналітична рефлексія","description":"Закріпити різницю між даними, джерелом, форматом, quality та storage."}
+    ]
+  },
+  "scenario":{
+    "title":"П'ять джерел — одне аналітичне питання",
+    "description":"Аналітична група має регулярно оновлювати картину подій. Надходять відкриті web-сторінки, JSON через API, табличні донесення, формалізовані XML-повідомлення та ручні записи. Якщо просто скласти все в одну папку, швидкість накопичення даних зросте, але керованість evidence — ні.",
+    "facts":[
+      {"value":"5","label":"типів джерел"},
+      {"value":"3","label":"різні формати обміну"},
+      {"value":"1–60 хв","label":"частота оновлення"},
+      {"value":"100%","label":"потреба у provenance"}
+    ],
+    "question":"Який мінімальний процес потрібен, щоб зібрані записи стали керованими даними, придатними для подальшого аналізу?"
+  },
+  "pipeline":{
+    "active":"collection",
+    "stages":[
+      {"id":"sources","label":"Джерела","description":"Web, API, формалізовані документи, форми, файли та сенсори.","output":"potential evidence"},
+      {"id":"collection","label":"Збір","description":"Отримання, фіксація provenance, первинна validation і timestamp.","output":"collected records"},
+      {"id":"storage","label":"Зберігання","description":"Керований формат і сховище з правилами доступу та цілісності.","output":"persistent dataset"},
+      {"id":"preparation","label":"Підготовка","description":"Очищення, узгодження, дедуплікація і transformation.","output":"analysis-ready data"},
+      {"id":"analysis","label":"Аналіз","description":"Порівняння, статистика, моделі та pattern detection.","output":"analytical evidence"},
+      {"id":"visualization","label":"Візуалізація","description":"Графіки, карти, таблиці й dashboard.","output":"communicated evidence"},
+      {"id":"decision","label":"Рішення","description":"Людська інтерпретація, ризики й наступні дії.","output":"brief / recommendation"}
+    ]
+  },
+  "collectionMethods":{
+    "intro":"Не існує універсального «кращого» каналу збору. Оберіть метод за доступністю, структурою, частотою оновлення, правовими обмеженнями та provenance.",
+    "cases":[
+      {"id":"web","label":"WEB","goal":"OPEN WEB","title":"Публічна сторінка без API","context":"Потрібно раз на добу отримувати заголовки з відкритої сторінки, структура HTML достатньо стабільна.","facts":["public page","HTML","daily","no API"],"options":[{"label":"Web scraping","correct":true,"feedback":"Автоматизований HTML parser доречний, якщо доступ дозволений, структура контролюється, а код зберігає URL і timestamp."},{"label":"Google Form","correct":false,"feedback":"Форма створює новий канал ручного вводу, але не отримує вже опублікований web-контент."},{"label":"XML generator","correct":false,"feedback":"Генерація XML не вирішує отримання даних із web-джерела."}],"rule":"Scraping — це керований extractor, а не доказ істинності сторінки; provenance і validation залишаються обов'язковими."},
+      {"id":"api","label":"API","goal":"MACHINE-TO-MACHINE","title":"Оновлення структурованих подій кожні 5 хвилин","context":"Система надає документований endpoint і JSON-відповідь зі status code та timestamp.","facts":["structured","frequent","JSON","documented endpoint"],"options":[{"label":"REST API","correct":true,"feedback":"API дає стабільніший машинний контракт, контроль статусів і простіше автоматизоване логування."},{"label":"Ручне копіювання","correct":false,"feedback":"Ручна операція погано масштабується і збільшує ризик втрати provenance."},{"label":"Screenshot","correct":false,"feedback":"Знімок може бути evidence для людини, але не є зручним структурованим потоком для аналітики."}],"rule":"API не скасовує validation: перевіряйте HTTP status, schema, missing fields і source timestamp."},
+      {"id":"report","label":"REPORT","goal":"FORMALIZED REPORT","title":"Стандартизоване донесення підрозділу","context":"Запис має чіткі поля, контрольовані значення та може надходити у CSV/XML.","facts":["formalized","schema","controlled fields","human-origin"],"options":[{"label":"Формалізований документ","correct":true,"feedback":"Структура забезпечує передбачувані поля, але все одно потрібні QA, version/schema control і provenance."},{"label":"Вільний текст без шаблону","correct":false,"feedback":"Вільний текст може містити більше контексту, але ускладнює автоматичне об'єднання та validation."},{"label":"Лише усна передача","correct":false,"feedback":"Без формалізації немає стабільного machine-readable artifact та відтворюваного trail."}],"rule":"Формалізація зменшує неоднозначність структури, але не гарантує правильність значень."},
+      {"id":"form","label":"FORM","goal":"CONTROLLED INPUT","title":"Потрібно зібрати однакові поля від багатьох виконавців","context":"Кожен виконавець вводить дату, підрозділ, категорію і значення; критичні поля мають бути обов'язковими.","facts":["many users","same fields","validation","manual input"],"options":[{"label":"Web / Google Form","correct":true,"feedback":"Форма добре контролює структуру вводу і required fields, але потребує правил ідентифікації записів і валідації значень."},{"label":"Різні Excel-файли без шаблону","correct":false,"feedback":"Різні локальні структури створюють зайву роботу з узгодженням."},{"label":"PDF screenshot","correct":false,"feedback":"Це поганий формат для повторного автоматичного використання структурованих полів."}],"rule":"Контрольований input schema полегшує інтеграцію, але data quality залежить також від семантики й дисципліни заповнення."}
+    ]
+  },
+  "etlMission":{
+    "intro":"Позначте етапи, які мають бути зафіксовані у відтворюваному pipeline збору.",
+    "steps":[
+      {"id":"need","title":"Визначити інформаційну потребу","task":"Сформулювати, яке аналітичне питання має підтримати потік даних.","evidence":"короткий data requirement + очікувані поля","feedback":"Без requirement неможливо оцінити релевантність збору."},
+      {"id":"capture","title":"Отримати дані","task":"Зберегти response/file/form record разом із source URL/identifier та часом отримання.","evidence":"raw snapshot або machine-readable response","feedback":"Raw layer дає можливість повторно перевірити transformation."},
+      {"id":"validate","title":"Виконати первинну validation","task":"Перевірити status, schema, required fields, типи й очевидні помилки.","evidence":"quality log / rejected rows","feedback":"Validation відокремлює технічно непридатні записи до аналізу."},
+      {"id":"transform","title":"Нормалізувати формат","task":"Узгодити назви полів, часовий формат, кодування й контрольовані категорії.","evidence":"transformation rules","feedback":"Transformation має бути відтворюваною і документованою."},
+      {"id":"provenance","title":"Зберегти provenance","task":"Не втратити source, received_at, original id і версію правила перетворення.","evidence":"provenance columns / metadata","feedback":"Без provenance запис важко перевірити або зіставити з іншим джерелом."},
+      {"id":"store","title":"Передати у кероване сховище","task":"Зберегти дані так, щоб підтримати цілісність, пошук, аудит і подальшу підготовку.","evidence":"dataset/table + schema","feedback":"Storage — не кінець: далі починаються quality audit і preparation."}
+    ],
+    "complete":"Pipeline має raw evidence, validation trail, transformation rules, provenance та persistent result."
+  },
+  "formats":{
+    "intro":"Порівняйте три базові формати, які прямо присутні в матеріалах Теми 2.",
+    "formats":[
+      {"id":"csv","label":"CSV","description":"Простий табличний обмін: один рядок — один запис, колонки — поля.","sample":"event_id,time,type\nE-17,08:10,A\nE-18,08:15,B","strengths":["простий для таблиць і pandas","компактний","зручний для batch exchange"],"risks":["слабка типізація","немає природної вкладеності","потрібні домовленості щодо delimiter/encoding"]},
+      {"id":"json","label":"JSON","description":"Легкий структурований формат, природний для API та вкладених об'єктів.","sample":"{\n  \"event_id\": \"E-17\",\n  \"time\": \"08:10\",\n  \"source\": {\"id\": \"S1\"}\n}","strengths":["ключі роблять поля явними","вкладені структури","поширений у REST API"],"risks":["schema може бути неявною","поля можуть зникати/змінювати тип","більший overhead за CSV"]},
+      {"id":"xml","label":"XML","description":"Явна ієрархічна структура з тегами, корисна для формалізованого обміну та складних схем.","sample":"<event id=\"E-17\">\n  <time>08:10</time>\n  <source id=\"S1\"/>\n</event>","strengths":["ієрархія","schema/validation ecosystem","явна структура документів"],"risks":["verbose","складніший parsing","надмірний для простих плоских таблиць"]}
+    ],
+    "cases":[
+      {"id":"table","title":"100 000 плоских рядків для batch-аналізу","context":"Однакова таблична схема, мінімум вкладеності.","options":[{"label":"CSV","correct":true,"feedback":"Простий і компактний табличний контракт."},{"label":"XML","correct":false,"feedback":"Працюватиме, але для плоскої таблиці створює зайву структурну вагу."},{"label":"PNG","correct":false,"feedback":"Зображення не зберігає machine-readable table."}]},
+      {"id":"api","title":"REST endpoint з вкладеними атрибутами джерела","context":"Потрібні ключі, масиви й вкладені об'єкти.","options":[{"label":"JSON","correct":true,"feedback":"Природно представляє objects/arrays і широко використовується в API."},{"label":"CSV","correct":false,"feedback":"Вкладені структури доведеться штучно сплощувати."},{"label":"TXT без структури","correct":false,"feedback":"Немає явного machine contract."}]},
+      {"id":"formal","title":"Формалізоване ієрархічне донесення з жорсткою схемою","context":"Важливі ієрархія, обов'язкові вузли та schema validation.","options":[{"label":"XML","correct":true,"feedback":"XML добре підтримує ієрархічні документи і формальну schema validation."},{"label":"JPEG","correct":false,"feedback":"Втрачається машинна структура."},{"label":"CSV","correct":false,"feedback":"Можливий лише після сплощення ієрархії та окремих домовленостей."}]}
+    ]
+  },
+  "storageModels":{
+    "intro":"На цьому занятті storage розглядаємо як продовження collection contract. Детальна нормалізація та SQL — у 2.4–2.5.",
+    "items":[
+      {"id":"relational","icon":"RDB","label":"Relational","structure":"Таблиці, ключі, constraints і SQL.","strengths":["цілісність","JOIN і агрегації","чітка schema"],"limits":["schema changes потребують управління","не завжди природна для сильно вкладених документів"],"bestFor":"структуровані записи, довідники, звітність","examples":"PostgreSQL","analytics":"Стабільна основа для контрольованого dataset і відтворюваних запитів."},
+      {"id":"document","icon":"DOC","label":"Document","structure":"Самодостатні JSON-подібні документи.","strengths":["гнучка структура","зручно для вкладених records"],"limits":["контроль зв'язків залежить від design","можливе дублювання"],"bestFor":"неоднорідні documents і rapid schema evolution","examples":"document store","analytics":"Зручно зберігати records, що природно приходять як вкладені JSON objects."},
+      {"id":"file","icon":"FILE","label":"File / object layer","structure":"CSV/JSON/XML files + metadata/catalog.","strengths":["простий raw/archive layer","зберігає оригінал"],"limits":["без каталогу швидко втрачається керованість","слабші constraints"],"bestFor":"raw snapshots, batch exchange, archival evidence","examples":"versioned files / object storage","analytics":"Корисний raw layer, якщо поруч є metadata, naming, versioning і ingestion rules."}
+    ]
+  },
+  "sections":[
+    {"id":"collectionMethods","component":"collection-method-selector","eyebrow":"COLLECTION CHANNEL","title":"Як обрати спосіб збору","description":"Рішення визначається не популярністю інструмента, а структурою джерела, частотою, доступністю і вимогами до provenance."},
+    {"id":"etlMission","component":"workflow-mission-lab","eyebrow":"ETL / ELT","title":"Від raw evidence до керованого dataset","description":"Зафіксуйте мінімальний відтворюваний workflow збору та первинного контролю якості."},
+    {"id":"formats","component":"format-exchange-lab","eyebrow":"DATA CONTRACT","title":"CSV, JSON чи XML?","description":"Формат має підтримувати потрібну структуру обміну і не приховувати provenance."},
+    {"id":"storageModels","component":"storage-model-explorer","eyebrow":"STORAGE BRIDGE","title":"Куди передати зібрані дані","description":"Первинне рішення щодо storage повинно випливати з структури, зв'язків і способу подальшого використання."}
+  ],
+  "analystNote":{"title":"Якість аналізу не може бути вищою за керованість evidence","text":"Якщо під час збору загублено джерело, час, original identifier або правила transformation, пізніша модель може бути математично коректною, але аналітичний висновок буде важко перевірити. Collection layer має створити traceable dataset, а не просто накопичити файли."},
+  "quizTitle":"Збір, формат, quality та storage",
+  "quiz":[
+    {"question":"Що слід визначити до вибору конкретної бібліотеки для збору?","options":["Інформаційну потребу, джерело, структуру та вимоги до provenance","Колір майбутнього dashboard","Лише формат назви файлу"],"answer":0,"explanation":"Technology choice має випливати з data requirement та constraints."},
+    {"question":"Чому успішний HTTP 200 ще не означає якісні дані?","options":["Тому що API завжди повертає XML","Потрібно перевірити schema, required fields, source time і semantic validity","Тому що JSON не можна аналізувати"],"answer":1,"explanation":"Transport success не дорівнює semantic/data quality."},
+    {"question":"Який формат природно підтримує вкладені objects і масиви в REST API?","options":["JSON","PNG","CSV без додаткових домовленостей"],"answer":0,"explanation":"JSON природно представляє вкладені структури."},
+    {"question":"Що має залишитися після transformation?","options":["Лише фінальний файл без raw даних","Правила transformation і provenance, що дозволяють відтворити результат","Тільки screenshot"],"answer":1,"explanation":"Відтворюваність потребує trace від raw evidence до result."},
+    {"question":"Що є правильним переходом до 2.4–2.5?","options":["Спочатку накопичити якомога більше файлів","Після визначення потоків і форматів обґрунтувати модель зберігання, schema та SQL","Відмовитися від validation"],"answer":1,"explanation":"Storage architecture є продовженням collection contract."}
+  ],
+  "reflection":"Які два поля provenance ви б зробили обов'язковими у кожному зібраному записі вашого аналітичного проєкту — і чому?",
+  "sources":[
+    {"label":"2026 interactive learning site · README","href":"../../Theme%202/alection%201/2026/iaz_learning_site/README.md"},
+    {"label":"2026 interactive learning site · index.html","href":"../../Theme%202/alection%201/2026/iaz_learning_site/index.html"},
+    {"label":"Збір та зберігання даних для ІАЗ ОВУ · PDF","href":"../../Theme%202/alection%201/%D0%97%D0%B1%D1%96%D1%80%20%D1%82%D0%B0%20%D0%B7%D0%B1%D0%B5%D1%80%D1%96%D0%B3%D0%B0%D0%BD%D0%BD%D1%8F%20%D0%B4%D0%B0%D0%BD%D0%B8%D1%85%20%D0%B4%D0%BB%D1%8F%20%D0%86%D0%90%D0%97%20%D0%9E%D0%92%D0%A3.pdf"},
+    {"label":"JSON sample notebook","href":"../../Theme%202/alection%201/sampleJSON.ipynb"}
+  ],
+  "sourceNote":"Назву 2.1 підтверджено README оновленого навчального сайту 2026. Web-версія MI2024 reuse-ить методичну логіку, але не копіює монолітний старий HTML."
+}
