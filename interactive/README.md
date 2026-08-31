@@ -40,7 +40,32 @@ interactive/
 
 ## Реалізовані заняття
 
-### Тема 2
+### Тема 1 — 5/5
+
+Theme 1 використовує один data-driven shell:
+
+```text
+lessons/theme1.html?lesson=t1-l1
+...
+lessons/theme1.html?lesson=t1-l5
+```
+
+Наскрізний track:
+
+`problem-first methodology → project lifecycle → effectiveness evaluation → Git/IDE workflow → DB/API/UI architecture → integrated mini-system`
+
+Реалізовано:
+- 1.1 — IAZ Lifecycle Lab + methodological trade-offs;
+- 1.2 — Effectiveness Scorecard: baseline, criteria, weights і hard constraints;
+- 1.3 — Git/GitHub + VS Code + Python + PostgreSQL environment, commit/push workflow і repository hygiene;
+- 1.4 — DB → REST API → UI architecture на фактичних PostgreSQL/Flask source artifacts;
+- 1.5 — 8-variant GET/POST/DELETE Integration Flow Lab.
+
+Назви **1.1–1.3** підтверджені первинними `lesson.ipynb`. Для **1.4–1.5** окремих primary plans з офіційними назвами у repository не знайдено, тому web-labels явно мають `titleConfidence: source-derived`.
+
+Red-team note: legacy `1.4_1.5/02Analytics_03UI(UX)/app.py` містить hardcoded PostgreSQL credentials. Оригінальний source не переписується приховано, але interactive track прямо навчає відокремлювати secrets від source code (`.env`/environment config + `.gitignore`).
+
+### Тема 2 — 2/5
 - `lessons/t2-l4.html` — 2.4 Storage Architecture Lab.
 - `lessons/t2-l5.html` — 2.5 Relational Schema + SQL Mission Lab.
 
@@ -74,7 +99,6 @@ lessons/theme5.html?lesson=t5-l8
 ```
 
 Реалізовано:
-
 - 5.1 — methodology of visualization + Visual Encoding + Evidence→Brief;
 - 5.2 — semantic HTML/CSS + responsive Dashboard Builder;
 - 5.3 — 10 practical visualization missions from the source task;
@@ -95,6 +119,13 @@ lessons/theme5.html?lesson=t5-l8
 - `decision-tradeoff`
 - `workflow-mission-lab`
 - `knowledge-check`
+
+### Methodology / project foundations — Theme 1
+- `iaz-lifecycle-lab`
+- `effectiveness-scorecard`
+- `dev-workflow-explorer`
+- `system-architecture-lab`
+- `integration-flow-lab`
 
 ### Storage / SQL
 - `storage-model-explorer`
@@ -129,6 +160,12 @@ lessons/theme5.html?lesson=t5-l8
 
 ## Methodological rules
 
+Theme 1:
+
+`information need → requirements/criteria → design → implementation → validation → operation → evaluation/feedback`
+
+Technology selection follows the problem and success criteria. Weighted scorecards are educational decision aids; hard constraints remain explicit. Secrets do not belong in Git/source code.
+
 Правильна модель переходу до ML/DL:
 
 `data audit → split → fit preprocessing on train → transform train/validation/test → train/tune → final evaluation on held-out test`
@@ -145,6 +182,7 @@ Audience adaptation може змінювати detail, terminology та interac
 
 - `data/course-matrix.json` — machine-readable roadmap Theme 1–5;
 - `../docs/COURSE_INTERACTIVE_MATRIX.md` — master matrix;
+- `../docs/THEME1_INTERACTIVE_TRACK.md` — Theme 1 source audit, methodology/project track і technical debt;
 - `../docs/THEME3_INTERACTIVE_TRACK.md` — Theme 3;
 - `../docs/THEME4_INTERACTIVE_TRACK.md` — Theme 4;
 - `../docs/THEME5_INTERACTIVE_TRACK.md` — Theme 5 source audit, track logic і reusable visualization components.
