@@ -8,6 +8,7 @@ on:
       - "docs/LESSON_AUTHORING_GUIDE.md"
       - "docs/COURSE_INTERACTIVE_MATRIX.md"
       - "docs/THEME3_INTERACTIVE_TRACK.md"
+      - "docs/THEME4_INTERACTIVE_TRACK.md"
   push:
     branches:
       - main
@@ -17,6 +18,7 @@ on:
       - "docs/LESSON_AUTHORING_GUIDE.md"
       - "docs/COURSE_INTERACTIVE_MATRIX.md"
       - "docs/THEME3_INTERACTIVE_TRACK.md"
+      - "docs/THEME4_INTERACTIVE_TRACK.md"
 
 permissions:
   contents: read
@@ -56,6 +58,7 @@ jobs:
           python3 - <<'PY'
           import json
           from pathlib import Path
+          from urllib.parse import urlsplit, parse_qs
 
           root = Path('interactive')
           catalog = json.loads((root / 'data/course.json').read_text(encoding='utf-8'))
@@ -71,14 +74,24 @@ jobs:
               href = item.get('href')
               if not href:
                   continue
-              target = (root / href.removeprefix('./')).resolve()
+              parsed = urlsplit(href)
+              target = (root / parsed.path.removeprefix('./')).resolve()
               if not target.is_file():
-                  missing.append((item.get('id'), href))
-              else:
-                  print(f"OK: {item.get('id')} -> {href}")
+                  missing.append((item.get('id'), href, 'page'))
+                  continue
+
+              query = parse_qs(parsed.query)
+              lesson_ids = query.get('lesson', [])
+              if lesson_ids:
+                  lesson_json = root / 'data' / 'lessons' / f'{lesson_ids[0]}.json'
+                  if not lesson_json.is_file():
+                      missing.append((item.get('id'), href, 'lesson JSON'))
+                      continue
+
+              print(f"OK: {item.get('id')} -> {href}")
 
           if missing:
-              for item_id, href in missing:
-                  print(f'MISSING: {item_id} -> {href}')
+              for item_id, href, kind in missing:
+                  print(f'MISSING {kind}: {item_id} -> {href}')
               raise SystemExit('Broken links found in interactive/data/course.json')
           PY
