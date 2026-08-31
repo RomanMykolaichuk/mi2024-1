@@ -59,9 +59,15 @@ jobs:
 
           root = Path('interactive')
           catalog = json.loads((root / 'data/course.json').read_text(encoding='utf-8'))
+          items = list(catalog.get('items', []))
+
+          for group in catalog.get('groups', []):
+              items.extend(group.get('items', []))
+
+          items.extend(catalog.get('resources', []))
           missing = []
 
-          for item in catalog.get('items', []):
+          for item in items:
               href = item.get('href')
               if not href:
                   continue
