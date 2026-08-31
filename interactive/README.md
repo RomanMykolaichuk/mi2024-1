@@ -13,7 +13,7 @@ python3 -m http.server 8000
 
 ## Залежності
 
-Для базової версії немає npm-залежностей і build step. Потрібні лише browser та будь-який local static server.
+Для базової web-версії немає npm-залежностей і build step. Потрібні лише browser та будь-який local static server.
 
 ## Структура
 
@@ -31,6 +31,10 @@ interactive/
 ## Головна сторінка
 
 Каталог організовано **за темами дисципліни**. Кожна тема має status, progress `implemented / total` і картки реалізованих занять.
+
+Поточний стан web-track:
+
+`Theme 1 — 5/5 · Theme 2 — 5/5 · Theme 3 — 5/5 · Theme 4 — 14/14 · Theme 5 — 8/8`
 
 ## Норматив тривалості
 
@@ -58,12 +62,12 @@ lessons/theme1.html?lesson=t1-l5
 - 1.1 — IAZ Lifecycle Lab + methodological trade-offs;
 - 1.2 — Effectiveness Scorecard: baseline, criteria, weights і hard constraints;
 - 1.3 — Git/GitHub + VS Code + Python + PostgreSQL environment, commit/push workflow і repository hygiene;
-- 1.4 — DB → REST API → UI architecture на фактичних PostgreSQL/Flask source artifacts;
+- 1.4 — DB → REST API → UI architecture;
 - 1.5 — 8-variant GET/POST/DELETE Integration Flow Lab.
 
 Назви **1.1–1.3** підтверджені первинними `lesson.ipynb`. Для **1.4–1.5** окремих primary plans з офіційними назвами у repository не знайдено, тому web-labels явно мають `titleConfidence: source-derived`.
 
-Red-team note: legacy `1.4_1.5/02Analytics_03UI(UX)/app.py` містить hardcoded PostgreSQL credentials. Оригінальний source не переписується приховано, але interactive track прямо навчає відокремлювати secrets від source code (`.env`/environment config + `.gitignore`).
+Red-team note: legacy `1.4_1.5/02Analytics_03UI(UX)/app.py` містить hardcoded PostgreSQL credentials. Interactive track прямо навчає відокремлювати secrets від source code (`.env`/environment config + `.gitignore`).
 
 ### Тема 2 — 5/5
 
@@ -75,7 +79,7 @@ lessons/theme2.html?lesson=t2-l2
 lessons/theme2.html?lesson=t2-l3
 ```
 
-2.4–2.5 зберігають свої існуючі сторінки, але вся Тема 2 має спільну навігацію `2.1 → 2.5`.
+2.4–2.5 зберігають свої сторінки, але вся Тема 2 має спільну навігацію `2.1 → 2.5`.
 
 Наскрізний track:
 
@@ -84,20 +88,19 @@ lessons/theme2.html?lesson=t2-l3
 Реалізовано:
 - 2.1 — Collection Method Selector + ETL/quality workflow + CSV/JSON/XML + bridge до storage;
 - 2.2 — Internet/CSV, API/JSON, formal reports + Provenance Lab + synthetic case `17 records → 14 unique events`;
-- 2.3 — four practical missions: web scraping, Excel, form, XML + GitHub evidence + failure modes;
+- 2.3 — web scraping, Excel, form, XML + GitHub evidence + failure modes;
 - 2.4 — Storage Architecture Lab;
 - 2.5 — Relational Schema + SQL Mission Lab.
 
-Назви 2.1 і 2.2 підтверджені source materials; 2.3 має `titleConfidence: verified-from-task`.
-
 ### Тема 3 — 5/5
+
 - 3.1 methodology + Data Quality + decision trade-offs + EDA;
 - 3.2 EDA Explorer + team mission;
 - 3.3 practical reproducible EDA;
 - 3.4 transformation + leakage lab;
 - 3.5 end-to-end model-ready pipeline.
 
-### Тема 4 — 13/14
+### Тема 4 — 14/14
 
 Theme 4 використовує один data-driven shell:
 
@@ -107,7 +110,36 @@ lessons/theme4.html?lesson=t4-l1
 lessons/theme4.html?lesson=t4-l14
 ```
 
-Реалізовано 4.1–4.9 та 4.11–4.14. **4.10** позначено `source-gap`: у репозиторії немає окремого первинного матеріалу, тому зміст не вигадується.
+4.10 тепер реалізоване як:
+
+**«Практичне використання методів глибокого навчання в межах виконання індивідуальних (групових) проектів»**.
+
+Primary source package:
+
+```text
+Theme4/Practice 10/
+├── README.md
+├── content.ipynb
+├── task.ipynb
+└── sample.ipynb
+```
+
+Interactive route:
+
+```text
+lessons/theme4.html?lesson=t4-l10
+```
+
+4.10 використовує вже наявний reusable engine:
+
+- Architecture Lab (`neural-network-lab`);
+- experiment decisions (`decision-tradeoff`);
+- Individual Project Mission (`workflow-mission-lab`);
+- Group Project Mission (`workflow-mission-lab`);
+- evidence readiness gate (`readiness-scorecard`);
+- self-check (`knowledge-check`).
+
+`sample.ipynb` генерує synthetic 16×16 images локально і показує `baseline → CNN → early stopping → final test → confusion matrix → error analysis` без зовнішніх даних.
 
 ### Тема 5 — 8/8
 
@@ -122,14 +154,14 @@ lessons/theme5.html?lesson=t5-l8
 Реалізовано:
 - 5.1 — methodology of visualization + Visual Encoding + Evidence→Brief;
 - 5.2 — semantic HTML/CSS + responsive Dashboard Builder;
-- 5.3 — 10 practical visualization missions from the source task;
+- 5.3 — 10 practical visualization missions;
 - 5.4 — selecting visual elements by task/data/audience;
 - 5.5 — integrated analytical dashboard with KPI/chart/table/map;
-- 5.6 — graphic-design foundations for analytical visualization;
+- 5.6 — graphic-design foundations;
 - 5.7 — group redesign, critique and design rationale;
 - 5.8 — audience adaptation: technical expert / leader / public view.
 
-Для **5.5** окремого план-конспекту з точною назвою не знайдено. Назва `Практичне створення дашборду військового аналітика` позначена `source-derived` від фактичних артефактів `Practice55/start` і `Practice55/pr35`.
+Для **5.5** назва `Практичне створення дашборду військового аналітика` позначена `source-derived` від фактичних артефактів `Practice55/start` і `Practice55/pr35`.
 
 ## Reusable components
 
@@ -195,13 +227,17 @@ Theme 2:
 
 `information need → source/channel → capture → validation/provenance → format → reconciliation → storage → query`
 
-Record identity and event identity are not the same. Deduplication має уникати подвійного рахунку, але не знищувати evidence про незалежні підтвердження. Browser practice не виконує live scraping або external Google Apps Script: такі дії переходять у локальне практичне середовище після design/QA route.
+Record identity and event identity are not the same. Deduplication має уникати подвійного рахунку, але не знищувати evidence про незалежні підтвердження.
 
-Technology selection follows the problem and success criteria. Weighted scorecards are educational decision aids; hard constraints remain explicit. Secrets do not belong in Git/source code.
+Technology selection follows the problem and success criteria. Secrets do not belong in Git/source code.
 
 Правильна модель переходу до ML/DL:
 
-`data audit → split → fit preprocessing on train → transform train/validation/test → train/tune → final evaluation on held-out test`
+`data audit → split → fit preprocessing on train → transform train/validation/test → train/tune → freeze candidate → final evaluation on held-out test → error analysis`
+
+Для DL-project:
+
+`problem contract → provenance → baseline → controlled experiments → independent evaluation → failure modes → reproducibility → limitations / next step`
 
 Для GenAI: source evidence, generated synthesis, uncertainty і human review мають бути явно розділені.
 
@@ -209,21 +245,21 @@ Technology selection follows the problem and success criteria. Weighted scorecar
 
 `analytical question → visual encoding → scale/context → pattern → verification → interpretation → implication / next step`
 
-Audience adaptation може змінювати detail, terminology та interaction, але не повинна змінювати факти, scale, provenance або приховувати критичну uncertainty.
+Audience adaptation може змінювати detail, terminology та interaction, але не повинна змінювати факти, scale, provenance або приховувати critical uncertainty.
 
 ## Документація
 
 - `data/course-matrix.json` — machine-readable roadmap Theme 1–5;
 - `../docs/COURSE_INTERACTIVE_MATRIX.md` — master matrix;
-- `../docs/THEME1_INTERACTIVE_TRACK.md` — Theme 1 source audit, methodology/project track і technical debt;
-- `../docs/THEME2_INTERACTIVE_TRACK.md` — Theme 2 source audit, collection/provenance/storage track і reusable components;
+- `../docs/THEME1_INTERACTIVE_TRACK.md` — Theme 1;
+- `../docs/THEME2_INTERACTIVE_TRACK.md` — Theme 2;
 - `../docs/THEME3_INTERACTIVE_TRACK.md` — Theme 3;
-- `../docs/THEME4_INTERACTIVE_TRACK.md` — Theme 4;
-- `../docs/THEME5_INTERACTIVE_TRACK.md` — Theme 5 source audit, track logic і reusable visualization components.
+- `../docs/THEME4_INTERACTIVE_TRACK.md` — Theme 4, включно з 4.10;
+- `../docs/THEME5_INTERACTIVE_TRACK.md` — Theme 5.
 
 ## Правило reusable engine
 
-Не додавати lesson-specific JS, якщо поведінку можна винести в reusable component.
+Не додавати lesson-specific JS, якщо поведінку можна зібрати з наявних reusable components.
 
 `HTML shell + reusable JS component + JSON lesson config = interactive lesson`
 
