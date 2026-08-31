@@ -52,6 +52,45 @@ jobs:
               print(f'OK: {path}')
           PY
 
+      - name: Validate Theme 4 lesson timeboxes
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+
+          errors = []
+          files = sorted(Path('interactive/data/lessons').glob('t4-l*.json'))
+          if len(files) != 13:
+              errors.append(f'Expected 13 Theme 4 lesson JSON files, found {len(files)}')
+
+          for path in files:
+              data = json.loads(path.read_text(encoding='utf-8'))
+              roadmap = data.get('roadmap', {})
+              duration = roadmap.get('duration', {})
+              minimum = duration.get('min')
+              maximum = duration.get('max')
+              blocks = roadmap.get('blocks', [])
+              planned = sum(int(block.get('minutes', 0)) for block in blocks)
+
+              if not isinstance(minimum, int) or minimum < 30:
+                  errors.append(f'{path}: duration.min must be >= 30')
+              if not isinstance(maximum, int) or maximum > 45:
+                  errors.append(f'{path}: duration.max must be <= 45')
+              if isinstance(minimum, int) and isinstance(maximum, int) and minimum > maximum:
+                  errors.append(f'{path}: duration.min > duration.max')
+              if planned < 30 or planned > 45:
+                  errors.append(f'{path}: planned block time must be 30–45 min, got {planned}')
+              if len(blocks) < 5:
+                  errors.append(f'{path}: expected at least 5 active blocks')
+
+              print(f'OK: {path} -> declared {minimum}–{maximum} min; planned {planned} min')
+
+          if errors:
+              print('\n'.join(f'ERROR: {error}' for error in errors))
+              raise SystemExit('Theme 4 timebox validation failed')
+          PY
+
       - name: Validate course catalog links
         shell: bash
         run: |
