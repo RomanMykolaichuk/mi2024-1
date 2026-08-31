@@ -23,7 +23,7 @@ export function mount(element,config){
     profile.innerHTML=`<p class="eyebrow">SYSTEM VARIANT</p><h3>${esc(v?.label??'')}</h3><p>${esc(v?.description??'')}</p><code>${esc(v?.table??'')}</code><div class="viz-facts">${(v?.fields??[]).map(x=>`<span>${esc(x)}</span>`).join('')}</div><p><strong>API</strong></p>${(v?.endpoints??[]).map(x=>`<code>${esc(x)}</code>`).join('')}`;
     const available=operationMap();
     operations.innerHTML=['GET','POST','DELETE'].filter(op=>available?.[op]).map(op=>`<button type="button" class="operation-tab ${op===operation?'is-selected':''}" data-operation="${op}">${op}</button>`).join('');
-    operations.querySelectorAll('[data-operation]').forEach(btn=>btn.addEventListener('click',()=>{operation=btn.dataset.operation;selected=[];renderMission();render();}));
+    operations.querySelectorAll('[data-operation]').forEach(btn=>btn.addEventListener('click',()=>{operation=btn.dataset.operation;selected=[];render();}));
     renderMission();
   }
   function renderMission(){
