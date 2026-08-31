@@ -1,0 +1,27 @@
+{
+  "id":"t3-l4","title":"Методи підготовки даних до аналізу (моделювання)","type":"group",
+  "pipeline":{"active":"preparation","stages":[
+    {"id":"sources","label":"Джерела","description":"Вхідні набори даних.","output":"raw data"},
+    {"id":"collection","label":"Збір","description":"Отримання даних.","output":"collected data"},
+    {"id":"storage","label":"Зберігання","description":"Кероване збереження.","output":"dataset"},
+    {"id":"preparation","label":"Трансформація","description":"Імпутація, scaling, encoding, feature selection, aggregation і коректний split.","output":"model-ready features"},
+    {"id":"analysis","label":"Моделювання","description":"Навчання та оцінювання моделей.","output":"model metrics"},
+    {"id":"visualization","label":"Візуалізація","description":"Представлення результатів.","output":"plots"},
+    {"id":"decision","label":"Підтримка рішення","description":"Інтерпретація.","output":"висновок"}]},
+  "transform":{"initial":{"missing":18,"features":5,"scaled":0,"encoded":0,"readiness":46},"metrics":[
+    {"key":"missing","label":"пропусків"},{"key":"features","label":"ознак"},{"key":"scaled","label":"масштабовано","suffix":"%"},{"key":"encoded","label":"категорій закодовано","suffix":"%"},{"key":"readiness","label":"готовність","suffix":"%"}],
+    "steps":[
+      {"id":"impute","kind":"MISSING DATA","title":"Обробити пропуски","description":"Використайте обґрунтовану стратегію імпутації для числових ознак.","effects":{"missing":{"set":0},"readiness":{"add":14}},"feedback":"Пропуски усунено, але стратегія має бути підібрана за природою даних."},
+      {"id":"scale","kind":"SCALING","title":"Масштабувати числові ознаки","description":"Min-Max або стандартизація потрібні не всім алгоритмам, але важливі для scale-sensitive methods.","effects":{"scaled":{"set":100},"readiness":{"add":12}},"feedback":"Масштабування застосовано; параметри scaler повинні fit-итися лише на train."},
+      {"id":"encode","kind":"ENCODING","title":"Закодувати категорії","description":"One-Hot Encoding не нав’язує штучного порядку номінальним категоріям.","effects":{"encoded":{"set":100},"features":{"add":3},"readiness":{"add":12}},"feedback":"Категорії перетворено на модельні ознаки; кількість ознак зросла."},
+      {"id":"select","kind":"FEATURES","title":"Переглянути набір ознак","description":"Залиште ознаки, які мають аналітичний сенс і не дублюють цільову інформацію.","effects":{"features":{"add":-1},"readiness":{"add":10}},"feedback":"Ознаки скорочено; feature selection не повинен використовувати test labels."}]},
+  "leakage":{"modes":[
+    {"id":"wrong","label":"Небезпечна послідовність","safe":false,"score":"HIGH","scoreLabel":"ризик data leakage","steps":[
+      {"title":"Увесь dataset","note":"train + future test"},{"title":"Fit scaler / encoding","note":"параметри бачать test","risk":true},{"title":"Split 80/20","note":"test вже вплинув"},{"title":"Model","note":"оцінка оптимістична","risk":true}],"explanation":"Якщо preprocessing навчається на всьому dataset до split, інформація з test потрапляє в train pipeline."},
+    {"id":"correct","label":"Коректна послідовність","safe":true,"score":"LOW","scoreLabel":"ризик leakage","steps":[
+      {"title":"Raw dataset","note":"до перетворень"},{"title":"Split 80/20","note":"train/test ізольовані"},{"title":"Fit on train","note":"imputer/scaler/encoder"},{"title":"Transform test","note":"ті ж параметри"},{"title":"Evaluate","note":"чесна оцінка"}],"explanation":"Test залишається невідомим під час fit preprocessing і моделі, тому оцінка краще відображає узагальнення."}]},
+  "quiz":{"questions":[
+    {"prompt":"На яких даних слід fit-ити scaler перед оцінюванням моделі?","options":["На всьому наборі","Лише на train","Лише на test"],"answer":1},
+    {"prompt":"Чому One-Hot Encoding часто кращий за 0/1/2 для номінальної категорії?","options":["Не створює штучного порядку між категоріями","Завжди зменшує кількість ознак","Не потребує даних"],"answer":0},
+    {"prompt":"Навіщо train/test split?","options":["Щоб зробити файл меншим","Щоб оцінити узагальнення на даних, яких модель не бачила під час навчання","Щоб уникнути SQL"],"answer":1}],"feedback":{"3":"Ключові принципи трансформації засвоєно.","2":"Добре; ще раз перегляньте leakage lab.","1":"Поверніться до послідовності split → fit → transform.","0":"Повторіть заняття 3.4."}}
+}

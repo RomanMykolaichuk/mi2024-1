@@ -1,56 +1,18 @@
 {
   "title": "MI2024 Interactive",
   "items": [
-    {
-      "id": "t2-l4",
-      "title": "Тема 2 · Заняття 4 · Методи зберігання даних ІАЗ ОУВ",
-      "description": "Повний Storage Architecture Lab: моделі даних, нормалізація PK/FK, SQL та сценарний вибір сховища.",
-      "status": "implemented",
-      "href": "./lessons/t2-l4.html"
-    },
-    {
-      "id": "t2-l5",
-      "title": "Тема 2 · Заняття 5 · Реляційна база даних та SQL",
-      "description": "Практичний SQL Mission Lab: шість варіантів схеми, PK/FK, PostgreSQL, SELECT/WHERE/JOIN/GROUP BY/ORDER BY/subquery.",
-      "status": "implemented",
-      "href": "./lessons/t2-l5.html"
-    },
-    {
-      "id": "t3-l1",
-      "title": "Лекція 3.1 · Підготовка даних",
-      "description": "Еталонний prototype: місце підготовки даних у pipeline, інтерактивне очищення та self-check.",
-      "status": "prototype",
-      "href": "./lessons/t3-l1.html"
-    },
-    {
-      "id": "matrix",
-      "title": "Master matrix · Theme 1–5",
-      "description": "Roadmap усіх наявних занять, технологій, етапів ІАЗ та reusable interactive components.",
-      "status": "roadmap"
-    },
-    {
-      "id": "theme-1",
-      "title": "Theme 1 · Interactive track",
-      "description": "Методологія, ефективність ІТ, development workflow та архітектура ІАЗ.",
-      "status": "planned"
-    },
-    {
-      "id": "theme-2",
-      "title": "Theme 2 · Interactive track",
-      "description": "Збір і зберігання даних; заняття 2.4 і 2.5 уже реалізовано.",
-      "status": "in-progress"
-    },
-    {
-      "id": "theme-4",
-      "title": "Theme 4 · Interactive track",
-      "description": "Методи аналізу, ML/NN та інші аналітичні технології.",
-      "status": "planned"
-    },
-    {
-      "id": "theme-5",
-      "title": "Theme 5 · Interactive track",
-      "description": "Потрібен поглиблений аудит назв/матеріалів перед масштабуванням.",
-      "status": "audit-needed"
-    }
+    {"id":"t2-l4","title":"Тема 2 · Заняття 4 · Методи зберігання даних ІАЗ ОУВ","description":"Storage Architecture Lab: моделі даних, нормалізація PK/FK, SQL та сценарний вибір сховища.","status":"implemented","href":"./lessons/t2-l4.html"},
+    {"id":"t2-l5","title":"Тема 2 · Заняття 5 · Реляційна база даних та SQL","description":"Практичний SQL Mission Lab: шість варіантів схеми, PK/FK і PostgreSQL.","status":"implemented","href":"./lessons/t2-l5.html"},
+    {"id":"t3-l1","title":"Тема 3 · Заняття 1 · Методологія підготовки даних","description":"Data Quality Lab + EDA preview: місце підготовки даних у повному аналітичному pipeline.","status":"implemented","href":"./lessons/t3-l1.html"},
+    {"id":"t3-l2","title":"Тема 3 · Заняття 2 · Попередній аналіз даних","description":"EDA Explorer + team mission: структура, пропуски, розподіли, кореляції та аномалії.","status":"implemented","href":"./lessons/t3-l2.html"},
+    {"id":"t3-l3","title":"Тема 3 · Заняття 3 · Практичний EDA","description":"Від dataset до відтворюваного профілю: audit, statistics, visualization, relationships, conclusion.","status":"implemented","href":"./lessons/t3-l3.html"},
+    {"id":"t3-l4","title":"Тема 3 · Заняття 4 · Трансформація та декомпозиція","description":"Transformation Lab + leakage lab: missing data, scaling, encoding, feature selection і train/test.","status":"implemented","href":"./lessons/t3-l4.html"},
+    {"id":"t3-l5","title":"Тема 3 · Заняття 5 · Підготовка до моделювання","description":"End-to-end model-ready pipeline, baseline model, independent evaluation і readiness gate.","status":"implemented","href":"./lessons/t3-l5.html"},
+    {"id":"matrix","title":"Master matrix · Theme 1–5","description":"Roadmap занять, технологій, етапів ІАЗ та reusable interactive components.","status":"roadmap"},
+    {"id":"theme-1","title":"Theme 1 · Interactive track","description":"Методологія, ефективність ІТ, development workflow та архітектура ІАЗ.","status":"planned"},
+    {"id":"theme-2","title":"Theme 2 · Interactive track","description":"Збір і зберігання даних; заняття 2.4 і 2.5 реалізовано.","status":"in-progress"},
+    {"id":"theme-3","title":"Theme 3 · Interactive track","description":"Повний track 3.1–3.5: data quality → EDA → transformation → leakage control → model readiness.","status":"implemented","href":"./lessons/t3-l1.html"},
+    {"id":"theme-4","title":"Theme 4 · Interactive track","description":"Методи аналізу, ML/NN та інші аналітичні технології.","status":"planned"},
+    {"id":"theme-5","title":"Theme 5 · Interactive track","description":"Потрібен поглиблений аудит назв/матеріалів перед масштабуванням.","status":"audit-needed"}
   ]
 }
