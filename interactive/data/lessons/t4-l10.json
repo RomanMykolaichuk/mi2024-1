@@ -1,0 +1,179 @@
+{
+  "id":"t4-l10",
+  "number":"4.10",
+  "title":"Практичне використання методів глибокого навчання в межах виконання індивідуальних (групових) проектів",
+  "titleConfidence":"verified-user-supplied",
+  "type":"practice",
+  "typeLabel":"практичне заняття",
+  "lead":"Deep learning project оцінюється не за розміром мережі чи training score, а за повним ланцюгом evidence: problem contract, provenance, split, baseline, architecture, controlled experiments, validation, error analysis, reproducibility та обґрунтований аналітичний висновок.",
+  "roadmap":{
+    "duration":{"min":38,"max":45},
+    "outcomes":[
+      "спроєктувати індивідуальний deep learning mini-project від problem statement до final review",
+      "організувати груповий deep learning project з єдиним experiment protocol і перевірюваними ролями",
+      "порівнювати DL з baseline та не використовувати final test для tuning",
+      "оцінювати overfitting, generalization, error profile, compute і reproducibility",
+      "сформувати evidence package, достатній для peer review"
+    ],
+    "blocks":[
+      {"label":"Scenario","minutes":4,"title":"Model ≠ project","description":"Визначити, яких evidence бракує, якщо команда показує лише trained model."},
+      {"label":"Architecture","minutes":7,"title":"Capacity vs generalization","description":"Architecture Lab: layers, units, dropout і generalization gap."},
+      {"label":"Decisions","minutes":7,"title":"Experiment protocol","description":"Baseline, validation/test, regularization і compute trade-offs."},
+      {"label":"Individual","minutes":8,"title":"Individual Project Mission","description":"Від problem contract до reproducible brief."},
+      {"label":"Group","minutes":8,"title":"Group Project Mission","description":"Roles, shared protocol, integration, peer review і final run."},
+      {"label":"Gate","minutes":4,"title":"Project readiness","description":"Перевірити готовність evidence package до захисту."},
+      {"label":"Check","minutes":4,"title":"Самоперевірка","description":"Закріпити ключові правила DL project work."}
+    ]
+  },
+  "scenario":{
+    "title":"Команда показує 94% training accuracy. Чи готовий проект?",
+    "description":"Є notebook і файл моделі, але не показано baseline, походження даних, validation/test protocol, error analysis, versioned config або limitations. Високий training score сам по собі не доводить, що модель узагальнюється або придатна для аналітичного використання.",
+    "facts":[
+      {"value":"94%","label":"training accuracy"},
+      {"value":"?","label":"baseline"},
+      {"value":"?","label":"independent test"},
+      {"value":"?","label":"failure modes"}
+    ],
+    "question":"Який мінімальний evidence треба додати, перш ніж обговорювати практичну цінність моделі?"
+  },
+  "pipeline":{
+    "active":"analysis",
+    "stages":[
+      {"id":"sources","label":"Problem / data","description":"Аналітична задача, target user, дозволені synthetic/open/controlled data.","output":"project contract"},
+      {"id":"collection","label":"Provenance","description":"Source, version, labels, permissions, limitations.","output":"data card"},
+      {"id":"storage","label":"Versioning","description":"Dataset/config/model/code versions без sensitive artifacts у public repo.","output":"reproducible assets"},
+      {"id":"preparation","label":"Split / baseline","description":"Leakage-safe train/validation/test і проста контрольна точка.","output":"experiment protocol"},
+      {"id":"analysis","label":"Deep learning","description":"Architecture, training, regularization, controlled experiments.","output":"candidate model"},
+      {"id":"visualization","label":"Evaluation","description":"Curves, confusion matrix/errors, baseline comparison, stress tests.","output":"review evidence"},
+      {"id":"decision","label":"Project review","description":"Limitations, readiness, human review, next experiment.","output":"analytical brief"}
+    ]
+  },
+  "architectureLab":{
+    "tasks":["classification","regression","image"],
+    "initial":{"task":"image","layers":2,"units":32,"dropout":0.25},
+    "note":"Це synthetic trade-off preview. Реальний вибір architecture має підтверджуватися validation і error analysis, а не лише кількістю parameters."
+  },
+  "tradeoffs":{
+    "intro":"Пройдіть рішення, які найчастіше роблять DL project методично слабким або сильним.",
+    "cases":[
+      {
+        "id":"baseline",
+        "title":"DL одразу дає високий score",
+        "scenario":"Команда хоче пропустити простий baseline, бо neural model вже працює.",
+        "question":"Що робимо?",
+        "options":[
+          {"label":"Все одно створити baseline на тому самому protocol","correct":true,"consequence":"З'являється контрольна точка для оцінки реальної доданої цінності DL.","rationale":"Без baseline незрозуміло, чи складність моделі виправдана."},
+          {"label":"Baseline не потрібен, якщо score > 90%","correct":false,"consequence":"Не можна довести, що складніша модель краща за просте рішення.","rationale":"Абсолютний score без comparator не показує incremental value."}
+        ],
+        "takeaway":"Deep learning має перевершувати або функціонально доповнювати baseline, а не просто існувати."
+      },
+      {
+        "id":"test",
+        "title":"Вибір architecture за test score",
+        "scenario":"Після кожної зміни layers/dropout команда дивиться test accuracy і лишає найкращий варіант.",
+        "question":"Чому це проблема?",
+        "options":[
+          {"label":"Test фактично перетворюється на validation set","correct":true,"consequence":"Фінальна оцінка стає оптимістичною та залежною від багаторазового tuning.","rationale":"Architecture/hyperparameters обирають на validation; final test відкривають після tuning."},
+          {"label":"Проблеми немає, якщо test великий","correct":false,"consequence":"Repeated selection за test все одно передає інформацію про нього в design decisions.","rationale":"Leakage може бути процесним, а не лише прямим змішуванням рядків."}
+        ],
+        "takeaway":"Final test — не leaderboard для серії експериментів."
+      },
+      {
+        "id":"overfit",
+        "title":"Train росте, validation падає",
+        "scenario":"Train accuracy 98%, validation 78%; gap збільшується після 12 epochs.",
+        "question":"Найкращий наступний крок?",
+        "options":[
+          {"label":"Перевірити capacity, early stopping, dropout/regularization і data quality","correct":true,"consequence":"Команда працює з причиною generalization gap, а не маскує його.","rationale":"Overfit — сигнал переглянути model/data/protocol."},
+          {"label":"Додати ще 100 epochs","correct":false,"consequence":"Training fit може зрости ще більше, а generalization — погіршитися.","rationale":"Більше training не лікує overfit автоматично."}
+        ],
+        "takeaway":"Validation curve — evidence для рішення про training strategy."
+      },
+      {
+        "id":"compute",
+        "title":"Найбільша модель не вкладається у ресурс",
+        "scenario":"Candidate вимагає значно більше GPU memory і часу, але validation gain становить лише 0.5 pp.",
+        "question":"Як оцінити рішення?",
+        "options":[
+          {"label":"Порівняти marginal gain з compute/latency/maintainability constraints","correct":true,"consequence":"Project decision враховує ефективність, а не лише score.","rationale":"Deployment і reproducibility — частина success criterion."},
+          {"label":"Завжди обирати найбільшу модель","correct":false,"consequence":"Зростають cost і operational constraints без доведеної аналітичної цінності.","rationale":"Complexity потребує evidence."}
+        ],
+        "takeaway":"Model quality — багатокритеріальне рішення."
+      }
+    ],
+    "complete":"Experiment protocol має baseline, clean validation/test roles, generalization controls і явні resource constraints."
+  },
+  "individualMission":{
+    "intro":"Позначайте етапи, коли можете назвати конкретний artifact, який залишиться після виконання.",
+    "steps":[
+      {"id":"problem","title":"Problem contract","task":"Визначте input, target, user, success criterion і чому DL доречне.","evidence":"README: 5–8 речень + criterion","feedback":"Задача стала перевірюваною до вибору architecture."},
+      {"id":"data","title":"Data card + split","task":"Зафіксуйте provenance, schema/shape, labels, limitations, seed і train/validation/test rule.","evidence":"data/README.md або data card","feedback":"Відомо, звідки дані й як уникнути leakage."},
+      {"id":"baseline","title":"Baseline","task":"Реалізуйте просту контрольну модель/правило на тому самому evaluation protocol.","evidence":"baseline metric + config","feedback":"DL матиме точку порівняння."},
+      {"id":"model","title":"DL candidate","task":"Обґрунтуйте architecture, loss, optimizer, metric і resource budget.","evidence":"model/config + hypothesis","feedback":"Architecture прив'язана до задачі, а не до моди."},
+      {"id":"experiments","title":"Controlled experiments","task":"Проведіть не менше 3 runs, змінюючи один ключовий фактор за раз.","evidence":"experiment table","feedback":"Є causal-style reasoning щодо design changes."},
+      {"id":"evaluation","title":"Final evaluation + errors","task":"Після tuning оцініть frozen candidate на test і покажіть типові помилки.","evidence":"metrics + confusion matrix/error examples","feedback":"Результат оцінюється не лише aggregate score."},
+      {"id":"brief","title":"Reproducible brief","task":"Зафіксуйте environment/config, limitations і next experiment.","evidence":"README + requirements + 5–7 sentence brief","feedback":"Інша людина може перевірити результат і його межі."}
+    ],
+    "complete":"Індивідуальний project має наскрізний evidence trail від problem statement до final limitation/next step."
+  },
+  "groupMission":{
+    "intro":"Груповий project має один спільний protocol; ролі розподіляють відповідальність, а не створюють п'ять несумісних notebook-ів.",
+    "steps":[
+      {"id":"contract","title":"Shared project contract","task":"Команда узгоджує problem, target user, metric, success criterion, data policy і final deliverable.","evidence":"shared brief / issue","feedback":"Усі ролі працюють на одну й ту саму аналітичну задачу."},
+      {"id":"roles","title":"Roles + ownership","task":"Призначте analytics, data, model, evaluation та integration/reproducibility responsibilities.","evidence":"roles table + task ownership","feedback":"Внесок і відповідальність стали видимими."},
+      {"id":"protocol","title":"One experiment protocol","task":"Узгодьте split, baseline, metrics, run naming, config format і правила роботи з test.","evidence":"protocol.md / config convention","feedback":"Результати різних учасників порівнювані."},
+      {"id":"branches","title":"Branch / commit discipline","task":"Виконуйте зміни окремими branches/commits; не додавайте credentials або sensitive data.","evidence":"Git history","feedback":"Проект можна review та інтегрувати без втрати provenance."},
+      {"id":"review","title":"Peer review","task":"Перед merge інша роль перевіряє data leakage, model assumptions, metrics або reproducibility.","evidence":"PR/review checklist","feedback":"Помилки шукаються до final demo."},
+      {"id":"integration","title":"Integrated final run","task":"Запустіть єдину версію pipeline з зафіксованими config/dependencies.","evidence":"final run + versioned metrics","feedback":"Групові частини перетворилися на один reproducible system."},
+      {"id":"brief","title":"Team review brief","task":"За 5–7 хв покажіть baseline, candidate, errors, limitations, role contributions і next step.","evidence":"review package","feedback":"Захист пояснює evidence і рішення, а не демонструє лише код."}
+    ],
+    "complete":"Груповий project має shared protocol, review history, integrated final run і зрозумілий внесок ролей."
+  },
+  "readiness":{
+    "checks":[
+      {"id":"problem","title":"Problem і DL rationale","description":"Є конкретна задача, user і пояснення, чому DL виправдане.","weight":2},
+      {"id":"provenance","title":"Data provenance","description":"Source/version/permissions/limitations задокументовані.","weight":2},
+      {"id":"split","title":"Leakage-safe protocol","description":"Train/validation/test або еквівалентний protocol розділені коректно.","weight":2},
+      {"id":"baseline","title":"Baseline","description":"Є проста контрольна точка на тому самому evaluation protocol.","weight":1},
+      {"id":"experiments","title":"Controlled experiments","description":"Є hypotheses і versioned experiment table.","weight":2},
+      {"id":"errors","title":"Error analysis","description":"Показані failure cases, а не лише aggregate metric.","weight":2},
+      {"id":"repro","title":"Reproducibility","description":"Seeds/config/dependencies/run instructions зафіксовані.","weight":2},
+      {"id":"limits","title":"Limitations + next step","description":"Висновок не перебільшує evidence і задає наступну перевірку.","weight":1}
+    ],
+    "verdicts":{
+      "ready":"Evidence package готовий до project review: тепер захищайте висновок і межі застосування.",
+      "partial":"Проект уже має основу, але review ще може знайти критичну прогалину в protocol/evidence.",
+      "notReady":"До захисту рано: high model score не компенсує відсутність provenance, baseline, clean evaluation або reproducibility."
+    }
+  },
+  "sections":[
+    {"eyebrow":"1 · ARCHITECTURE LAB","title":"Змініть місткість мережі та подивіться на generalization gap","description":"Це synthetic preview, що показує: більше layers/units може підвищити train score швидше, ніж validation.","component":"neural-network-lab","select":"architectureLab","after":"Не переносіть synthetic score у реальний project. Використайте його як нагадування: architecture hypothesis перевіряється тільки на ваших validation data."},
+    {"eyebrow":"2 · EXPERIMENT DECISIONS","title":"Baseline, test leakage, overfit і compute","description":"Чотири проектні рішення визначають методичну якість сильніше, ніж назва neural architecture.","component":"decision-tradeoff","select":"tradeoffs"},
+    {"eyebrow":"3 · INDIVIDUAL PROJECT","title":"Зберіть evidence package індивідуального проекту","description":"Кожен крок повинен завершуватися конкретним artifact, який може перевірити інша людина.","component":"workflow-mission-lab","select":"individualMission"},
+    {"eyebrow":"4 · GROUP PROJECT","title":"Організуйте команду навколо одного experiment protocol","description":"Ролі, branches і peer review потрібні для інтеграції, а не для формального розподілу роботи.","component":"workflow-mission-lab","select":"groupMission"},
+    {"eyebrow":"5 · READINESS GATE","title":"Чи готовий проект до захисту?","description":"Відмітьте лише ті пункти, для яких у вас реально існує evidence.","component":"readiness-scorecard","select":"readiness"}
+  ],
+  "analystNote":{
+    "title":"Модель без provenance, baseline та error analysis — ще не аналітичний результат",
+    "text":"У проекті цінність створює не `.keras`/`.pth` файл, а перевірюваний зв'язок між задачею, даними, protocol, model behavior, failure modes та висновком. Для групи до цього додаються ownership, review history й integrated final run."
+  },
+  "quizTitle":"Перевірте project-thinking",
+  "quiz":{
+    "questions":[
+      {"prompt":"Для чого потрібен baseline у DL project?","options":["Щоб виміряти додану цінність складнішої моделі","Щоб збільшити кількість notebooks","Щоб замінити test"],"answer":0},
+      {"prompt":"На якому наборі обирають architecture/hyperparameters?","options":["Validation","Final test","На всіх даних одночасно"],"answer":0},
+      {"prompt":"Що означає зростаючий train–validation gap?","options":["Можливий overfitting / проблема generalization","Гарантовано добра model","Що треба завжди додати epochs"],"answer":0},
+      {"prompt":"Що робить груповий project цілісним?","options":["Спільний problem/experiment protocol і integrated final run","Окремий notebook кожного без integration","Однакова назва branches"],"answer":0},
+      {"prompt":"Що має містити final review крім metric?","options":["Baseline, errors, limitations, provenance і next step","Лише screenshot training curve","Тільки кількість parameters"],"answer":0}
+    ],
+    "feedback":{"5":"Project-thinking сформовано.","4":"Добре; перевірте слабший пункт у readiness gate.","3":"Повторіть experiment decisions.","2":"Поверніться до individual/group missions.","1":"Почніть із problem contract і baseline.","0":"Перегляньте весь evidence chain."}
+  },
+  "reflection":"Який artifact у вашому поточному проекті найімовірніше відсутній: provenance, baseline, clean evaluation, error analysis чи reproducibility — і як саме ви його створите?",
+  "sources":[
+    {"label":"content.ipynb","href":"../../Theme4/Practice%2010/content.ipynb"},
+    {"label":"task.ipynb","href":"../../Theme4/Practice%2010/task.ipynb"},
+    {"label":"sample.ipynb","href":"../../Theme4/Practice%2010/sample.ipynb"},
+    {"label":"README.md","href":"../../Theme4/Practice%2010/README.md"}
+  ],
+  "sourceNote":"Офіційна назва та два навчальні питання надані автором курсу 31.08.2026. Первинні навчальні матеріали 4.10 створені в цьому ж change set; web-layer використовує synthetic/open teaching data і не виконує live sensitive processing."
+}
