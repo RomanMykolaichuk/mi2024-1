@@ -9,6 +9,7 @@ on:
       - "docs/COURSE_INTERACTIVE_MATRIX.md"
       - "docs/THEME3_INTERACTIVE_TRACK.md"
       - "docs/THEME4_INTERACTIVE_TRACK.md"
+      - "docs/THEME5_INTERACTIVE_TRACK.md"
   push:
     branches:
       - main
@@ -19,6 +20,7 @@ on:
       - "docs/COURSE_INTERACTIVE_MATRIX.md"
       - "docs/THEME3_INTERACTIVE_TRACK.md"
       - "docs/THEME4_INTERACTIVE_TRACK.md"
+      - "docs/THEME5_INTERACTIVE_TRACK.md"
 
 permissions:
   contents: read
@@ -103,6 +105,67 @@ jobs:
           if errors:
               print('\n'.join(f'ERROR: {error}' for error in errors))
               raise SystemExit('Theme 4 lesson validation failed')
+          PY
+
+      - name: Validate Theme 5 lesson timeboxes, titles and sources
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          from urllib.parse import urlsplit, unquote
+
+          errors = []
+          files = sorted(Path('interactive/data/lessons').glob('t5-l*.json'))
+          if len(files) != 8:
+              errors.append(f'Expected 8 Theme 5 lesson JSON files, found {len(files)}')
+
+          lesson_page_dir = Path('interactive/lessons').resolve()
+
+          for path in files:
+              data = json.loads(path.read_text(encoding='utf-8'))
+              roadmap = data.get('roadmap', {})
+              duration = roadmap.get('duration', {})
+              minimum = duration.get('min')
+              maximum = duration.get('max')
+              blocks = roadmap.get('blocks', [])
+              planned = sum(int(block.get('minutes', 0)) for block in blocks)
+
+              if not isinstance(minimum, int) or minimum < 30:
+                  errors.append(f'{path}: duration.min must be >= 30')
+              if not isinstance(maximum, int) or maximum > 45:
+                  errors.append(f'{path}: duration.max must be <= 45')
+              if isinstance(minimum, int) and isinstance(maximum, int) and minimum > maximum:
+                  errors.append(f'{path}: duration.min > duration.max')
+              if planned < 30 or planned > 45:
+                  errors.append(f'{path}: planned block time must be 30–45 min, got {planned}')
+              if len(blocks) < 5:
+                  errors.append(f'{path}: expected at least 5 active blocks')
+              if not data.get('titleConfidence'):
+                  errors.append(f'{path}: titleConfidence is required after source audit')
+
+              for source in data.get('sources', []):
+                  href = source.get('href')
+                  if not href:
+                      continue
+                  parsed = urlsplit(href)
+                  if parsed.scheme or parsed.netloc:
+                      continue
+                  target = (lesson_page_dir / unquote(parsed.path)).resolve()
+                  if not target.is_file():
+                      errors.append(f'{path}: missing source material {href}')
+
+              print(f'OK: {path} -> declared {minimum}–{maximum} min; planned {planned} min; title={data.get("titleConfidence")}')
+
+          source_derived = Path('interactive/data/lessons/t5-l5.json')
+          if source_derived.is_file():
+              data = json.loads(source_derived.read_text(encoding='utf-8'))
+              if data.get('titleConfidence') != 'source-derived':
+                  errors.append('t5-l5.json: Practice55 title must remain explicitly source-derived')
+
+          if errors:
+              print('\n'.join(f'ERROR: {error}' for error in errors))
+              raise SystemExit('Theme 5 lesson validation failed')
           PY
 
       - name: Validate course catalog links

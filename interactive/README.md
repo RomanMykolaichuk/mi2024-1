@@ -51,7 +51,7 @@ interactive/
 - 3.4 transformation + leakage lab;
 - 3.5 end-to-end model-ready pipeline.
 
-### Тема 4 — 13/14 наявних позицій
+### Тема 4 — 13/14
 
 Theme 4 використовує один data-driven shell:
 
@@ -61,23 +61,30 @@ lessons/theme4.html?lesson=t4-l1
 lessons/theme4.html?lesson=t4-l14
 ```
 
+Реалізовано 4.1–4.9 та 4.11–4.14. **4.10** позначено `source-gap`: у репозиторії немає окремого первинного матеріалу, тому зміст не вигадується.
+
+### Тема 5 — 8/8
+
+Theme 5 також використовує один data-driven shell:
+
+```text
+lessons/theme5.html?lesson=t5-l1
+...
+lessons/theme5.html?lesson=t5-l8
+```
+
 Реалізовано:
 
-- 4.1 — method selection for statistics/ML/GIS/text/network analysis;
-- 4.2 — classification/regression/clustering + ML workflow;
-- 4.3 — regression metrics and model complexity;
-- 4.4 — evaluation, CV and hyperparameter tuning;
-- 4.5 — classification threshold + confusion matrix;
-- 4.6 — neural-network architecture and capacity;
-- 4.7 — deep-learning experiment design;
-- 4.8 — TensorFlow regression/classification design;
-- 4.9 — convolution/CNN + image-model trade-offs;
-- 4.11 — frontier methods, model hubs and MLOps;
-- 4.12 — Transfer Learning + RL;
-- 4.13 — project design for model repositories / RL;
-- 4.14 — text analytics + Generative AI provenance controls.
+- 5.1 — methodology of visualization + Visual Encoding + Evidence→Brief;
+- 5.2 — semantic HTML/CSS + responsive Dashboard Builder;
+- 5.3 — 10 practical visualization missions from the source task;
+- 5.4 — selecting visual elements by task/data/audience;
+- 5.5 — integrated analytical dashboard with KPI/chart/table/map;
+- 5.6 — graphic-design foundations for analytical visualization;
+- 5.7 — group redesign, critique and design rationale;
+- 5.8 — audience adaptation: technical expert / leader / public view.
 
-**4.10** позначено `source-gap`: у репозиторії немає окремого первинного матеріалу, тому зміст не вигадується.
+Для **5.5** окремого план-конспекту з точною назвою не знайдено. Назва `Практичне створення дашборду військового аналітика` позначена `source-derived` від фактичних артефактів `Practice55/start` і `Practice55/pr35`.
 
 ## Reusable components
 
@@ -112,6 +119,14 @@ lessons/theme4.html?lesson=t4-l14
 - `transfer-rl-lab`
 - `text-analysis-lab`
 
+### Visualization / analytical communication — Theme 5
+- `visual-encoding-lab`
+- `dashboard-builder`
+- `design-critique-lab`
+- `audience-adaptation-lab`
+- `visualization-mission-lab`
+- `insight-brief-lab`
+
 ## Methodological rules
 
 Правильна модель переходу до ML/DL:
@@ -120,12 +135,19 @@ lessons/theme4.html?lesson=t4-l14
 
 Для GenAI: source evidence, generated synthesis, uncertainty і human review мають бути явно розділені.
 
+Для visualization:
+
+`analytical question → visual encoding → scale/context → pattern → verification → interpretation → implication / next step`
+
+Audience adaptation може змінювати detail, terminology та interaction, але не повинна змінювати факти, scale, provenance або приховувати критичну uncertainty.
+
 ## Документація
 
 - `data/course-matrix.json` — machine-readable roadmap Theme 1–5;
 - `../docs/COURSE_INTERACTIVE_MATRIX.md` — master matrix;
 - `../docs/THEME3_INTERACTIVE_TRACK.md` — Theme 3;
-- `../docs/THEME4_INTERACTIVE_TRACK.md` — Theme 4, source audit, reusable components і technical debt.
+- `../docs/THEME4_INTERACTIVE_TRACK.md` — Theme 4;
+- `../docs/THEME5_INTERACTIVE_TRACK.md` — Theme 5 source audit, track logic і reusable visualization components.
 
 ## Правило reusable engine
 
