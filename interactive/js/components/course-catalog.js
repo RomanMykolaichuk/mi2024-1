@@ -10,7 +10,8 @@ export function mount(element, config) {
 
 function renderCard(item) {
   const status = item.status ?? 'planned';
-  const enabled = status === 'prototype' || status === 'ready';
+  const enabledStatuses = new Set(['prototype', 'ready', 'implemented']);
+  const enabled = enabledStatuses.has(status) && Boolean(item.href);
   const tag = enabled ? 'a' : 'article';
   const href = enabled ? ` href="${item.href}"` : '';
   const disabled = enabled ? '' : ' aria-disabled="true"';
@@ -31,6 +32,7 @@ function statusLabel(status) {
   return {
     ready: 'ready',
     prototype: 'prototype',
+    implemented: 'implemented',
     planned: 'planned',
   }[status] ?? status;
 }
