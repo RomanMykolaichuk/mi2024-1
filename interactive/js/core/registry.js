@@ -32,6 +32,10 @@ import { mount as mountEffectivenessScorecard } from '../components/effectivenes
 import { mount as mountDevWorkflowExplorer } from '../components/dev-workflow-explorer.js';
 import { mount as mountSystemArchitectureLab } from '../components/system-architecture-lab.js';
 import { mount as mountIntegrationFlowLab } from '../components/integration-flow-lab.js';
+import { mount as mountCollectionMethodSelector } from '../components/collection-method-selector.js';
+import { mount as mountProvenanceLab } from '../components/provenance-lab.js';
+import { mount as mountFormatExchangeLab } from '../components/format-exchange-lab.js';
+import { mount as mountCollectionMissionLab } from '../components/collection-mission-lab.js';
 
 export const registry = {
   'course-catalog': mountCourseCatalog,
@@ -68,4 +72,8 @@ export const registry = {
   'dev-workflow-explorer': mountDevWorkflowExplorer,
   'system-architecture-lab': mountSystemArchitectureLab,
   'integration-flow-lab': mountIntegrationFlowLab,
+  'collection-method-selector': mountCollectionMethodSelector,
+  'provenance-lab': mountProvenanceLab,
+  'format-exchange-lab': mountFormatExchangeLab,
+  'collection-mission-lab': mountCollectionMissionLab,
 };

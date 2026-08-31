@@ -1,0 +1,141 @@
+{
+  "id":"t2-l3",
+  "number":"2.3",
+  "title":"Збір даних для інформаційно-аналітичного забезпечення (ІАЗ) ОУВ",
+  "titleConfidence":"verified-from-task",
+  "type":"practice",
+  "typeLabel":"практичне заняття",
+  "lead":"Практика переводить методи збору у відтворювані artifacts: web scraper, Excel processor, form schema та XML generator. Важливий результат — не просто отримати файл, а показати джерело, правила, validation і evidence виконання у GitHub.",
+  "roadmap":{
+    "duration":{"min":38,"max":45},
+    "note":"Web-версія не виконує зовнішні HTTP/Google Apps Script запити. Вона готує правильний workflow, outputs і QA criteria перед виконанням коду в локальному середовищі/Jupyter.",
+    "outcomes":[
+      "проєктувати workflow web scraping з provenance і filtering",
+      "читати, фільтрувати й експортувати табличні Excel data з явними правилами",
+      "проєктувати формалізовану web/Google Form з required fields і validation",
+      "створювати XML structure для machine-readable exchange",
+      "організовувати results і evidence виконання у GitHub"
+    ],
+    "blocks":[
+      {"label":"Scenario","minutes":4,"title":"Чотири канали — один репозиторій evidence","description":"Визначити outputs і критерії успішного збору."},
+      {"label":"Mission","minutes":16,"title":"Collection Mission Lab","description":"Web scraping, Excel, Form або XML — зібрати правильний workflow і врахувати variant."},
+      {"label":"Format","minutes":7,"title":"Output contract","description":"Зіставити CSV/JSON/XML із конкретним практичним завданням."},
+      {"label":"Evidence","minutes":7,"title":"GitHub evidence workflow","description":"Код, README, raw/sample input, generated output і commit history."},
+      {"label":"QA","minutes":4,"title":"Що може піти не так","description":"HTTP errors, schema drift, bad dates, invalid input, encoding і silent corrections."},
+      {"label":"Check","minutes":4,"title":"Self-check","description":"Перевірити готовність до локального виконання практики."}
+    ]
+  },
+  "scenario":{
+    "title":"Не «чотири скрипти», а чотири контрольовані data products",
+    "description":"У вихідному завданні потрібно зібрати web headlines, обробити Excel, створити Google Form і сформувати XML. Для аналітичного проєкту кожний результат повинен мати зрозуміле джерело, repeatable procedure, validation і machine-readable output.",
+    "facts":[
+      {"value":"4","label":"базові завдання"},
+      {"value":"6","label":"варіантів ускладнення"},
+      {"value":"4","label":"підпапки artifacts"},
+      {"value":"1","label":"GitHub evidence trail"}
+    ],
+    "question":"Який мінімальний набір artifacts доводить, що збір виконано відтворювано, а результат можна використати далі в ІАЗ?"
+  },
+  "pipeline":{
+    "active":"collection",
+    "stages":[
+      {"id":"sources","label":"Джерела","description":"Public web page, Excel source, user input form, structured unit data.","output":"input"},
+      {"id":"collection","label":"Збір","description":"Python/BeautifulSoup, pandas, Apps Script/form, XML generator.","output":"captured data"},
+      {"id":"storage","label":"Зберігання","description":"CSV/XLSX/URL/XML + Git repository artifacts.","output":"versioned outputs"},
+      {"id":"preparation","label":"Підготовка","description":"Filtering, type/date checks, normalization і QA.","output":"usable dataset"},
+      {"id":"analysis","label":"Аналіз","description":"Подальші запити, статистика та models.","output":"evidence"},
+      {"id":"visualization","label":"Візуалізація","description":"Charts/tables/maps залежно від task.","output":"view"},
+      {"id":"decision","label":"Рішення","description":"Інтерпретація та brief.","output":"actionable result"}
+    ]
+  },
+  "collectionMissions":{
+    "intro":"Оберіть місію. Натискайте кроки у правильній послідовності. Web-layer готує logic; фактичний Python/Apps Script виконується у вашому робочому середовищі.",
+    "missions":[
+      {"id":"scrape","label":"WEB","goal":"WEB SCRAPING","title":"Зібрати заголовки з відкритої web-сторінки","context":"Вихідне завдання використовує Python + BeautifulSoup і CSV; варіанти додають keyword filtering або JSON output.","output":"news_titles.csv / JSON","variant":"Передбачте один із варіантів: keyword filter або JSON замість CSV.","poolOrder":["export","parse","request","validate","define","document"],"steps":[
+        {"id":"define","label":"Визначити URL і дозволені поля","description":"Зафіксувати public source, selector/теги, keywords і provenance fields.","hint":"Спочатку потрібен source contract."},
+        {"id":"request","label":"Отримати HTML","description":"requests.get + timeout + user-agent/політика доступу + status check.","hint":"До parsing треба успішно й коректно отримати response."},
+        {"id":"validate","label":"Перевірити response","description":"Status, content type, empty page, encoding і можливу зміну структури.","hint":"Не парсьте невідомий/помилковий response як дані."},
+        {"id":"parse","label":"Витягти й очистити поля","description":"BeautifulSoup selectors, strip, optional keyword filtering, source URL/timestamp.","hint":"Тепер можна формувати records."},
+        {"id":"export","label":"Зберегти CSV/JSON","description":"Machine-readable output із predictable columns/keys.","hint":"Output формується після extraction/cleaning."},
+        {"id":"document","label":"README + evidence","description":"Запуск, dependencies, source, limitations, sample output і commit.","hint":"Завершіть відтворюваністю."}],"complete":"Є source URL, error checks, extraction rules, machine-readable output і README."},
+      {"id":"excel","label":"EXCEL","goal":"FORMALIZED TABLE","title":"Прочитати, відфільтрувати та експортувати Excel","context":"Потрібно використати pandas, застосувати явну умову та зберегти filtered result.","output":"filtered_data.xlsx","variant":"Варіант може вимагати date window або numeric threshold.","poolOrder":["export","filter","inspect","read","define","document"],"steps":[
+        {"id":"define","label":"Сформулювати filter rule","description":"Наприклад: останній місяць або value > threshold; правило має бути однозначним.","hint":"Спочатку визначте, що означає «потрібний запис»."},
+        {"id":"read","label":"Зчитати workbook","description":"pandas.read_excel із явним sheet/column expectation.","hint":"Після rule потрібен input dataset."},
+        {"id":"inspect","label":"Перевірити schema/types","description":"Колонки, dates, numeric coercion, missing values, duplicates.","hint":"Не фільтруйте до перевірки типів."},
+        {"id":"filter","label":"Застосувати condition","description":"Boolean mask із зафіксованим threshold/date boundary.","hint":"Тепер filter має стабільну семантику."},
+        {"id":"export","label":"Експортувати result","description":"to_excel з новим filename, не перезаписуючи raw source.","hint":"Збережіть output окремо від input."},
+        {"id":"document","label":"README + counts","description":"Зафіксувати input rows, output rows, rule і assumptions.","hint":"Фінальний evidence пояснює transformation."}],"complete":"Raw Excel збережено, schema перевірено, filter rule явний, result і counts задокументовані."},
+      {"id":"form","label":"FORM","goal":"CONTROLLED HUMAN INPUT","title":"Створити формалізовану форму збору","context":"Вихідне завдання: ім'я, дата, відділ; variants — email, required field і email validation.","output":"form URL + schema description","variant":"Додайте email як required field або validation rule, якщо це ваш варіант.","poolOrder":["share","validate","fields","purpose","create","document"],"steps":[
+        {"id":"purpose","label":"Визначити information requirement","description":"Хто вводить дані, для чого, які поля справді потрібні.","hint":"Форма починається з information need."},
+        {"id":"fields","label":"Спроєктувати поля","description":"Name/date/department/email, types, required flags і controlled choices.","hint":"Перед кодом потрібна schema input."},
+        {"id":"validate","label":"Додати validation","description":"Required fields, date semantics, email format і допустимі values.","hint":"Validation визначається до розгортання форми."},
+        {"id":"create","label":"Створити form/script","description":"Google Apps Script або інший дозволений form tool.","hint":"Тепер schema можна реалізувати."},
+        {"id":"share","label":"Зафіксувати URL/permissions","description":"Перевірити доступ, не публікувати sensitive data і зберегти link artifact.","hint":"Після створення перевірте distribution controls."},
+        {"id":"document","label":"README + sample","description":"Описати fields, validation, access assumptions і sample synthetic response.","hint":"Завершіть evidence trail."}],"complete":"Форма має явну schema, validation, контроль доступу та задокументований link/sample."},
+      {"id":"xml","label":"XML","goal":"STRUCTURED EXCHANGE","title":"Створити XML-файл про підрозділ / ресурси","context":"Потрібні name, quantity, status; variant може змінити domain на vehicles/equipment і availability.","output":"unit_data.xml","variant":"Для resource variant збережіть quantity + availability і поясніть schema.","poolOrder":["write","validate","tree","schema","data","document"],"steps":[
+        {"id":"schema","label":"Визначити XML hierarchy","description":"Root, repeating elements, required child nodes/attributes.","hint":"Спочатку потрібна структура документа."},
+        {"id":"data","label":"Підготувати synthetic records","description":"Безпечні навчальні values для name/quantity/status/availability.","hint":"Після schema підготуйте input values."},
+        {"id":"tree","label":"Побудувати XML tree","description":"ElementTree / equivalent, без ручного string concatenation.","hint":"Створіть structure програмно."},
+        {"id":"validate","label":"Перевірити types/required fields","description":"Quantity numeric, status controlled, no missing required nodes.","hint":"Перед записом перевірте semantic constraints."},
+        {"id":"write","label":"Записати UTF-8 XML","description":"Явне encoding/declaration і predictable filename.","hint":"Після validation можна export."},
+        {"id":"document","label":"README + schema example","description":"Опис hierarchy, запуск, sample і limitations.","hint":"Завершіть documentation."}],"complete":"XML має явну hierarchy, valid values, UTF-8 output і документацію."}
+    ]
+  },
+  "formats":{
+    "intro":"Під час практики формат є частиною вимог до output. Перемикайте приклади і зіставляйте їх із місіями.",
+    "formats":[
+      {"id":"csv","label":"CSV","description":"Табличний output для web headlines або flat event list.","sample":"source_url,title,collected_at\nhttps://example.org/a,Headline A,2026-08-31T08:00:00+03:00","strengths":["простий","pandas-friendly","diff/inspection"],"risks":["типи неявні","delimiter/encoding","вкладеність незручна"]},
+      {"id":"json","label":"JSON","description":"Альтернативний output scraping або API-like structured result.","sample":"{\n  \"source_url\": \"https://example.org/a\",\n  \"title\": \"Headline A\",\n  \"collected_at\": \"2026-08-31T08:00:00+03:00\"\n}","strengths":["ключі явні","nested objects","API interoperability"],"risks":["schema drift","missing optional keys","larger than flat CSV"]},
+      {"id":"xml","label":"XML","description":"Формалізований hierarchical output для unit/resource data.","sample":"<unit>\n  <name>UNIT-A</name>\n  <quantity>12</quantity>\n  <status>ready</status>\n</unit>","strengths":["hierarchy","schema validation","explicit document structure"],"risks":["verbose","parser complexity","overkill for simple tables"]}
+    ],
+    "cases":[
+      {"id":"headlines","title":"Flat list of scraped headlines","context":"Кожен record має URL, title і timestamp.","options":[{"label":"CSV","correct":true,"feedback":"Простий flat output прямо відповідає базовому завданню."},{"label":"XML","correct":false,"feedback":"Можливий, але для простої таблиці зайвий."},{"label":"PNG","correct":false,"feedback":"Не machine-readable."}]},
+      {"id":"variant-json","title":"Variant 5: web data у JSON","context":"Потрібні явні keys і потенційне подальше API-like використання.","options":[{"label":"JSON","correct":true,"feedback":"Це прямо відповідає variant і добре підтримує key-value records."},{"label":"XLSX screenshot","correct":false,"feedback":"Не відповідає вимозі JSON."},{"label":"TXT without keys","correct":false,"feedback":"Втрачається structural contract."}]},
+      {"id":"unit","title":"Unit/resources hierarchy","context":"Name, quantity, status/availability в ієрархічному документі.","options":[{"label":"XML","correct":true,"feedback":"Вихідне завдання прямо передбачає XML generator."},{"label":"JPEG","correct":false,"feedback":"Не зберігає machine-readable structure."},{"label":"CSV only","correct":false,"feedback":"Можливий для flat schema, але не виконує конкретну XML requirement."}]}
+    ]
+  },
+  "evidenceMission":{
+    "intro":"Позначте artifacts, які мають залишитися у repository після виконання практики.",
+    "steps":[
+      {"id":"code","title":"Source code / script","task":"web_scraper.py, excel_processor.py, google_form.gs або xml_creator.py.","evidence":"versioned source file","feedback":"Код робить procedure inspectable."},
+      {"id":"input","title":"Safe sample input","task":"Зберегти дозволений source example або synthetic/sample file; не комітити sensitive data.","evidence":"sample_data.xlsx / sample payload","feedback":"Sample дозволяє повторити workflow без ризику даних."},
+      {"id":"output","title":"Generated output","task":"CSV/JSON/XLSX/XML або link artifact відповідно до task.","evidence":"machine-readable result","feedback":"Output має відповідати documented schema."},
+      {"id":"readme","title":"README","task":"Purpose, prerequisites, command, source, validation, output, limitations.","evidence":"README.md","feedback":"Documentation відокремлює reproducible project від одноразового запуску."},
+      {"id":"ignore","title":"Repository hygiene","task":"Не комітити credentials, .env, caches або приватні exports.","evidence":".gitignore + no secrets","feedback":"Evidence trail не повинен створювати security debt."},
+      {"id":"commit","title":"Commit / push","task":"Зберегти логічний commit з результатами і перевірити repository view.","evidence":"commit history","feedback":"Version history фіксує стан виконання."}
+    ],
+    "complete":"Практика має code + safe input + output + README + clean repository history."
+  },
+  "qaTradeoffs":{
+    "intro":"Виберіть рішення, яке зберігає відтворюваність і не приховує помилки.",
+    "cases":[
+      {"id":"http","title":"Web page повернула 403/500","context":"Parser міг би отримати error page замість expected content.","options":[{"label":"Зупинити ingestion, залогувати status і перевірити умови доступу","correct":true,"feedback":"Не перетворюйте error page на dataset."},{"label":"Ігнорувати status і парсити HTML","correct":false,"feedback":"Можна отримати технічну сторінку як fake data."}]},
+      {"id":"date","title":"Excel date column прочиталася як text","context":"Filter «останній місяць» може працювати неправильно.","options":[{"label":"Явно parse/validate dates до filtering","correct":true,"feedback":"Filter має працювати на правильному semantic type."},{"label":"Фільтрувати рядки lexicographically без перевірки","correct":false,"feedback":"Формати дат можуть дати хибний порядок."}]},
+      {"id":"form-sensitive","title":"Форма просить надлишкові персональні дані","context":"Вони не потрібні для аналітичної задачі.","options":[{"label":"Зменшити data collection до necessary fields","correct":true,"feedback":"Data minimization знижує privacy/security risk."},{"label":"Збирати все «про всяк випадок»","correct":false,"feedback":"Надлишкові дані створюють зайвий ризик і не покращують task."}]}
+    ]
+  },
+  "sections":[
+    {"id":"collectionMissions","component":"collection-mission-lab","eyebrow":"PRACTICAL MISSIONS","title":"Чотири способи зібрати дані","description":"Зберіть правильну послідовність для кожного practical task і врахуйте свій варіант."},
+    {"id":"formats","component":"format-exchange-lab","eyebrow":"OUTPUT FORMAT","title":"Який artifact має бути на виході","description":"CSV/JSON/XML — не декоративний вибір, а частина contract між collector і наступним етапом pipeline."},
+    {"id":"evidenceMission","component":"workflow-mission-lab","eyebrow":"GITHUB EVIDENCE","title":"Що має залишитися після практики","description":"Проєкт повинен бути відтворюваним іншою людиною, а не лише працювати на одному ноутбуці."},
+    {"id":"qaTradeoffs","component":"decision-tradeoff","eyebrow":"FAILURE MODES","title":"Що робити, коли збір іде не за планом","description":"Помилки HTTP, types і надлишковий input треба обробляти явно."}
+  ],
+  "analystNote":{"title":"Практика завершується не файлом, а доказом процесу","text":"Для ІАЗ важливо мати не лише output, а й можливість відповісти: звідки дані, коли отримані, яким кодом перетворені, які rows відхилено, який filter застосовано і які limitations залишилися. Саме repository evidence перетворює одноразову вправу на відтворюваний analytical workflow."},
+  "quiz":[
+    {"question":"Що треба зробити до parsing web page?","options":["Перевірити response/status/content та умови доступу","Одразу записати HTML у final CSV без перевірки","Видалити source URL"],"answer":0,"explanation":"Transport/data validation передує extraction."},
+    {"question":"Чому raw Excel не слід перезаписувати filtered result?","options":["Щоб зберегти вихідний evidence і повторити transformation","Бо pandas не вміє записувати Excel","Щоб збільшити кількість файлів"],"answer":0,"explanation":"Raw input потрібен для audit/reproducibility."},
+    {"question":"Яка роль validation у form?","options":["Контролювати required fields і допустимий формат введення","Лише змінювати колір кнопки","Автоматично робити всі відповіді достовірними"],"answer":0,"explanation":"Validation контролює structure/format, але не гарантує truthfulness."},
+    {"question":"Що не слід комітити в GitHub?","options":["README","Synthetic sample","Credentials/.env із секретами"],"answer":2,"explanation":"Secrets мають зберігатися поза repository history."},
+    {"question":"Який мінімальний evidence робить practical reproducible?","options":["Code + safe input/sample + output + README + version history","Лише screenshot output","Лише усний опис"],"answer":0,"explanation":"Потрібні artifact і procedure trail."}
+  ],
+  "reflection":"Яке з чотирьох завдань найсильніше залежить від зовнішнього середовища, і які два safeguards ви додасте, щоб воно залишалося відтворюваним через місяць?",
+  "sources":[
+    {"label":"Практичне завдання 2.3 · task.ipynb","href":"../../Theme%202/practice%202.3/task.ipynb"},
+    {"label":"Sample implementation notebook","href":"../../Theme%202/practice%202.3/sample.ipynb"},
+    {"label":"Sample headlines CSV","href":"../../Theme%202/practice%202.3/knu_headlines.csv"},
+    {"label":"Sample Excel input","href":"../../Theme%202/practice%202.3/sample_data.xlsx"},
+    {"label":"Sample XML","href":"../../Theme%202/practice%202.3/units.xml"},
+    {"label":"Form link artifact","href":"../../Theme%202/practice%202.3/form_link.txt"}
+  ],
+  "sourceNote":"Назву і чотири базові tasks підтверджено task.ipynb. У browser simulation немає live scraping або автоматичного створення Google Form; ці дії виконуються у локальному практичному середовищі після проходження design/QA route."
+}

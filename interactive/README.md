@@ -65,9 +65,30 @@ lessons/theme1.html?lesson=t1-l5
 
 Red-team note: legacy `1.4_1.5/02Analytics_03UI(UX)/app.py` містить hardcoded PostgreSQL credentials. Оригінальний source не переписується приховано, але interactive track прямо навчає відокремлювати secrets від source code (`.env`/environment config + `.gitignore`).
 
-### Тема 2 — 2/5
-- `lessons/t2-l4.html` — 2.4 Storage Architecture Lab.
-- `lessons/t2-l5.html` — 2.5 Relational Schema + SQL Mission Lab.
+### Тема 2 — 5/5
+
+2.1–2.3 використовують data-driven shell:
+
+```text
+lessons/theme2.html?lesson=t2-l1
+lessons/theme2.html?lesson=t2-l2
+lessons/theme2.html?lesson=t2-l3
+```
+
+2.4–2.5 зберігають свої існуючі сторінки, але вся Тема 2 має спільну навігацію `2.1 → 2.5`.
+
+Наскрізний track:
+
+`information need → collection channel → raw evidence → validation/provenance → CSV/JSON/XML → reconciliation → storage model → relational schema → SQL → analytical result`
+
+Реалізовано:
+- 2.1 — Collection Method Selector + ETL/quality workflow + CSV/JSON/XML + bridge до storage;
+- 2.2 — Internet/CSV, API/JSON, formal reports + Provenance Lab + synthetic case `17 records → 14 unique events`;
+- 2.3 — four practical missions: web scraping, Excel, form, XML + GitHub evidence + failure modes;
+- 2.4 — Storage Architecture Lab;
+- 2.5 — Relational Schema + SQL Mission Lab.
+
+Назви 2.1 і 2.2 підтверджені source materials; 2.3 має `titleConfidence: verified-from-task`.
 
 ### Тема 3 — 5/5
 - 3.1 methodology + Data Quality + decision trade-offs + EDA;
@@ -127,7 +148,13 @@ lessons/theme5.html?lesson=t5-l8
 - `system-architecture-lab`
 - `integration-flow-lab`
 
-### Storage / SQL
+### Collection / provenance — Theme 2
+- `collection-method-selector`
+- `provenance-lab`
+- `format-exchange-lab`
+- `collection-mission-lab`
+
+### Storage / SQL — Theme 2
 - `storage-model-explorer`
 - `schema-normalization-lab`
 - `sql-query-lab`
@@ -164,6 +191,12 @@ Theme 1:
 
 `information need → requirements/criteria → design → implementation → validation → operation → evaluation/feedback`
 
+Theme 2:
+
+`information need → source/channel → capture → validation/provenance → format → reconciliation → storage → query`
+
+Record identity and event identity are not the same. Deduplication має уникати подвійного рахунку, але не знищувати evidence про незалежні підтвердження. Browser practice не виконує live scraping або external Google Apps Script: такі дії переходять у локальне практичне середовище після design/QA route.
+
 Technology selection follows the problem and success criteria. Weighted scorecards are educational decision aids; hard constraints remain explicit. Secrets do not belong in Git/source code.
 
 Правильна модель переходу до ML/DL:
@@ -183,6 +216,7 @@ Audience adaptation може змінювати detail, terminology та interac
 - `data/course-matrix.json` — machine-readable roadmap Theme 1–5;
 - `../docs/COURSE_INTERACTIVE_MATRIX.md` — master matrix;
 - `../docs/THEME1_INTERACTIVE_TRACK.md` — Theme 1 source audit, methodology/project track і technical debt;
+- `../docs/THEME2_INTERACTIVE_TRACK.md` — Theme 2 source audit, collection/provenance/storage track і reusable components;
 - `../docs/THEME3_INTERACTIVE_TRACK.md` — Theme 3;
 - `../docs/THEME4_INTERACTIVE_TRACK.md` — Theme 4;
 - `../docs/THEME5_INTERACTIVE_TRACK.md` — Theme 5 source audit, track logic і reusable visualization components.

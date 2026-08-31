@@ -21,14 +21,17 @@ export function mount(element, config) {
     root.innerHTML = cases.map((item, index) => {
       const selected = answers.get(item.id);
       const chosen = item.options?.[selected];
+      const scenario = item.scenario ?? item.context ?? '';
+      const question = item.question ?? 'Яке рішення є обґрунтованим?';
+      const consequence = chosen?.consequence ?? chosen?.feedback ?? '';
       return `
         <article class="decision-case ${selected !== undefined ? 'is-answered' : ''}">
           <div class="decision-case__head">
             <span class="decision-case__number">${index + 1}</span>
             <div><p class="eyebrow">${esc(item.kicker ?? 'СИТУАЦІЯ')}</p><h3>${esc(item.title)}</h3></div>
           </div>
-          <p class="decision-case__scenario">${esc(item.scenario)}</p>
-          <p class="decision-case__question"><strong>${esc(item.question)}</strong></p>
+          <p class="decision-case__scenario">${esc(scenario)}</p>
+          <p class="decision-case__question"><strong>${esc(question)}</strong></p>
           <div class="decision-options">
             ${(item.options ?? []).map((option, optionIndex) => `
               <button class="decision-option ${selected === optionIndex ? 'is-selected' : ''}" type="button" data-case="${esc(item.id)}" data-option="${optionIndex}">
@@ -39,7 +42,7 @@ export function mount(element, config) {
           ${chosen ? `
             <div class="decision-feedback ${chosen.correct ? 'is-good' : 'is-risk'}">
               <strong>${chosen.correct ? 'Обґрунтоване рішення' : 'Ризиковане рішення'}</strong>
-              <p>${esc(chosen.consequence)}</p>
+              <p>${esc(consequence)}</p>
               ${chosen.rationale ? `<p><strong>Чому:</strong> ${esc(chosen.rationale)}</p>` : ''}
             </div>
             ${item.takeaway ? `<p class="decision-takeaway"><strong>Висновок:</strong> ${esc(item.takeaway)}</p>` : ''}

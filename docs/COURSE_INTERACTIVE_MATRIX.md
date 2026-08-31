@@ -1,117 +1,87 @@
 # MI2024 Interactive — master matrix
 
-> Статусна матриця для послідовного перетворення наявних матеріалів курсу на reusable інтерактивні сторінки. Вона **не перейменовує** вихідні заняття. Якщо точна назва не підтверджена первинним матеріалом, це явно позначається.
+> Статусна матриця reusable інтерактивного web-шару. Вихідні назви не вигадуються: `verified`, `verified-from-task`, `source-derived` і `source-gap` зберігають походження назви.
 
 ## Архітектурний принцип
 
 `технологія → місце у військовій аналітиці → дія слухача → наслідок → аналітичний висновок`
 
-Кожне заняття збирається reusable-компонентами та JSON-конфігурацією. Theme 1, Theme 4 і Theme 5 використовують спільні data-driven page shells, щоб не дублювати HTML/навігацію.
+Цільова тривалість нового web-заняття — **30–45 хв активної роботи**. Theme 1, Theme 2 (2.1–2.3), Theme 4 і Theme 5 використовують data-driven shared shells; 2.4–2.5 та Theme 3 зберігають свої наявні сторінки.
 
 ## Матриця
 
-| ID | Тип | Джерело | Назва / робоча назва | Етап ІАЗ | Технологія | Інтерактив | Компоненти | Статус |
-|---|---|---|---|---|---|---|---|---|
-| t1-l1 | lesson | `Theme 1/1.1/lesson.ipynb` | **Методологічні основи ІАЗ** | decision | problem-first methodology; project lifecycle | IAZ Lifecycle Lab + methodological trade-offs | `lesson-roadmap`, `analytics-pipeline`, `iaz-lifecycle-lab`, `decision-tradeoff`, `knowledge-check` | **implemented** |
-| t1-l2 | lesson | `Theme 1/1.2/lesson.ipynb`, PDF | **Наукові методи оцінки ефективності застосування інформаційних технологій в ОУВ** | decision/evaluation | criteria; baseline; weighted score; hard constraints | Effectiveness Scorecard + validity trade-offs | `lesson-roadmap`, `analytics-pipeline`, `effectiveness-scorecard`, `decision-tradeoff`, `knowledge-check` | **implemented** |
-| t1-l3 | practice | `Theme 1/1.3/lesson.ipynb`, `practice3.ipynb` | **Основи створення інтегрованого середовища розробки засобів ІАЗ** | enablement | Git; GitHub; VS Code; Python; PostgreSQL | Dev Workflow + environment readiness | `lesson-roadmap`, `dev-workflow-explorer`, `decision-tradeoff`, `knowledge-check` | **implemented** |
-| t1-l4 | project | `Theme 1/1.4_1.5/01DataBase`, `02Analytics_03UI(UX)` | **Проєктування даних і REST API простого засобу ІАЗ** *(source-derived)* | storage/enablement | PostgreSQL; PK/FK; Flask REST; layered architecture | DB → API → UI Architecture Lab | `lesson-roadmap`, `analytics-pipeline`, `system-architecture-lab`, `decision-tradeoff`, `knowledge-check` | **implemented** |
-| t1-l5 | practice | `Theme 1/1.4_1.5/2025/task.ipynb`, README | **Інтеграція PostgreSQL, REST API та веб-інтерфейсу простого засобу ІАЗ** *(source-derived)* | enablement/integration | CRUD; validation; Flask; PostgreSQL; HTML/CSS/JS | 8-variant Integration Flow Lab | `lesson-roadmap`, `integration-flow-lab`, `decision-tradeoff`, `knowledge-check` | **implemented** |
-| t2-l1 | lecture | `Theme 2/alection 1` | Збір та зберігання даних для ІАЗ ОВУ | collection/storage | data sources; storage | Source-to-storage flow | `analytics-pipeline` | **planned** |
-| t2-l2 | group | `Theme 2/gl2.2` | Методи збору даних для ІАЗ ОВУ | collection | web/forms/files/APIs | Collection selector | `decision-tradeoff` | **planned** |
-| t2-l3 | practice | `Theme 2/practice 2.3` | Збір даних для ІАЗ ОУВ | collection | scraping; Excel; forms; JSON/XML | Collection challenge | reusable collection components | **planned** |
-| t2-l4 | group | `Theme 2/gl2.4` | Методи зберігання даних ІАЗ ОУВ | storage | relational DB; SQL; normalization; NoSQL | Storage Architecture Lab | `storage-model-explorer`, `schema-normalization-lab`, `sql-query-lab`, `storage-decision-lab` | **implemented** |
-| t2-l5 | practice | `Theme 2/practice2.5` | Реляційна база даних: дві пов’язані таблиці та SQL-запити | storage | PostgreSQL; JOIN; GROUP BY | SQL Mission Lab | `relational-schema-builder`, `sql-mission-lab` | **implemented** |
-| t3-l1 | lecture | `Theme3/aLection1` | Методологія підготовки даних; Методи попереднього аналізу даних | preparation | quality; cleaning; EDA | 35–45 хв methodology + Data Quality + trade-offs | `lesson-roadmap`, `data-quality-lab`, `decision-tradeoff`, `eda-explorer` | **implemented** |
-| t3-l2 | group | `Theme3/Group lesson 2` | Попередній аналіз даних | preparation | EDA; statistics; correlation; anomalies | EDA Explorer | `eda-explorer`, `workflow-mission-lab` | **implemented** |
-| t3-l3 | practice | `Theme3/Practice 3/task.ipynb` | Аналіз набору даних з Kaggle | preparation | audit; stats; visualization | EDA Mission | `eda-explorer`, `workflow-mission-lab` | **implemented** |
-| t3-l4 | group | `Theme3/Group lesson 4` | Методи підготовки даних до аналізу (моделювання) | preparation | missing; scaling; encoding; split | Transformation + Leakage Lab | `transformation-lab`, `split-leakage-lab` | **implemented** |
-| t3-l5 | practice | `Theme3/Practice5/task.ipynb` | Аналіз набору даних з Kaggle (Практика 3.5) | preparation/model-readiness | preprocessing; baseline; evaluation | Model-Ready Pipeline | `workflow-mission-lab`, `readiness-scorecard` | **implemented** |
-| t4-l1 | lecture | `Theme4/aLection1` | Огляд сучасних методів аналізу даних в інтересах ІАЗ ОВУ | analysis | statistics; ML; GIS; text/network | Method Selector | `method-selector`, `decision-tradeoff` | **implemented** |
-| t4-l2 | group | `Theme4/Group lesson 2/content1.ipynb` | Використання методів ШІ для аналізу даних | analysis | classification; regression; clustering | Task selector + ML workflow | `method-selector`, `workflow-mission-lab` | **implemented** |
-| t4-l3 | practice | `Theme4/practice3/task.ipynb` | Використання методів ШІ для аналізу даних: регресія | analysis | regression; MAE; MSE/RMSE; R² | Regression lab | `metric-tradeoff-lab`, `workflow-mission-lab` | **implemented** |
-| t4-l4 | group | `Theme4/Group lesson 4/content1.ipynb` | Оцінка точності та налаштування гіперпараметрів | analysis/evaluation | metrics; CV; tuning | Hyperparameter/evaluation lab | `metric-tradeoff-lab`, `decision-tradeoff` | **implemented** |
-| t4-l5 | practice | `Theme4/practice5/task.ipynb` | Використання методів ШІ для аналізу даних: класифікація | analysis/evaluation | confusion matrix; precision; recall; F1 | Threshold Lab | `metric-tradeoff-lab`, `workflow-mission-lab` | **implemented** |
-| t4-l6 | lecture | `Theme4/aLection6` | Основи використання штучних нейронних мереж для аналізу даних | analysis | ANN; activation; training | Neural Architecture Lab | `neural-network-lab`, `decision-tradeoff` | **implemented** |
-| t4-l7 | group | `Theme4/Group lesson 7/content.ipynb` | Основи використання методів глибокого навчання для аналізу даних | analysis | MLP; CNN; RNN; Transformer | DL experiment mission | `neural-network-lab`, `workflow-mission-lab` | **implemented** |
-| t4-l8 | practice | `Theme4/practice8/practical_task_regression_classification.ipynb` | Регресія та класифікація з TensorFlow | analysis | TensorFlow/Keras | TensorFlow mission | `neural-network-lab`, `workflow-mission-lab` | **implemented** |
-| t4-l9 | group | `Theme4/Group lesson 9/content.ipynb` | Основи використання глибокого навчання для аналізу графічної інформації | analysis | CNN; convolution; pooling | Convolution Lab | `convolution-lab`, `decision-tradeoff` | **implemented** |
-| t4-l10 | unknown | `—` | Окреме первинне джерело 4.10 у репозиторії відсутнє | analysis | — | Не реалізується без джерела | — | **source-gap** |
-| t4-l11 | lecture | `Theme4/aLection11/content.ipynb` | Перспективні напрямки використання методів аналізу даних | analysis/enablement | DL; LLM; MLOps; Transfer; RL | Frontier Method Selector | `method-selector`, `decision-tradeoff` | **implemented** |
-| t4-l12 | group | `Theme4/Group lesson 12/content.ipynb` | Transfer Learning та основи Reinforcement Learning | analysis | model hubs; fine-tuning; RL | Transfer/RL Lab | `transfer-rl-lab`, `decision-tradeoff` | **implemented** |
-| t4-l13 | practice | `Theme4/Practice 13/content.ipynb` | Практичне використання репозиторіїв моделей у проєктах | analysis/project | Transfer Learning; RL | Project Design Mission | `transfer-rl-lab`, `workflow-mission-lab` | **implemented** |
-| t4-l14 | group | `Theme4/Group lesson 14/info.ipynb` | Методи аналізу текстової інформації. Основи генеративного ШІ | analysis/decision | text analytics; GenAI | Text Analysis Lab | `text-analysis-lab`, `decision-tradeoff` | **implemented** |
-| t5-l1 | lecture | `Theme5/aLection51/content51.ipynb` | **Методологічні основи візуалізації даних** | visualization/decision | visual encoding; design quality; evidence communication | Visual Encoding + Design Critique + Evidence→Brief | `visual-encoding-lab`, `design-critique-lab`, `insight-brief-lab` | **implemented** |
-| t5-l2 | group | `Theme5/GroupLesson52/content.ipynb` | **Огляд інструментів візуалізації даних на основі HTML + CSS** | visualization | semantic HTML; CSS Grid/Flexbox; dashboard layout | Dashboard Builder + layout critique | `dashboard-builder`, `design-critique-lab`, `insight-brief-lab` | **implemented** |
-| t5-l3 | practice | `Theme5/Practice53/2025/task.ipynb` | **Практичне використання інструментів візуалізації даних** | visualization/decision | maps; time series; network; heatmap; dashboard; uncertainty | 10 Visualization Missions | `visualization-mission-lab`, `visual-encoding-lab`, `insight-brief-lab` | **implemented** |
-| t5-l4 | group | `Theme5/GroupLesson54/content.ipynb` | **Підбір візуальних елементів для візуалізації даних** | visualization | chart selection; perceptual accuracy; data/task/audience | Visual Encoding Challenge + trade-offs | `visual-encoding-lab`, `decision-tradeoff`, `insight-brief-lab` | **implemented** |
-| t5-l5 | practice | `Theme5/Practice55/start`, `pr35` | **Практичне створення дашборду військового аналітика** *(source-derived)* | visualization/decision | KPI; chart; table; map; coordinated views | Integrated Dashboard Lab | `dashboard-builder`, `design-critique-lab`, `insight-brief-lab` | **implemented** |
-| t5-l6 | lecture | `Theme5/aLection56/content.ipynb` | **Основи графічного дизайну та його використання для візуалізації даних** | visualization | composition; hierarchy; color; typography; whitespace | Design Critique + encoding | `design-critique-lab`, `visual-encoding-lab`, `insight-brief-lab` | **implemented** |
-| t5-l7 | group | `Theme5/GroupLesson57/content.ipynb` | **Застосування принципів графічного дизайну для візуалізації даних** | visualization/decision | redesign; design review; dashboard | Group redesign + critique + pitch | `dashboard-builder`, `design-critique-lab`, `decision-tradeoff`, `insight-brief-lab` | **implemented** |
-| t5-l8 | practice | `Theme5/Practice58/content.ipynb` | **Розробка та демонстрація візуалізацій для різних аудиторій в межах виконання індивідуальних (групових) проектів** | visualization/decision | audience adaptation; simple/detailed views | Audience Adaptation + role-specific brief | `audience-adaptation-lab`, `dashboard-builder`, `insight-brief-lab` | **implemented** |
+| ID | Source / title audit | Етап | Ключовий інтерактив | Статус |
+|---|---|---|---|---|
+| 1.1 | `Theme 1/1.1/lesson.ipynb` · **Методологічні основи ІАЗ** · `verified` | decision | IAZ lifecycle + trade-offs | **implemented** |
+| 1.2 | `Theme 1/1.2/lesson.ipynb` · **Наукові методи оцінки ефективності застосування інформаційних технологій в ОУВ** · `verified` | decision/evaluation | Effectiveness Scorecard | **implemented** |
+| 1.3 | `Theme 1/1.3` · **Основи створення інтегрованого середовища розробки засобів ІАЗ** · `verified` | enablement | Git/IDE workflow | **implemented** |
+| 1.4 | `Theme 1/1.4_1.5` · **Проєктування даних і REST API простого засобу ІАЗ** · `source-derived` | storage/enablement | DB → API → UI architecture | **implemented** |
+| 1.5 | `Theme 1/1.4_1.5/2025` · **Інтеграція PostgreSQL, REST API та web UI** · `source-derived` | integration | GET/POST/DELETE Integration Flow | **implemented** |
+| 2.1 | `alection 1/2026/iaz_learning_site` · **Основи збору та зберігання даних для ІАЗ ОУВ** · `verified` | collection/storage | Collection selector + ETL + CSV/JSON/XML | **implemented** |
+| 2.2 | `gl2.2/content.ipynb`, 2026 case · **Методи збору даних для ІАЗ ОУВ** · `verified` | collection/preparation | Internet/API/formal reports + Provenance Lab + 17→14 reconciliation | **implemented** |
+| 2.3 | `practice 2.3/task.ipynb` · **Збір даних для інформаційно-аналітичного забезпечення (ІАЗ) ОУВ** · `verified-from-task` | collection | Web/Excel/Form/XML practical missions | **implemented** |
+| 2.4 | `gl2.4` · **Методи зберігання даних ІАЗ ОУВ** | storage | Storage Architecture + normalization + SQL | **implemented** |
+| 2.5 | `practice2.5` · relational DB / SQL practice | storage/analysis | Schema Builder + SQL Mission Lab | **implemented** |
+| 3.1 | `Theme3/aLection1` · data preparation methodology · `verified` | preparation | Data Quality + trade-offs + EDA | **implemented** |
+| 3.2 | `Theme3/Group lesson 2` · **Попередній аналіз даних** | preparation | EDA Explorer + workflow mission | **implemented** |
+| 3.3 | `Theme3/Practice 3` · Kaggle EDA task | preparation | Practical EDA mission | **implemented** |
+| 3.4 | `Theme3/Group lesson 4` · preparation for modeling | preparation | Transformation + leakage lab | **implemented** |
+| 3.5 | `Theme3/Practice5` · model-ready practice | model-readiness | Baseline + readiness scorecard | **implemented** |
+| 4.1 | `Theme4/aLection1` · modern analysis methods | analysis | Method Selector | **implemented** |
+| 4.2 | `Theme4/Group lesson 2` · AI methods | analysis | ML task selector | **implemented** |
+| 4.3 | `Theme4/practice3` · regression | analysis | Regression metrics/complexity | **implemented** |
+| 4.4 | `Theme4/Group lesson 4` · accuracy/hyperparameters | evaluation | Metric/tuning trade-offs | **implemented** |
+| 4.5 | `Theme4/practice5` · classification | evaluation | Threshold / precision / recall / F1 | **implemented** |
+| 4.6 | `Theme4/aLection6` · neural networks | analysis | Neural Architecture Lab | **implemented** |
+| 4.7 | `Theme4/Group lesson 7` · deep learning | analysis | DL experiment mission | **implemented** |
+| 4.8 | `Theme4/practice8` · TensorFlow | analysis | TensorFlow task mission | **implemented** |
+| 4.9 | `Theme4/Group lesson 9` · graphical information | analysis | Convolution Lab | **implemented** |
+| 4.10 | окремого primary source не знайдено | analysis | не вигадується | **source-gap** |
+| 4.11 | `Theme4/aLection11` · перспективні напрями | analysis/enablement | Frontier method selector | **implemented** |
+| 4.12 | `Theme4/Group lesson 12` · Transfer Learning + RL | analysis | Transfer/RL Lab | **implemented** |
+| 4.13 | `Theme4/Practice 13` · model repositories in projects | project | Project Design Mission | **implemented** |
+| 4.14 | `Theme4/Group lesson 14` · text + GenAI | analysis/decision | Text Analysis Lab | **implemented** |
+| 5.1 | `Theme5/aLection51` · visualization methodology | visualization | Visual Encoding + Evidence→Brief | **implemented** |
+| 5.2 | `Theme5/GroupLesson52` · HTML+CSS | visualization | Dashboard Builder | **implemented** |
+| 5.3 | `Theme5/Practice53` · practical visualization | visualization | 10 Visualization Missions | **implemented** |
+| 5.4 | `Theme5/GroupLesson54` · visual element selection | visualization | Visual Encoding Challenge | **implemented** |
+| 5.5 | `Theme5/Practice55` dashboard artifacts · `source-derived` | visualization/decision | Integrated Dashboard Lab | **implemented** |
+| 5.6 | `Theme5/aLection56` · graphic design | visualization | Design Critique | **implemented** |
+| 5.7 | `Theme5/GroupLesson57` · applied design | visualization/decision | Group redesign + critique | **implemented** |
+| 5.8 | `Theme5/Practice58` · audience-specific visualization | visualization/decision | Audience Adaptation Lab | **implemented** |
 
-## Reusable engine — реалізовано
+## Reusable engine
 
-### Core / pedagogical
-- `course-catalog`
-- `lesson-roadmap`
-- `analytics-pipeline`
-- `decision-tradeoff`
-- `workflow-mission-lab`
-- `knowledge-check`
+### Core
+`course-catalog`, `lesson-roadmap`, `analytics-pipeline`, `decision-tradeoff`, `workflow-mission-lab`, `knowledge-check`
 
-### Theme 1 — methodology / evaluation / project foundations
-- `iaz-lifecycle-lab`
-- `effectiveness-scorecard`
-- `dev-workflow-explorer`
-- `system-architecture-lab`
-- `integration-flow-lab`
+### Theme 1 — foundations
+`iaz-lifecycle-lab`, `effectiveness-scorecard`, `dev-workflow-explorer`, `system-architecture-lab`, `integration-flow-lab`
+
+### Theme 2 — collection / provenance
+`collection-method-selector`, `provenance-lab`, `format-exchange-lab`, `collection-mission-lab`
 
 ### Theme 2 — storage / SQL
-- `storage-model-explorer`
-- `schema-normalization-lab`
-- `sql-query-lab`
-- `storage-decision-lab`
-- `relational-schema-builder`
-- `sql-mission-lab`
+`storage-model-explorer`, `schema-normalization-lab`, `sql-query-lab`, `storage-decision-lab`, `relational-schema-builder`, `sql-mission-lab`
 
-### Theme 3 — data preparation / EDA
-- `data-quality-lab`
-- `eda-explorer`
-- `transformation-lab`
-- `split-leakage-lab`
-- `readiness-scorecard`
+### Theme 3 — preparation / EDA
+`data-quality-lab`, `eda-explorer`, `transformation-lab`, `split-leakage-lab`, `readiness-scorecard`
 
 ### Theme 4 — analysis / AI
-- `method-selector`
-- `metric-tradeoff-lab`
-- `neural-network-lab`
-- `convolution-lab`
-- `transfer-rl-lab`
-- `text-analysis-lab`
+`method-selector`, `metric-tradeoff-lab`, `neural-network-lab`, `convolution-lab`, `transfer-rl-lab`, `text-analysis-lab`
 
-### Theme 5 — visualization / analytical communication
-- `visual-encoding-lab`
-- `dashboard-builder`
-- `design-critique-lab`
-- `audience-adaptation-lab`
-- `visualization-mission-lab`
-- `insight-brief-lab`
+### Theme 5 — visualization
+`visual-encoding-lab`, `dashboard-builder`, `design-critique-lab`, `audience-adaptation-lab`, `visualization-mission-lab`, `insight-brief-lab`
 
 ## Методичні контролі
 
-- Цільова тривалість web-заняття: **30–45 хв активної роботи**.
-- Theme 1 використовує problem-first логіку: інформаційна потреба та критерії передують вибору технології.
-- Weighted effectiveness score є навчальною моделлю; hard constraints не компенсуються середнім балом.
-- Secrets не зберігаються в source code/Git; legacy source example з hardcoded DB password трактується як technical debt, а не recommendation.
-- Visual обирається від аналітичного питання, data type та audience, а не від популярності бібліотеки.
-- Scale, units, provenance і критична uncertainty не приховуються заради дизайну.
-- Dashboard має підтримувати `overview → comparison/pattern → detail → brief`, а не бути колекцією widgets.
+- Web-заняття: **30–45 хв активної роботи**.
+- Collection: source/provenance/timestamp/schema/validation не губляться під час transformation.
+- **Record identity ≠ event identity**: deduplication не повинна знищувати evidence незалежного підтвердження.
+- Browser simulation не підміняє live scraping, реальний PostgreSQL, Jupyter, Apps Script або зовнішні API.
 - Scaling/imputation/feature selection, що навчаються з даних, fit-яться лише на train після split.
-- Held-out test не використовується для hyperparameter/model selection.
-- GenAI output відокремлюється від source evidence і має provenance/human review.
-- Source gap не заповнюється вигаданим матеріалом: `4.10` залишається `source-gap`; `1.4`, `1.5` і `5.5` явно позначені як `source-derived`.
-
-## Правило аудиту
-
-Статуси `working`, `source-derived`, `audit-needed` та `source-gap` не є твердженнями про офіційну назву. Перед реалізацією читається первинний notebook/PDF/plan; лише після цього оновлюються назва, технологія, learning goal та статус.
+- Held-out test не використовується для model/hyperparameter selection.
+- GenAI output відокремлюється від source evidence та проходить human review.
+- Visual encoding визначається analytical question/data/audience, а не декоративністю.
+- Secrets та sensitive data не зберігаються у Git/static web-layer.
+- `source-derived` і `source-gap` не маскуються під verified source titles.
