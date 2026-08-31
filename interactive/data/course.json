@@ -9,6 +9,13 @@
       "href": "./lessons/t2-l4.html"
     },
     {
+      "id": "t2-l5",
+      "title": "Тема 2 · Заняття 5 · Реляційна база даних та SQL",
+      "description": "Практичний SQL Mission Lab: шість варіантів схеми, PK/FK, PostgreSQL, SELECT/WHERE/JOIN/GROUP BY/ORDER BY/subquery.",
+      "status": "implemented",
+      "href": "./lessons/t2-l5.html"
+    },
+    {
       "id": "t3-l1",
       "title": "Лекція 3.1 · Підготовка даних",
       "description": "Еталонний prototype: місце підготовки даних у pipeline, інтерактивне очищення та self-check.",
@@ -30,7 +37,7 @@
     {
       "id": "theme-2",
       "title": "Theme 2 · Interactive track",
-      "description": "Збір і зберігання даних; заняття 2.4 уже реалізовано.",
+      "description": "Збір і зберігання даних; заняття 2.4 і 2.5 уже реалізовано.",
       "status": "in-progress"
     },
     {

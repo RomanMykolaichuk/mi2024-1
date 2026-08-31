@@ -6,6 +6,8 @@ import { mount as mountStorageModelExplorer } from '../components/storage-model-
 import { mount as mountSchemaNormalizationLab } from '../components/schema-normalization-lab.js';
 import { mount as mountSqlQueryLab } from '../components/sql-query-lab.js';
 import { mount as mountStorageDecisionLab } from '../components/storage-decision-lab.js';
+import { mount as mountRelationalSchemaBuilder } from '../components/relational-schema-builder.js';
+import { mount as mountSqlMissionLab } from '../components/sql-mission-lab.js';
 
 export const registry = {
   'course-catalog': mountCourseCatalog,
@@ -16,4 +18,6 @@ export const registry = {
   'schema-normalization-lab': mountSchemaNormalizationLab,
   'sql-query-lab': mountSqlQueryLab,
   'storage-decision-lab': mountStorageDecisionLab,
+  'relational-schema-builder': mountRelationalSchemaBuilder,
+  'sql-mission-lab': mountSqlMissionLab,
 };

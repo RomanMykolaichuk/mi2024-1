@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="uk">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Практичне заняття 2.5: реляційна база даних, PK/FK та SQL Mission Lab">
+  <title>Заняття 2.5 · Реляційна база даних та SQL</title>
+  <link rel="stylesheet" href="../assets/css/main.css">
+  <link rel="stylesheet" href="../assets/css/storage-lab.css">
+  <link rel="stylesheet" href="../assets/css/sql-mission.css">
+</head>
+<body>
+  <main class="page-shell">
+    <nav class="breadcrumb" aria-label="Навігація"><a href="../index.html">MI2024 Interactive</a><span aria-hidden="true">→</span><span>Тема 2 · Заняття 5</span></nav>
+
+    <header class="hero hero--compact">
+      <p class="eyebrow">ТЕМА 2 · ЗАНЯТТЯ 5 · RELATIONAL DATABASE / SQL MISSION</p>
+      <h1>Від двох таблиць до аналітичного запиту</h1>
+      <p class="hero__lead">Практичне заняття перетворює схему БД на послідовність аналітичних дій: визначити PK/FK, створити зв’язок, виконати SELECT, WHERE, JOIN, GROUP BY, ORDER BY і підзапит — та пояснити, що саме отриманий результат означає для аналітика.</p>
+    </header>
+
+    <section class="section-shell">
+      <div class="section-heading"><p class="eyebrow">ANALYTICS PIPELINE</p><h2>SQL починається не із запиту, а зі структури даних</h2><p>На цьому занятті ми працюємо на етапі зберігання, але результат одразу переходить у аналіз.</p></div>
+      <div data-component="analytics-pipeline" data-source="../data/lessons/t2-l5.json" data-select="pipeline"></div>
+    </section>
+
+    <section class="section-shell">
+      <div class="section-heading"><p class="eyebrow">1 · RELATIONAL SCHEMA BUILDER</p><h2>Визначте PRIMARY KEY і FOREIGN KEY</h2><p>Оберіть один із шести варіантів вихідного практичного завдання. Для кожного визначте ключ довідникової таблиці та поле зв’язку в основній таблиці.</p></div>
+      <div data-component="relational-schema-builder" data-source="../data/lessons/t2-l5.json" data-select="schema"></div>
+    </section>
+
+    <section class="analyst-note">
+      <p class="eyebrow">WHY IT MATTERS FOR THE ANALYST</p>
+      <h2>Неправильний зв’язок таблиць дає формально правильний, але змістовно хибний результат</h2>
+      <p>JOIN працює коректно лише тоді, коли ключі відображають реальний зв’язок сутностей. Тому проєктування схеми — частина аналітичного мислення, а не лише робота адміністратора бази даних.</p>
+    </section>
+
+    <section class="section-shell">
+      <div class="section-heading"><p class="eyebrow">2 · SQL MISSION LAB</p><h2>Шість типових місій замість пасивного перегляду 20 прикладів</h2><p>Введіть або доповніть SQL. Перевірка виконується у браузері за структурою запиту; після успіху відкривається синтетичний result set та пояснення аналітичного сенсу. Це навчальна симуляція, а не підключення до реальної БД.</p></div>
+      <div data-component="sql-mission-lab" data-source="../data/lessons/t2-l5.json" data-select="missions"></div>
+    </section>
+
+    <section class="section-shell workflow-section">
+      <div class="section-heading"><p class="eyebrow">3 · PRACTICAL WORKFLOW</p><h2>Що переносимо з інтерактиву у реальний проєкт</h2></div>
+      <div class="workflow-grid">
+        <article><span>01</span><h3>Excel / source data</h3><p>Підготуйте два логічно пов’язані набори даних.</p></article>
+        <article><span>02</span><h3>PostgreSQL schema</h3><p>Створіть дві таблиці, PK, FK та необхідні constraints.</p></article>
+        <article><span>03</span><h3>Import</h3><p>Завантажте дані й перевірте типи, пропуски та referential integrity.</p></article>
+        <article><span>04</span><h3>20 SQL queries</h3><p>Реалізуйте вибірки, фільтрацію, JOIN, GROUP BY, сортування й складніші запити.</p></article>
+        <article><span>05</span><h3>Interpretation</h3><p>Для ключових запитів сформулюйте, яке аналітичне питання вони вирішують.</p></article>
+        <article><span>06</span><h3>GitHub evidence</h3><p>Збережіть SQL, дані/приклади, результати та README у структурованому проєкті.</p></article>
+      </div>
+    </section>
+
+    <section class="dialect-note">
+      <p class="eyebrow">TECHNICAL NOTE</p>
+      <h2>У цьому інтерактиві використовується PostgreSQL-синтаксис</h2>
+      <p>У старому текстовому прикладі заняття змішані конструкції PostgreSQL і MySQL. Тут застосовано послідовний PostgreSQL-підхід: без <code>USE</code> та <code>AUTO_INCREMENT</code>, із <code>GENERATED ALWAYS AS IDENTITY</code> і стандартними FK.</p>
+    </section>
+
+    <section class="section-shell">
+      <div class="section-heading"><p class="eyebrow">SELF-CHECK</p><h2>Перевірте зв’язок «схема → SQL → аналітичний результат»</h2></div>
+      <div data-component="knowledge-check" data-source="../data/lessons/t2-l5.json" data-select="quiz"></div>
+    </section>
+
+    <section class="section-shell">
+      <div class="section-heading"><p class="eyebrow">SOURCE MATERIALS</p><h2>Матеріали практичного заняття</h2><p>Після інтерактиву переходьте до реальної роботи з notebook, Excel і PostgreSQL.</p></div>
+      <div class="source-links"><a href="../../Theme%202/practice2.5/task.ipynb">task.ipynb</a><a href="../../Theme%202/practice2.5/sample.ipynb">sample.ipynb</a><a href="../../Theme%202/practice2.5/training_data.xlsx">training_data.xlsx</a></div>
+    </section>
+  </main>
+  <script type="module" src="../js/app.js"></script>
+</body>
+</html>
