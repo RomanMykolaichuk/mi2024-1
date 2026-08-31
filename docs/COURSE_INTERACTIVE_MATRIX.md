@@ -6,17 +6,17 @@
 
 `технологія → місце у військовій аналітиці → дія слухача → наслідок → аналітичний висновок`
 
-Кожне заняття збирається reusable-компонентами та JSON-конфігурацією. Theme 4 і Theme 5 використовують спільні data-driven page shells, щоб не дублювати HTML/навігацію.
+Кожне заняття збирається reusable-компонентами та JSON-конфігурацією. Theme 1, Theme 4 і Theme 5 використовують спільні data-driven page shells, щоб не дублювати HTML/навігацію.
 
 ## Матриця
 
 | ID | Тип | Джерело | Назва / робоча назва | Етап ІАЗ | Технологія | Інтерактив | Компоненти | Статус |
 |---|---|---|---|---|---|---|---|---|
-| t1-l1 | lecture | `Theme 1/1.1` | Методологічні основи ІАЗ | decision | IAZ methodology | IAZ lifecycle | `analytics-pipeline`, `decision-tradeoff` | **planned** |
-| t1-l2 | lecture | `Theme 1/1.2` | Наукові методи оцінки ефективності застосування ІТ в ОУВ | decision | effectiveness evaluation | Effectiveness scorecard | `effectiveness-scorecard` | **planned** |
-| t1-l3 | lecture | `Theme 1/1.3` | Основи створення інтегрованого середовища розробки засобів ІАЗ | enablement | Git; IDE; workflow | Development workflow explorer | `dev-workflow-explorer` | **planned** |
-| t1-l4 | project/group | `Theme 1/1.4_1.5/01DataBase` | Проєктування бази даних засобу ІАЗ | storage | DB architecture | Schema builder | `schema-normalization-lab`, `storage-model-explorer` | **planned** |
-| t1-l5 | project/practice | `Theme 1/1.4_1.5/02Analytics_03UI(UX)` | Аналітика та UI/UX засобу ІАЗ | visualization | analytics; UI/UX | Dashboard/UX builder | `visual-encoding-lab` | **planned** |
+| t1-l1 | lesson | `Theme 1/1.1/lesson.ipynb` | **Методологічні основи ІАЗ** | decision | problem-first methodology; project lifecycle | IAZ Lifecycle Lab + methodological trade-offs | `lesson-roadmap`, `analytics-pipeline`, `iaz-lifecycle-lab`, `decision-tradeoff`, `knowledge-check` | **implemented** |
+| t1-l2 | lesson | `Theme 1/1.2/lesson.ipynb`, PDF | **Наукові методи оцінки ефективності застосування інформаційних технологій в ОУВ** | decision/evaluation | criteria; baseline; weighted score; hard constraints | Effectiveness Scorecard + validity trade-offs | `lesson-roadmap`, `analytics-pipeline`, `effectiveness-scorecard`, `decision-tradeoff`, `knowledge-check` | **implemented** |
+| t1-l3 | practice | `Theme 1/1.3/lesson.ipynb`, `practice3.ipynb` | **Основи створення інтегрованого середовища розробки засобів ІАЗ** | enablement | Git; GitHub; VS Code; Python; PostgreSQL | Dev Workflow + environment readiness | `lesson-roadmap`, `dev-workflow-explorer`, `decision-tradeoff`, `knowledge-check` | **implemented** |
+| t1-l4 | project | `Theme 1/1.4_1.5/01DataBase`, `02Analytics_03UI(UX)` | **Проєктування даних і REST API простого засобу ІАЗ** *(source-derived)* | storage/enablement | PostgreSQL; PK/FK; Flask REST; layered architecture | DB → API → UI Architecture Lab | `lesson-roadmap`, `analytics-pipeline`, `system-architecture-lab`, `decision-tradeoff`, `knowledge-check` | **implemented** |
+| t1-l5 | practice | `Theme 1/1.4_1.5/2025/task.ipynb`, README | **Інтеграція PostgreSQL, REST API та веб-інтерфейсу простого засобу ІАЗ** *(source-derived)* | enablement/integration | CRUD; validation; Flask; PostgreSQL; HTML/CSS/JS | 8-variant Integration Flow Lab | `lesson-roadmap`, `integration-flow-lab`, `decision-tradeoff`, `knowledge-check` | **implemented** |
 | t2-l1 | lecture | `Theme 2/alection 1` | Збір та зберігання даних для ІАЗ ОВУ | collection/storage | data sources; storage | Source-to-storage flow | `analytics-pipeline` | **planned** |
 | t2-l2 | group | `Theme 2/gl2.2` | Методи збору даних для ІАЗ ОВУ | collection | web/forms/files/APIs | Collection selector | `decision-tradeoff` | **planned** |
 | t2-l3 | practice | `Theme 2/practice 2.3` | Збір даних для ІАЗ ОУВ | collection | scraping; Excel; forms; JSON/XML | Collection challenge | reusable collection components | **planned** |
@@ -60,6 +60,13 @@
 - `workflow-mission-lab`
 - `knowledge-check`
 
+### Theme 1 — methodology / evaluation / project foundations
+- `iaz-lifecycle-lab`
+- `effectiveness-scorecard`
+- `dev-workflow-explorer`
+- `system-architecture-lab`
+- `integration-flow-lab`
+
 ### Theme 2 — storage / SQL
 - `storage-model-explorer`
 - `schema-normalization-lab`
@@ -94,13 +101,16 @@
 ## Методичні контролі
 
 - Цільова тривалість web-заняття: **30–45 хв активної роботи**.
+- Theme 1 використовує problem-first логіку: інформаційна потреба та критерії передують вибору технології.
+- Weighted effectiveness score є навчальною моделлю; hard constraints не компенсуються середнім балом.
+- Secrets не зберігаються в source code/Git; legacy source example з hardcoded DB password трактується як technical debt, а не recommendation.
 - Visual обирається від аналітичного питання, data type та audience, а не від популярності бібліотеки.
 - Scale, units, provenance і критична uncertainty не приховуються заради дизайну.
 - Dashboard має підтримувати `overview → comparison/pattern → detail → brief`, а не бути колекцією widgets.
 - Scaling/imputation/feature selection, що навчаються з даних, fit-яться лише на train після split.
 - Held-out test не використовується для hyperparameter/model selection.
 - GenAI output відокремлюється від source evidence і має provenance/human review.
-- Source gap не заповнюється вигаданим матеріалом: `4.10` залишається `source-gap`; назва `5.5` явно позначена як `source-derived`.
+- Source gap не заповнюється вигаданим матеріалом: `4.10` залишається `source-gap`; `1.4`, `1.5` і `5.5` явно позначені як `source-derived`.
 
 ## Правило аудиту
 
