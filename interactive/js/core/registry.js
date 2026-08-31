@@ -27,6 +27,11 @@ import { mount as mountDesignCritiqueLab } from '../components/design-critique-l
 import { mount as mountAudienceAdaptationLab } from '../components/audience-adaptation-lab.js';
 import { mount as mountVisualizationMissionLab } from '../components/visualization-mission-lab.js';
 import { mount as mountInsightBriefLab } from '../components/insight-brief-lab.js';
+import { mount as mountIazLifecycleLab } from '../components/iaz-lifecycle-lab.js';
+import { mount as mountEffectivenessScorecard } from '../components/effectiveness-scorecard.js';
+import { mount as mountDevWorkflowExplorer } from '../components/dev-workflow-explorer.js';
+import { mount as mountSystemArchitectureLab } from '../components/system-architecture-lab.js';
+import { mount as mountIntegrationFlowLab } from '../components/integration-flow-lab.js';
 
 export const registry = {
   'course-catalog': mountCourseCatalog,
@@ -58,4 +63,9 @@ export const registry = {
   'audience-adaptation-lab': mountAudienceAdaptationLab,
   'visualization-mission-lab': mountVisualizationMissionLab,
   'insight-brief-lab': mountInsightBriefLab,
+  'iaz-lifecycle-lab': mountIazLifecycleLab,
+  'effectiveness-scorecard': mountEffectivenessScorecard,
+  'dev-workflow-explorer': mountDevWorkflowExplorer,
+  'system-architecture-lab': mountSystemArchitectureLab,
+  'integration-flow-lab': mountIntegrationFlowLab,
 };
