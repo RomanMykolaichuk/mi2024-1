@@ -21,6 +21,12 @@ import { mount as mountNeuralNetworkLab } from '../components/neural-network-lab
 import { mount as mountConvolutionLab } from '../components/convolution-lab.js';
 import { mount as mountTransferRlLab } from '../components/transfer-rl-lab.js';
 import { mount as mountTextAnalysisLab } from '../components/text-analysis-lab.js';
+import { mount as mountVisualEncodingLab } from '../components/visual-encoding-lab.js';
+import { mount as mountDashboardBuilder } from '../components/dashboard-builder.js';
+import { mount as mountDesignCritiqueLab } from '../components/design-critique-lab.js';
+import { mount as mountAudienceAdaptationLab } from '../components/audience-adaptation-lab.js';
+import { mount as mountVisualizationMissionLab } from '../components/visualization-mission-lab.js';
+import { mount as mountInsightBriefLab } from '../components/insight-brief-lab.js';
 
 export const registry = {
   'course-catalog': mountCourseCatalog,
@@ -46,4 +52,10 @@ export const registry = {
   'convolution-lab': mountConvolutionLab,
   'transfer-rl-lab': mountTransferRlLab,
   'text-analysis-lab': mountTextAnalysisLab,
+  'visual-encoding-lab': mountVisualEncodingLab,
+  'dashboard-builder': mountDashboardBuilder,
+  'design-critique-lab': mountDesignCritiqueLab,
+  'audience-adaptation-lab': mountAudienceAdaptationLab,
+  'visualization-mission-lab': mountVisualizationMissionLab,
+  'insight-brief-lab': mountInsightBriefLab,
 };
