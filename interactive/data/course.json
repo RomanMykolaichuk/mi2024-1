@@ -1,7 +1,13 @@
 {
   "title":"MI2024 Interactive",
   "groups":[
-    {"id":"theme-1","title":"Тема 1 · Методологічні та інструментальні засади ІАЗ","description":"Методологія ІАЗ, оцінювання ефективності ІТ, середовище розробки та архітектура аналітичного засобу.","status":"planned","progress":{"implemented":0,"total":5},"items":[]},
+    {"id":"theme-1","title":"Тема 1 · Методологічні та інструментальні засади ІАЗ","description":"Problem-first методологія ІАЗ → оцінювання ефективності → Git/IDE environment → DB/API/UI architecture → інтегрована мінісистема.","status":"implemented","progress":{"implemented":5,"total":5},"items":[
+      {"id":"t1-l1","title":"1.1 · Методологічні основи ІАЗ","description":"IAZ Lifecycle Lab: інформаційна потреба, вимоги, проєктування, реалізація, validation, operation і feedback.","duration":"≈ 35–45 хв","status":"implemented","href":"./lessons/theme1.html?lesson=t1-l1"},
+      {"id":"t1-l2","title":"1.2 · Наукові методи оцінки ефективності ІТ в ОУВ","description":"Effectiveness Scorecard: критерії, ваги, baseline, hard constraints і sensitivity.","duration":"≈ 35–45 хв","status":"implemented","href":"./lessons/theme1.html?lesson=t1-l2"},
+      {"id":"t1-l3","title":"1.3 · Інтегроване середовище розробки засобів ІАЗ","description":"Git/GitHub + VS Code + Python + PostgreSQL, repository hygiene і commit/push workflow.","duration":"≈ 35–45 хв","status":"implemented","href":"./lessons/theme1.html?lesson=t1-l3"},
+      {"id":"t1-l4","title":"1.4 · Проєктування даних і REST API простого засобу ІАЗ","description":"Source-derived DB/API/UI architecture на реальних documents/document_types, Flask route і PostgreSQL schema.","duration":"≈ 35–45 хв","status":"implemented","href":"./lessons/theme1.html?lesson=t1-l4"},
+      {"id":"t1-l5","title":"1.5 · Інтеграція PostgreSQL, REST API та web UI","description":"Source-derived Integration Flow Lab для 8 варіантів: GET/POST/DELETE від UI до persistent state і назад.","duration":"≈ 35–45 хв","status":"implemented","href":"./lessons/theme1.html?lesson=t1-l5"}
+    ]},
     {"id":"theme-2","title":"Тема 2 · Збір і зберігання даних","description":"Від способів отримання даних до моделей зберігання, реляційної схеми та SQL.","status":"in-progress","progress":{"implemented":2,"total":5},"items":[
       {"id":"t2-l4","title":"2.4 · Методи зберігання даних ІАЗ ОУВ","description":"Storage Architecture Lab: моделі даних, нормалізація PK/FK, SQL та сценарний вибір сховища.","status":"implemented","href":"./lessons/t2-l4.html"},
       {"id":"t2-l5","title":"2.5 · Реляційна база даних та SQL","description":"Практичний SQL Mission Lab: шість варіантів схеми, PK/FK і PostgreSQL.","status":"implemented","href":"./lessons/t2-l5.html"}
