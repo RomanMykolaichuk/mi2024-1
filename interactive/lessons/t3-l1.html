@@ -1,1 +1,155 @@
-<!doctype html><html lang="uk"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="Інтерактивна лекція 3.1 про методологію підготовки даних та EDA"><title>Лекція 3.1 · Методологія підготовки даних</title><link rel="stylesheet" href="../assets/css/main.css"><link rel="stylesheet" href="../assets/css/data-preparation.css"></head><body><main class="page-shell"><nav class="breadcrumb" aria-label="Навігація"><a href="../index.html">MI2024 Interactive</a><span>→</span><span>Тема 3 · Заняття 1</span></nav><nav class="track-nav" aria-label="Тема 3"><a class="is-current" href="t3-l1.html">3.1</a><a href="t3-l2.html">3.2</a><a href="t3-l3.html">3.3</a><a href="t3-l4.html">3.4</a><a href="t3-l5.html">3.5</a></nav><header class="hero hero--compact"><p class="eyebrow">ТЕМА 3 · ЗАНЯТТЯ 1 · DATA PREPARATION</p><h1>Підготовка даних — це методологія, а не косметичне очищення таблиці</h1><p class="hero__lead">Від якості, порядку й обґрунтованості перетворень залежить достовірність усього наступного аналізу та моделювання.</p></header><section class="section-shell"><div class="section-heading"><p class="eyebrow">ANALYTICS PIPELINE</p><h2>Де знаходиться підготовка даних?</h2></div><div data-component="analytics-pipeline" data-source="../data/lessons/t3-l1.json" data-select="pipeline"></div></section><section class="section-shell"><div class="section-heading"><p class="eyebrow">1 · DATA QUALITY</p><h2>Підготуйте синтетичний набір даних</h2><p>Застосовуйте дії послідовно та спостерігайте, як вони змінюють якість і readiness.</p></div><div data-component="data-quality-lab" data-source="../data/lessons/t3-l1.json" data-select="lab"></div></section><section class="section-shell"><div class="section-heading"><p class="eyebrow">2 · EDA PREVIEW</p><h2>Перш ніж трансформувати — дослідіть</h2><p>Лекція включає друге навчальне питання — Exploratory Data Analysis. Перегляньте п’ять типів evidence, які далі стануть основою 3.2–3.3.</p></div><div data-component="eda-explorer" data-source="../data/lessons/t3-l2.json" data-select="eda"></div></section><section class="analyst-note"><p class="eyebrow">WHY IT MATTERS FOR THE ANALYST</p><h2>Кожне перетворення є аналітичним припущенням</h2><p>Видалення рядка, імпутація пропуску, зміна масштабу або трактування аномалії можуть змінити підсумкові метрики. Тому перетворення повинні бути пояснюваними, відтворюваними й пов’язаними з метою аналізу.</p></section><section class="section-shell"><div class="section-heading"><p class="eyebrow">SELF-CHECK</p><h2>Перевірте розуміння</h2></div><div data-component="knowledge-check" data-source="../data/lessons/t3-l1.json" data-select="quiz"></div></section><section class="section-shell"><div class="section-heading"><p class="eyebrow">SOURCE MATERIALS</p><h2>Матеріали лекції</h2></div><div class="source-links"><a href="../../Theme3/aLection1/content1.ipynb">Методологія підготовки</a><a href="../../Theme3/aLection1/content2.ipynb">Методи EDA</a><a href="../../Theme3/aLection1/questions.ipynb">Questions</a><a href="../../Theme3/aLection1/%D0%9F%D1%96%D0%B4%D0%B3%D0%BE%D1%82%D0%BE%D0%B2%D0%BA%D0%B0%20%D0%B4%D0%B0%D0%BD%D0%B8%D1%85%20%D0%B4%D0%BB%D1%8F%20%D0%B2%D1%96%D0%B9%D1%81%D1%8C%D0%BA%D0%BE%D0%B2%D0%BE%D0%B3%D0%BE%20%D0%B0%D0%BD%D0%B0%D0%BB%D1%96%D0%B7%D1%83.pdf">PDF</a></div></section></main><script type="module" src="../js/app.js"></script></body></html>
+<!doctype html>
+<html lang="uk">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Інтерактивна лекція 3.1 про методологію підготовки даних та EDA">
+  <title>Лекція 3.1 · Методологія підготовки даних</title>
+  <link rel="stylesheet" href="../assets/css/main.css">
+  <link rel="stylesheet" href="../assets/css/data-preparation.css">
+</head>
+<body>
+  <main class="page-shell">
+    <nav class="breadcrumb" aria-label="Навігація">
+      <a href="../index.html">MI2024 Interactive</a><span>→</span><span>Тема 3 · Заняття 1</span>
+    </nav>
+
+    <nav class="track-nav" aria-label="Тема 3">
+      <a class="is-current" href="t3-l1.html">3.1</a><a href="t3-l2.html">3.2</a><a href="t3-l3.html">3.3</a><a href="t3-l4.html">3.4</a><a href="t3-l5.html">3.5</a>
+    </nav>
+
+    <header class="hero hero--compact">
+      <div class="hero-meta"><span>Лекція</span><span>≈ 40 хв</span><span>Data preparation</span></div>
+      <p class="eyebrow">ТЕМА 3 · ЗАНЯТТЯ 1</p>
+      <h1>Підготовка даних — це методологія, а не косметичне очищення таблиці</h1>
+      <p class="hero__lead">Від якості, походження, семантики та порядку перетворень залежить достовірність усього наступного аналізу. Мета заняття — навчитися бачити preprocessing як серію обґрунтованих аналітичних рішень.</p>
+    </header>
+
+    <section class="section-shell">
+      <div class="section-heading">
+        <p class="eyebrow">LEARNING ROUTE</p>
+        <h2>Маршрут заняття: 35–45 хвилин</h2>
+        <p>Час розподілений не на пасивне читання, а на послідовні рішення, перевірку evidence та коротку самоперевірку.</p>
+      </div>
+      <div data-component="lesson-roadmap" data-source="../data/lessons/t3-l1.json" data-select="roadmap"></div>
+    </section>
+
+    <section class="section-shell scenario-brief">
+      <div class="section-heading">
+        <p class="eyebrow">0 · АНАЛІТИЧНА СИТУАЦІЯ</p>
+        <h2>500 записів уже зібрано. Чи можна починати аналіз?</h2>
+        <p>Аналітична група отримала синтетичний масив повідомлень із чотирьох джерел. Формально дані доступні, але перед побудовою метрик треба зрозуміти, що саме в них може спотворити висновок.</p>
+      </div>
+      <div class="scenario-grid">
+        <article><strong>42</strong><span>пропущені значення</span><p>Частина пропусків сконцентрована в одному джерелі, тому причина може бути системною.</p></article>
+        <article><strong>17</strong><span>потенційні дублікати</span><p>Не всі однакові записи є технічними дублями: частина може бути незалежним підтвердженням.</p></article>
+        <article><strong>12</strong><span>аномальних значень</span><p>Серед них можуть бути помилки формату, але також рідкісні події, які не можна видаляти автоматично.</p></article>
+        <article><strong>5</strong><span>форматів часу</span><p>Є різні представлення timestamp і не для всіх записів однозначно визначений timezone.</p></article>
+      </div>
+      <div class="prompt-box">
+        <strong>Питання перед будь-яким очищенням:</strong>
+        <p>Який висновок ми хочемо отримати? Яка одиниця спостереження? Які поля критичні? Які перетворення можуть змінити зміст даних?</p>
+      </div>
+    </section>
+
+    <section class="section-shell">
+      <div class="section-heading">
+        <p class="eyebrow">1 · ANALYTICS PIPELINE</p>
+        <h2>Де знаходиться підготовка даних?</h2>
+        <p>Підготовка стоїть між збереженням і аналізом, але її рішення залежать і від джерел, і від майбутнього аналітичного питання. Тому це не ізольований технічний крок.</p>
+      </div>
+      <div data-component="analytics-pipeline" data-source="../data/lessons/t3-l1.json" data-select="pipeline"></div>
+    </section>
+
+    <section class="section-shell">
+      <div class="section-heading">
+        <p class="eyebrow">2 · МЕТОДОЛОГІЧНІ ПРИНЦИПИ</p>
+        <h2>П’ять правил, які мають передувати коду</h2>
+        <p>Команда `dropna()` або `fillna()` нічого не говорить про те, чи є рішення аналітично коректним. Спочатку потрібна логіка.</p>
+      </div>
+      <div class="concept-grid">
+        <article><span>01</span><h3>Goal-first</h3><p>Спочатку формулюється аналітичне питання, target і одиниця спостереження. Без цього неможливо визначити, які ознаки релевантні, а які проблеми якості справді критичні.</p></article>
+        <article><span>02</span><h3>Provenance</h3><p>Походження запису, джерело, час отримання та спосіб формування є частиною даних. Дві однакові цифри з різних джерел можуть мати різну доказову вагу.</p></article>
+        <article><span>03</span><h3>Semantics before format</h3><p>Уніфікація типів і форматів має зберігати зміст. Перетворити timestamp технічно легко; складніше переконатися, що його timezone та подієвий сенс інтерпретуються правильно.</p></article>
+        <article><span>04</span><h3>Quality is contextual</h3><p>Повний dataset не обов’язково якісний. Імпутовані значення можуть підвищити completeness, але одночасно приховати системний дефект джерела або послабити достовірність висновку.</p></article>
+        <article><span>05</span><h3>Reproducibility</h3><p>Кожне значуще перетворення треба зафіксувати: що змінилося, чому, за яким правилом і з яким наслідком. Інший аналітик має мати змогу відтворити той самий pipeline.</p></article>
+      </div>
+    </section>
+
+    <section class="section-shell">
+      <div class="section-heading">
+        <p class="eyebrow">3 · DATA QUALITY LAB</p>
+        <h2>Підготуйте синтетичний набір даних</h2>
+        <p>Застосовуйте дії послідовно. Не дивіться лише на «quality score»: простежуйте, які записи й припущення змінюються після кожного кроку.</p>
+      </div>
+      <div data-component="data-quality-lab" data-source="../data/lessons/t3-l1.json" data-select="lab"></div>
+    </section>
+
+    <section class="section-shell">
+      <div class="section-heading">
+        <p class="eyebrow">4 · DECISION TRADE-OFF LAB</p>
+        <h2>Коли «очистити» — недостатня відповідь</h2>
+        <p>Чотири ситуації навмисно неоднозначні. Мета — обрати не найшвидшу операцію, а рішення, яке найкраще зберігає зміст і доказовість.</p>
+      </div>
+      <div data-component="decision-tradeoff" data-source="../data/lessons/t3-l1.json" data-select="tradeoff"></div>
+    </section>
+
+    <section class="section-shell">
+      <div class="section-heading">
+        <p class="eyebrow">5 · EDA PREVIEW</p>
+        <h2>Перш ніж трансформувати — дослідіть</h2>
+        <p>EDA дає evidence для частини preprocessing-рішень. Перегляньте п’ять типів сигналів: структура, пропуски, розподіли, зв’язки та аномалії.</p>
+      </div>
+      <div data-component="eda-explorer" data-source="../data/lessons/t3-l2.json" data-select="eda"></div>
+    </section>
+
+    <section class="section-shell">
+      <div class="section-heading">
+        <p class="eyebrow">6 · SYNTHESIS</p>
+        <h2>Підготовка даних і EDA працюють як цикл</h2>
+        <p>Не варто уявляти процес як жорстку лінію «спочатку очистили все, потім подивилися». Часто EDA виявляє проблему, після чого preprocessing змінює dataset, а повторна перевірка підтверджує або спростовує рішення.</p>
+      </div>
+      <div class="comparison-grid">
+        <article><p class="eyebrow">PREPARATION</p><h3>Змінює dataset</h3><ul><li>очищення і validation</li><li>узгодження типів і форматів</li><li>імпутація або видалення</li><li>нормалізація та encoding</li><li>документування pipeline</li></ul><p><strong>Результат:</strong> відтворюваний набір, придатний до аналізу.</p></article>
+        <article><p class="eyebrow">EDA</p><h3>Створює evidence</h3><ul><li>структура і типи даних</li><li>missingness і quality patterns</li><li>розподіли та перцентилі</li><li>кореляції та взаємозв’язки</li><li>аномалії та гіпотези</li></ul><p><strong>Результат:</strong> розуміння, які перетворення потрібні і що треба перевірити далі.</p></article>
+        <article class="comparison-grid__cycle"><p class="eyebrow">WORKING LOOP</p><h3>Evidence → decision → verification</h3><p>1. EDA виявляє проблему.<br>2. Аналітик формулює правило preprocessing.<br>3. Дані трансформуються.<br>4. EDA/quality check повторюється.<br>5. Рішення й наслідок документуються.</p></article>
+      </div>
+    </section>
+
+    <section class="analyst-note">
+      <p class="eyebrow">WHY IT MATTERS FOR THE ANALYST</p>
+      <h2>Кожне перетворення є аналітичним припущенням</h2>
+      <p>Видалення рядка, імпутація пропуску, зміна масштабу або трактування аномалії можуть змінити підсумкові метрики. Якісний preprocessing — це не максимальне «очищення», а контрольований і пояснюваний перехід від сирих даних до доказової бази.</p>
+    </section>
+
+    <section class="section-shell">
+      <div class="section-heading">
+        <p class="eyebrow">7 · SELF-CHECK</p>
+        <h2>Перевірте методологічне розуміння</h2>
+        <p>П’ять запитань перевіряють не синтаксис Pandas, а логіку прийняття рішень щодо даних.</p>
+      </div>
+      <div data-component="knowledge-check" data-source="../data/lessons/t3-l1.json" data-select="quiz"></div>
+      <div class="reflection-box">
+        <strong>Фінальна рефлексія</strong>
+        <p>Сформулюйте одним реченням власне правило: <em>«Перед тим як змінити дані, я повинен…»</em>. Якщо правило містить мету, evidence і наслідок — головну ідею заняття засвоєно.</p>
+      </div>
+    </section>
+
+    <section class="section-shell">
+      <div class="section-heading">
+        <p class="eyebrow">SOURCE MATERIALS</p>
+        <h2>Матеріали лекції та продовження</h2>
+        <p>Інтерактивна сторінка формує методологічну рамку. Notebook і PDF залишаються джерелами для детальнішого опрацювання та реалізації в Python.</p>
+      </div>
+      <div class="source-links">
+        <a href="../../Theme3/aLection1/content1.ipynb">Методологія підготовки</a>
+        <a href="../../Theme3/aLection1/content2.ipynb">Методи EDA</a>
+        <a href="../../Theme3/aLection1/questions.ipynb">Questions</a>
+        <a href="../../Theme3/aLection1/%D0%9F%D1%96%D0%B4%D0%B3%D0%BE%D1%82%D0%BE%D0%B2%D0%BA%D0%B0%20%D0%B4%D0%B0%D0%BD%D0%B8%D1%85%20%D0%B4%D0%BB%D1%8F%20%D0%B2%D1%96%D0%B9%D1%81%D1%8C%D0%BA%D0%BE%D0%B3%D0%BE%20%D0%B0%D0%BD%D0%B0%D0%BB%D1%96%D0%B7%D1%83.pdf">PDF</a>
+        <a href="t3-l2.html">Далі: 3.2 Попередній аналіз даних →</a>
+      </div>
+    </section>
+  </main>
+  <script type="module" src="../js/app.js"></script>
+</body>
+</html>
