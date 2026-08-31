@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="uk">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Інтерактивне групове заняття 2.4 про методи зберігання даних ІАЗ ОУВ">
+  <title>Заняття 2.4 · Методи зберігання даних</title>
+  <link rel="stylesheet" href="../assets/css/main.css">
+  <link rel="stylesheet" href="../assets/css/storage-lab.css">
+</head>
+<body>
+  <main class="page-shell">
+    <nav class="breadcrumb" aria-label="Навігація"><a href="../index.html">MI2024 Interactive</a><span aria-hidden="true">→</span><span>Тема 2 · Заняття 4</span></nav>
+    <header class="hero hero--compact">
+      <p class="eyebrow">ТЕМА 2 · ЗАНЯТТЯ 4 · STORAGE ARCHITECTURE LAB</p>
+      <h1>Де і як зберігати дані, щоб ними можна було довірено аналізувати?</h1>
+      <p class="hero__lead">Реляційна база, JSON-документи, key-value чи граф? Сховище — не «місце для файлів», а частина аналітичної архітектури: воно визначає цілісність, типи можливих запитів, швидкість доступу та відтворюваність звітності.</p>
+    </header>
+
+    <section class="section-shell"><div class="section-heading"><p class="eyebrow">ANALYTICS PIPELINE</p><h2>Зберігання між збором і аналізом</h2><p>Натискайте етапи pipeline. Для цього заняття активний етап — «Зберігання».</p></div><div data-component="analytics-pipeline" data-source="../data/lessons/t2-l4.json" data-select="pipeline"></div></section>
+
+    <section class="section-shell"><div class="section-heading"><p class="eyebrow">1 · MODEL EXPLORER</p><h2>Одна задача — різні моделі даних</h2><p>Порівняйте структуру, сильні сторони, обмеження та типові аналітичні сценарії.</p></div><div data-component="storage-model-explorer" data-source="../data/lessons/t2-l4.json" data-select="models"></div></section>
+
+    <section class="section-shell"><div class="section-heading"><p class="eyebrow">2 · SCHEMA LAB</p><h2>Навіщо PK, FK і нормалізація?</h2><p>Порівняйте плоску таблицю документів із нормалізованою схемою. Дані тут синтетичні й навчальні.</p></div><div data-component="schema-normalization-lab" data-source="../data/lessons/t2-l4.json" data-select="normalization"></div></section>
+
+    <section class="analyst-note"><p class="eyebrow">WHY IT MATTERS FOR THE ANALYST</p><h2>Цілісність схеми впливає на достовірність показника</h2><p>Якщо довідникові значення дублюються, зв’язки не контролюються, а статуси вводяться довільно, помилка виникає ще до статистики чи ML. PK/FK, constraints і нормалізація зменшують частину таких ризиків, але створюють власні компроміси — наприклад, потребу в JOIN.</p></section>
+
+    <section class="section-shell"><div class="section-heading"><p class="eyebrow">3 · SQL QUERY LAB</p><h2>Від записів до аналітичного показника</h2><p>Запустіть підготовлені SELECT/JOIN/GROUP BY запити та простежте, як структура схеми переходить у результат для аналітика.</p></div><div data-component="sql-query-lab" data-source="../data/lessons/t2-l4.json" data-select="sql"></div></section>
+
+    <section class="section-shell"><div class="section-heading"><p class="eyebrow">4 · DECISION LAB</p><h2>Оберіть сховище під задачу</h2><p>Мета — не вгадати «модну» технологію, а зіставити тип даних і майбутній аналітичний запит із властивостями моделі.</p></div><div data-component="storage-decision-lab" data-source="../data/lessons/t2-l4.json" data-select="decision"></div></section>
+
+    <section class="section-shell"><div class="section-heading"><p class="eyebrow">SELF-CHECK</p><h2>Перевірте ключові принципи</h2></div><div data-component="knowledge-check" data-source="../data/lessons/t2-l4.json" data-select="quiz"></div></section>
+
+    <section class="section-shell"><div class="section-heading"><p class="eyebrow">SOURCE MATERIALS</p><h2>Матеріали заняття в репозиторії</h2><p>Інтерактивний шар не замінює notebook/SQL, а допомагає зрозуміти технологію перед практичною реалізацією.</p></div><div class="source-links"><a href="../../Theme%202/gl2.4/content.ipynb">content.ipynb</a><a href="../../Theme%202/gl2.4/01relDB.html">Реляційні БД</a><a href="../../Theme%202/gl2.4/02%D0%9F%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D1%83%D0%B2%D0%B0%D0%BD%D0%BD%D1%8F.html">Проєктування БД</a><a href="../../Theme%202/gl2.4/03SQL.html">SQL mind map</a><a href="../../Theme%202/gl2.4/04NoSQL.html">NoSQL mind map</a></div></section>
+  </main>
+  <script type="module" src="../js/app.js"></script>
+</body>
+</html>

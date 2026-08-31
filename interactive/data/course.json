@@ -2,6 +2,13 @@
   "title": "MI2024 Interactive",
   "items": [
     {
+      "id": "t2-l4",
+      "title": "Тема 2 · Заняття 4 · Методи зберігання даних ІАЗ ОУВ",
+      "description": "Повний Storage Architecture Lab: моделі даних, нормалізація PK/FK, SQL та сценарний вибір сховища.",
+      "status": "implemented",
+      "href": "./lessons/t2-l4.html"
+    },
+    {
       "id": "t3-l1",
       "title": "Лекція 3.1 · Підготовка даних",
       "description": "Еталонний prototype: місце підготовки даних у pipeline, інтерактивне очищення та self-check.",
@@ -9,28 +16,34 @@
       "href": "./lessons/t3-l1.html"
     },
     {
+      "id": "matrix",
+      "title": "Master matrix · Theme 1–5",
+      "description": "Roadmap усіх наявних занять, технологій, етапів ІАЗ та reusable interactive components.",
+      "status": "roadmap"
+    },
+    {
       "id": "theme-1",
       "title": "Theme 1 · Interactive track",
-      "description": "Інтерактивні пояснення технологій теми після аудиту наявних матеріалів.",
+      "description": "Методологія, ефективність ІТ, development workflow та архітектура ІАЗ.",
       "status": "planned"
     },
     {
       "id": "theme-2",
       "title": "Theme 2 · Interactive track",
-      "description": "Інтерактивні пояснення технологій теми після аудиту наявних матеріалів.",
-      "status": "planned"
+      "description": "Збір і зберігання даних; заняття 2.4 уже реалізовано.",
+      "status": "in-progress"
     },
     {
       "id": "theme-4",
       "title": "Theme 4 · Interactive track",
-      "description": "Інтерактивні пояснення технологій теми після аудиту наявних матеріалів.",
+      "description": "Методи аналізу, ML/NN та інші аналітичні технології.",
       "status": "planned"
     },
     {
       "id": "theme-5",
       "title": "Theme 5 · Interactive track",
-      "description": "Інтерактивні пояснення технологій теми після аудиту наявних матеріалів.",
-      "status": "planned"
+      "description": "Потрібен поглиблений аудит назв/матеріалів перед масштабуванням.",
+      "status": "audit-needed"
     }
   ]
 }

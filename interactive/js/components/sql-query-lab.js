@@ -1,0 +1,9 @@
+function esc(v){return String(v).replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));}
+function resultTable(q){return `<div class="table-scroll"><table class="data-table"><thead><tr>${q.columns.map(c=>`<th>${esc(c)}</th>`).join('')}</tr></thead><tbody>${q.rows.map(r=>`<tr>${r.map(v=>`<td>${esc(v)}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;}
+export function mount(element,config){
+ const queries=config.queries??[]; if(!queries.length)return;
+ element.innerHTML=`<div class="simulator-note">${esc(config.note??'')}</div><div class="sql-layout"><div class="sql-list">${queries.map((q,i)=>`<button type="button" class="sql-query-button ${i===0?'is-active':''}" data-query="${esc(q.id)}"><span>${esc(q.concept)}</span>${esc(q.label)}</button>`).join('')}</div><div class="sql-workbench" data-role="workbench"></div></div>`;
+ const wb=element.querySelector('[data-role="workbench"]'), buttons=[...element.querySelectorAll('[data-query]')];
+ function render(id){const q=queries.find(x=>x.id===id)||queries[0]; wb.innerHTML=`<div class="sql-heading"><div><p class="eyebrow">${esc(q.concept)}</p><h3>${esc(q.label)}</h3></div><button type="button" class="btn" data-role="run">Виконати запит</button></div><pre class="sql-code"><code>${esc(q.sql)}</code></pre><div class="sql-result" data-role="result"><p class="microcopy">Натисніть «Виконати запит», щоб побачити навчальний результат.</p></div>`; buttons.forEach(b=>b.classList.toggle('is-active',b.dataset.query===q.id)); wb.querySelector('[data-role="run"]').addEventListener('click',()=>{wb.querySelector('[data-role="result"]').innerHTML=`<p class="eyebrow">RESULT SET</p>${resultTable(q)}<div class="analytics-callout"><strong>Аналітичний сенс:</strong> ${esc(q.insight)}</div>`;});}
+ buttons.forEach(b=>b.addEventListener('click',()=>render(b.dataset.query))); render(queries[0].id);
+}
