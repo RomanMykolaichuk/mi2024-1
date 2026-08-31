@@ -1,0 +1,36 @@
+{
+  "title": "MI2024 Interactive",
+  "items": [
+    {
+      "id": "t3-l1",
+      "title": "Лекція 3.1 · Підготовка даних",
+      "description": "Еталонний prototype: місце підготовки даних у pipeline, інтерактивне очищення та self-check.",
+      "status": "prototype",
+      "href": "./lessons/t3-l1.html"
+    },
+    {
+      "id": "theme-1",
+      "title": "Theme 1 · Interactive track",
+      "description": "Інтерактивні пояснення технологій теми після аудиту наявних матеріалів.",
+      "status": "planned"
+    },
+    {
+      "id": "theme-2",
+      "title": "Theme 2 · Interactive track",
+      "description": "Інтерактивні пояснення технологій теми після аудиту наявних матеріалів.",
+      "status": "planned"
+    },
+    {
+      "id": "theme-4",
+      "title": "Theme 4 · Interactive track",
+      "description": "Інтерактивні пояснення технологій теми після аудиту наявних матеріалів.",
+      "status": "planned"
+    },
+    {
+      "id": "theme-5",
+      "title": "Theme 5 · Interactive track",
+      "description": "Інтерактивні пояснення технологій теми після аудиту наявних матеріалів.",
+      "status": "planned"
+    }
+  ]
+}

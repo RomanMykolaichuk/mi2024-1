@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="uk">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Інтерактивна демонстрація підготовки даних до військового аналізу">
+  <title>Лекція 3.1 · Підготовка даних</title>
+  <link rel="stylesheet" href="../assets/css/main.css">
+</head>
+<body>
+  <main class="page-shell">
+    <nav class="breadcrumb" aria-label="Навігація">
+      <a href="../index.html">MI2024 Interactive</a>
+      <span aria-hidden="true">→</span>
+      <span>Лекція 3.1</span>
+    </nav>
+
+    <header class="hero hero--compact">
+      <p class="eyebrow">ЛЕКЦІЯ 3.1 · DATA PREPARATION</p>
+      <h1>Чи готові дані до аналізу?</h1>
+      <p class="hero__lead">Дані з різних джерел можуть бути формально доступними, але ще не придатними для обґрунтованого аналітичного висновку.</p>
+    </header>
+
+    <section class="section-shell">
+      <div class="section-heading">
+        <p class="eyebrow">ANALYTICS PIPELINE</p>
+        <h2>Де ми знаходимося?</h2>
+      </div>
+      <div
+        data-component="analytics-pipeline"
+        data-source="../data/lessons/t3-l1.json"
+        data-select="pipeline">
+      </div>
+    </section>
+
+    <section class="section-shell">
+      <div class="section-heading">
+        <p class="eyebrow">INTERACTIVE LAB</p>
+        <h2>Підготуйте набір даних</h2>
+        <p>Застосовуйте дії послідовно та спостерігайте, як вони змінюють якість і готовність даних.</p>
+      </div>
+      <div
+        data-component="data-quality-lab"
+        data-source="../data/lessons/t3-l1.json"
+        data-select="lab">
+      </div>
+    </section>
+
+    <section class="analyst-note">
+      <p class="eyebrow">WHY IT MATTERS FOR THE ANALYST</p>
+      <h2>Підготовка даних — частина аналітичного рішення</h2>
+      <p>Очищення, нормалізація та робота з аномаліями змінюють не лише «охайність» таблиці. Вони впливають на обсяг доказової бази, стабільність метрик і подальшу інтерпретацію результату. Тому кожне перетворення має бути пояснюваним і відтворюваним.</p>
+    </section>
+
+    <section class="section-shell">
+      <div class="section-heading">
+        <p class="eyebrow">SELF-CHECK</p>
+        <h2>Перевірте розуміння</h2>
+      </div>
+      <div
+        data-component="knowledge-check"
+        data-source="../data/lessons/t3-l1.json"
+        data-select="quiz">
+      </div>
+    </section>
+  </main>
+
+  <script type="module" src="../js/app.js"></script>
+</body>
+</html>
