@@ -8,6 +8,7 @@ on:
       - "docs/LESSON_AUTHORING_GUIDE.md"
       - "docs/COURSE_INTERACTIVE_MATRIX.md"
       - "docs/THEME3_INTERACTIVE_TRACK.md"
+      - "docs/THEME4_INTERACTIVE_TRACK.md"
   push:
     branches:
       - main
@@ -17,6 +18,7 @@ on:
       - "docs/LESSON_AUTHORING_GUIDE.md"
       - "docs/COURSE_INTERACTIVE_MATRIX.md"
       - "docs/THEME3_INTERACTIVE_TRACK.md"
+      - "docs/THEME4_INTERACTIVE_TRACK.md"
 
 permissions:
   contents: read
@@ -50,12 +52,66 @@ jobs:
               print(f'OK: {path}')
           PY
 
+      - name: Validate Theme 4 lesson timeboxes and sources
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          from urllib.parse import urlsplit, unquote
+
+          errors = []
+          files = sorted(Path('interactive/data/lessons').glob('t4-l*.json'))
+          if len(files) != 13:
+              errors.append(f'Expected 13 Theme 4 lesson JSON files, found {len(files)}')
+
+          lesson_page_dir = Path('interactive/lessons').resolve()
+
+          for path in files:
+              data = json.loads(path.read_text(encoding='utf-8'))
+              roadmap = data.get('roadmap', {})
+              duration = roadmap.get('duration', {})
+              minimum = duration.get('min')
+              maximum = duration.get('max')
+              blocks = roadmap.get('blocks', [])
+              planned = sum(int(block.get('minutes', 0)) for block in blocks)
+
+              if not isinstance(minimum, int) or minimum < 30:
+                  errors.append(f'{path}: duration.min must be >= 30')
+              if not isinstance(maximum, int) or maximum > 45:
+                  errors.append(f'{path}: duration.max must be <= 45')
+              if isinstance(minimum, int) and isinstance(maximum, int) and minimum > maximum:
+                  errors.append(f'{path}: duration.min > duration.max')
+              if planned < 30 or planned > 45:
+                  errors.append(f'{path}: planned block time must be 30–45 min, got {planned}')
+              if len(blocks) < 5:
+                  errors.append(f'{path}: expected at least 5 active blocks')
+
+              for source in data.get('sources', []):
+                  href = source.get('href')
+                  if not href:
+                      continue
+                  parsed = urlsplit(href)
+                  if parsed.scheme or parsed.netloc:
+                      continue
+                  target = (lesson_page_dir / unquote(parsed.path)).resolve()
+                  if not target.is_file():
+                      errors.append(f'{path}: missing source material {href}')
+
+              print(f'OK: {path} -> declared {minimum}–{maximum} min; planned {planned} min')
+
+          if errors:
+              print('\n'.join(f'ERROR: {error}' for error in errors))
+              raise SystemExit('Theme 4 lesson validation failed')
+          PY
+
       - name: Validate course catalog links
         shell: bash
         run: |
           python3 - <<'PY'
           import json
           from pathlib import Path
+          from urllib.parse import urlsplit, parse_qs
 
           root = Path('interactive')
           catalog = json.loads((root / 'data/course.json').read_text(encoding='utf-8'))
@@ -71,14 +127,24 @@ jobs:
               href = item.get('href')
               if not href:
                   continue
-              target = (root / href.removeprefix('./')).resolve()
+              parsed = urlsplit(href)
+              target = (root / parsed.path.removeprefix('./')).resolve()
               if not target.is_file():
-                  missing.append((item.get('id'), href))
-              else:
-                  print(f"OK: {item.get('id')} -> {href}")
+                  missing.append((item.get('id'), href, 'page'))
+                  continue
+
+              query = parse_qs(parsed.query)
+              lesson_ids = query.get('lesson', [])
+              if lesson_ids:
+                  lesson_json = root / 'data' / 'lessons' / f'{lesson_ids[0]}.json'
+                  if not lesson_json.is_file():
+                      missing.append((item.get('id'), href, 'lesson JSON'))
+                      continue
+
+              print(f"OK: {item.get('id')} -> {href}")
 
           if missing:
-              for item_id, href in missing:
-                  print(f'MISSING: {item_id} -> {href}')
+              for item_id, href, kind in missing:
+                  print(f'MISSING {kind}: {item_id} -> {href}')
               raise SystemExit('Broken links found in interactive/data/course.json')
           PY

@@ -66,9 +66,15 @@ function renderCard(item) {
         <h3>${esc(item.title)}</h3>
         <p>${esc(item.description)}</p>
       </div>
-      <p class="course-card__action">${enabled ? 'Відкрити →' : 'Заплановано'}</p>
+      <p class="course-card__action">${enabled ? 'Відкрити →' : disabledAction(status)}</p>
     </${tag}>
   `;
+}
+
+function disabledAction(status) {
+  if (status === 'source-gap') return 'Немає первинного джерела';
+  if (status === 'audit-needed') return 'Потрібен аудит';
+  return 'Заплановано';
 }
 
 function statusLabel(status) {
@@ -79,6 +85,7 @@ function statusLabel(status) {
     planned: 'заплановано',
     'in-progress': 'у розробці',
     'audit-needed': 'потрібен аудит',
+    'source-gap': 'джерело відсутнє',
     roadmap: 'roadmap',
   }[status] ?? status;
 }

@@ -30,7 +30,7 @@ HTML5
 Контент відділяється від механізму.
 
 ```text
-HTML сторінка
+HTML shell / page
     ↓
 data-component="..."
     ↓
@@ -49,17 +49,41 @@ JSON configuration / scenario
 </section>
 ```
 
-Один `analytics-pipeline.js` використовується в усіх лекціях, а конкретний зміст задається JSON.
+Один reusable component використовується в різних заняттях, а конкретний зміст задається JSON.
 
-## 4. Reusable engine
+## 4. Два способи page composition
+
+### 4.1 Explicit HTML composition
+
+Підходить, коли заняття має унікальну структуру. Theme 2–3 переважно використовують окремі HTML-сторінки з явними `[data-component]` placeholders.
+
+### 4.2 Data-driven shared shell
+
+Коли велика серія занять має однакову педагогічну рамку, не потрібно дублювати HTML. Theme 4 використовує:
+
+```text
+lessons/theme4.html?lesson=t4-lN
+        ↓
+js/theme4-page.js
+        ↓
+data/lessons/t4-lN.json
+        ↓
+shared reusable components
+```
+
+`theme4-page.js` формує breadcrumb, track navigation, hero, `lesson-roadmap`, scenario, pipeline, component sections, analyst note, self-check і source links, після чого запускає загальний `app.js`.
+
+Це не SPA framework: сторінка залишається звичайним static HTML + browser JavaScript.
+
+## 5. Reusable engine
 
 ### `js/app.js`
 
-Bootstrap-файл. Знаходить усі елементи `[data-component]`, отримує їх конфігурацію та передає відповідному компоненту.
+Bootstrap-файл. Знаходить `[data-component]`, отримує конфігурацію та передає відповідному component mount.
 
 ### `js/core/registry.js`
 
-Єдиний реєстр компонентів. Нова функціональність додається один раз у registry, а не імпортується вручну в кожній лекції.
+Єдиний реєстр компонентів. Нова поведінка додається один раз у registry.
 
 ### `js/core/data.js`
 
@@ -68,11 +92,11 @@ Bootstrap-файл. Знаходить усі елементи `[data-component]
 - завантаження JSON;
 - кешування повторних запитів;
 - вибір підсекції через `data-select`;
-- читання inline `data-config` для малих компонентів.
+- inline `data-config` для малих компонентів.
 
 ### `js/components/*`
 
-Самодостатні reusable-компоненти. Кожен експортує одну функцію:
+Самодостатні reusable-компоненти. Кожен експортує:
 
 ```js
 export function mount(element, config) {
@@ -80,56 +104,87 @@ export function mount(element, config) {
 }
 ```
 
-Компонент не повинен знати назву конкретної лекції.
+Component не повинен залежати від ID конкретної лекції.
 
-## 5. Базова бібліотека компонентів
+## 6. Поточна бібліотека компонентів
 
-Поточний каркас містить:
+### Core / pedagogical
+- `course-catalog`
+- `lesson-roadmap`
+- `analytics-pipeline`
+- `decision-tradeoff`
+- `workflow-mission-lab`
+- `knowledge-check`
 
-- `course-catalog` — головна карта/каталог інтерактивних занять;
-- `analytics-pipeline` — місце технології в ланцюгу військової аналітики;
-- `data-quality-lab` — stateful what-if симулятор підготовки даних;
-- `knowledge-check` — коротка самоперевірка.
+### Storage / SQL
+- `storage-model-explorer`
+- `schema-normalization-lab`
+- `sql-query-lab`
+- `storage-decision-lab`
+- `relational-schema-builder`
+- `sql-mission-lab`
 
-Наступні кандидати:
+### Data preparation / EDA
+- `data-quality-lab`
+- `eda-explorer`
+- `transformation-lab`
+- `split-leakage-lab`
+- `readiness-scorecard`
 
-- `metric-explorer`;
-- `model-comparison`;
-- `map-explorer` (Leaflet);
-- `timeline-explorer`;
-- `network-explorer`;
-- `decision-card`;
-- `compare-approaches`;
-- `uncertainty-lab`.
+### Analysis / AI
+- `method-selector`
+- `metric-tradeoff-lab`
+- `neural-network-lab`
+- `convolution-lab`
+- `transfer-rl-lab`
+- `text-analysis-lab`
 
-## 6. State management
+Майбутні кандидати: `map-explorer`, `timeline-explorer`, `network-explorer`, `visual-encoding-lab`, `dashboard-builder`, `decision-brief`.
 
-У v1 не вводиться глобальний state manager. Стан належить компоненту.
+## 7. State management
 
-Це навмисно: лекційні інтерактиви мають бути незалежними й малими. Якщо з'явиться комплексний тренажер з картою, timeline, багатьма об'єктами та спільним станом, його можна винести в окремий application layer або перейти для цього компонента на React.
+У v1 немає global state manager. Стан належить компоненту.
 
-## 7. Дані
+Це навмисно: лекційні інтерактиви незалежні й малі. Якщо з'явиться комплексний тренажер із картою, timeline, багатьма об'єктами та спільним state, його можна винести в окремий application layer або, за потреби, використати framework лише для цього складного компонента.
 
-JSON — декларативний опис заняття. У ньому зберігаються:
+## 8. Lesson JSON
 
-- назва й тип заняття;
-- active stage аналітичного pipeline;
-- параметри демонстрації;
-- сценарій симулятора;
-- питання self-check;
-- посилання на notebook/матеріали (коли вони будуть промаплені).
+JSON є декларативним описом заняття. Рекомендовані поля:
 
-Важливо: JSON не повинен містити чутливі або службові реальні дані.
+- `id`, `number`, `title`, `type`;
+- `roadmap.duration`, outcomes і timeboxed blocks;
+- `scenario`;
+- `pipeline`;
+- component configs;
+- `sections` для data-driven shell;
+- `analystNote`;
+- `quiz` і reflection;
+- `sources`.
 
-## 8. URL та portable deployment
+JSON не повинен містити чутливі або службові реальні дані.
 
-У коді використовуються відносні URL. Це дозволяє однаково працювати:
+## 9. URL та portable deployment
+
+Використовуються relative URLs. Це дозволяє однаково працювати:
 
 - локально через `python3 -m http.server`;
 - у GitHub Pages під `/mi2024-1/`;
-- з іншого статичного web server.
+- з іншого static web server.
 
-## 9. Accessibility і progressive enhancement
+Query route типу `theme4.html?lesson=t4-l1` також залишається статичним: server віддає один HTML-файл, а browser обирає lesson JSON.
+
+## 10. CI contracts
+
+Static checks перевіряють:
+
+- JavaScript syntax;
+- JSON validity;
+- catalog links і data-driven query routes;
+- для Theme 4 — 13 підтверджених lesson JSON та timebox 30–45 хв.
+
+CI не підмінює browser/manual QA, але ловить структурні помилки до merge.
+
+## 11. Accessibility і progressive enhancement
 
 Компоненти повинні:
 
@@ -139,18 +194,20 @@ JSON — декларативний опис заняття. У ньому зб�
 - підтримувати клавіатуру для основних дій;
 - показувати зрозуміле повідомлення про помилку замість порожнього блоку.
 
-## 10. Правило масштабування
+## 12. Правило масштабування
 
 Не створювати `lecture1.js`, `lecture2.js`, `lecture3.js` з копіями логіки.
 
 Потрібна схема:
 
 ```text
-один reusable component
+shared page shell (коли доречно)
+        +
+reusable components
         +
 JSON конкретного заняття
         =
 новий інтерактив
 ```
 
-Це ключова вимога до всіх наступних сторінок.
+Framework додається лише тоді, коли реальна shared-state complexity виправдовує його вартість.

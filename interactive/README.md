@@ -13,60 +13,81 @@ python3 -m http.server 8000
 
 ## Залежності
 
-Для базової версії немає npm-залежностей і build step. Потрібні лише browser та будь-який локальний static server. Найпростіший варіант — Python `http.server`.
+Для базової версії немає npm-залежностей і build step. Потрібні лише browser та будь-який local static server.
 
 ## Структура
 
 ```text
 interactive/
-├── index.html                 # landing page / grouped course catalog
-├── lessons/                   # інтерактивні заняття
-├── assets/css/main.css        # спільний design system
-├── assets/css/*.css           # тематичні/component styles
+├── index.html                 # grouped course catalog
+├── lessons/                   # lesson pages / shared shells
+├── assets/css/*.css           # design system + thematic styles
 ├── js/app.js                  # bootstrap reusable engine
 ├── js/core/                   # registry + data loader
 ├── js/components/             # reusable components
-└── data/                      # course map + lesson scenarios + master matrix
+└── data/lessons/*.json        # lesson scenarios/configs
 ```
 
 ## Головна сторінка
 
-Каталог організовано **за темами дисципліни**, а не одним плоским списком. Кожна тема має:
-
-- назву й коротке пояснення;
-- статус розроблення;
-- прогрес `implemented / total`;
-- картки тільки тих занять, які вже мають інтерактивний web-шар.
+Каталог організовано **за темами дисципліни**. Кожна тема має status, progress `implemented / total` і картки реалізованих занять.
 
 ## Норматив тривалості
 
-Ціль для інтерактивного заняття — **приблизно 30–45 хв активної роботи** без повного виконання окремого Jupyter notebook.
+Ціль для web-заняття — **приблизно 30–45 хв активної роботи** без повного виконання окремого Jupyter notebook.
 
-Типова лекція має містити scenario, concept/pipeline, основний lab, decision/what-if activity, interpretation та self-check. Для контролю використовується reusable component `lesson-roadmap`.
-
-`3.1` є reference implementation розширеної лекції приблизно на 40 хв.
+Типовий маршрут: scenario → concept/pipeline → main interactive → decision/mission → interpretation → self-check/reflection. `lesson-roadmap` показує timebox і структуру.
 
 ## Реалізовані заняття
 
 ### Тема 2
-- `lessons/t2-l4.html` — **2.4 «Методи зберігання даних ІАЗ ОУВ»**: storage model explorer, normalization lab, SQL query lab, storage decision lab, self-check.
-- `lessons/t2-l5.html` — **2.5 «Реляційна база даних та SQL»**: six-variant relational schema builder, PK/FK practice, PostgreSQL SQL Mission Lab, practical workflow, self-check.
+- `lessons/t2-l4.html` — 2.4 Storage Architecture Lab.
+- `lessons/t2-l5.html` — 2.5 Relational Schema + SQL Mission Lab.
 
-### Тема 3 — complete interactive track
-- `lessons/t3-l1.html` — **3.1 «Методологія підготовки даних»**: ≈40 хв; scenario, methodology principles, Data Quality Lab, Decision Trade-off Lab, EDA preview, synthesis, self-check.
-- `lessons/t3-l2.html` — **3.2 «Попередній аналіз даних»**: EDA Explorer, team mission, self-check.
-- `lessons/t3-l3.html` — **3.3 «Практичний EDA»**: dataset → audit → statistics → visualization → correlations → conclusion.
-- `lessons/t3-l4.html` — **3.4 «Методи підготовки даних до аналізу (моделювання)»**: transformation lab + train/test leakage lab.
-- `lessons/t3-l5.html` — **3.5 «Наскрізна підготовка даних до моделювання»**: end-to-end mission + leakage check + model-readiness scorecard.
+### Тема 3 — 5/5
+- 3.1 methodology + Data Quality + decision trade-offs + EDA;
+- 3.2 EDA Explorer + team mission;
+- 3.3 practical reproducible EDA;
+- 3.4 transformation + leakage lab;
+- 3.5 end-to-end model-ready pipeline.
+
+### Тема 4 — 13/14 наявних позицій
+
+Theme 4 використовує один data-driven shell:
+
+```text
+lessons/theme4.html?lesson=t4-l1
+...
+lessons/theme4.html?lesson=t4-l14
+```
+
+Реалізовано:
+
+- 4.1 — method selection for statistics/ML/GIS/text/network analysis;
+- 4.2 — classification/regression/clustering + ML workflow;
+- 4.3 — regression metrics and model complexity;
+- 4.4 — evaluation, CV and hyperparameter tuning;
+- 4.5 — classification threshold + confusion matrix;
+- 4.6 — neural-network architecture and capacity;
+- 4.7 — deep-learning experiment design;
+- 4.8 — TensorFlow regression/classification design;
+- 4.9 — convolution/CNN + image-model trade-offs;
+- 4.11 — frontier methods, model hubs and MLOps;
+- 4.12 — Transfer Learning + RL;
+- 4.13 — project design for model repositories / RL;
+- 4.14 — text analytics + Generative AI provenance controls.
+
+**4.10** позначено `source-gap`: у репозиторії немає окремого первинного матеріалу, тому зміст не вигадується.
 
 ## Reusable components
 
-### Core pedagogical components
-- `course-catalog` — grouped Theme → Lessons catalog;
-- `lesson-roadmap` — timebox, learning outcomes і блоки заняття;
-- `analytics-pipeline` — місце технології в аналітичному процесі;
-- `decision-tradeoff` — неоднозначні ситуації та наслідки рішення;
-- `knowledge-check` — self-check.
+### Core / pedagogical
+- `course-catalog`
+- `lesson-roadmap`
+- `analytics-pipeline`
+- `decision-tradeoff`
+- `workflow-mission-lab`
+- `knowledge-check`
 
 ### Storage / SQL
 - `storage-model-explorer`
@@ -79,35 +100,39 @@ interactive/
 ### Data preparation / EDA
 - `data-quality-lab`
 - `eda-explorer`
-- `workflow-mission-lab`
 - `transformation-lab`
 - `split-leakage-lab`
 - `readiness-scorecard`
 
-## Theme 3 methodological rule
+### Analysis / AI — Theme 4
+- `method-selector`
+- `metric-tradeoff-lab`
+- `neural-network-lab`
+- `convolution-lab`
+- `transfer-rl-lab`
+- `text-analysis-lab`
 
-Правильна модель переходу до ML:
+## Methodological rules
 
-`data audit → train/test split → fit preprocessing on train → transform train/test → train model → evaluate on test`
+Правильна модель переходу до ML/DL:
 
-Не fit-ити scaler, imputer чи feature selection на всьому dataset до split: це створює ризик **data leakage** і завищеної оцінки моделі.
+`data audit → split → fit preprocessing on train → transform train/validation/test → train/tune → final evaluation on held-out test`
 
-## Master matrix
+Для GenAI: source evidence, generated synthesis, uncertainty і human review мають бути явно розділені.
 
-- `data/course-matrix.json` — machine-readable roadmap Theme 1–5.
-- `../docs/COURSE_INTERACTIVE_MATRIX.md` — людиночитний варіант матриці та component roadmap.
-- `../docs/THEME3_INTERACTIVE_TRACK.md` — зміст, педагогічна логіка і технічні рішення Theme 3.
+## Документація
+
+- `data/course-matrix.json` — machine-readable roadmap Theme 1–5;
+- `../docs/COURSE_INTERACTIVE_MATRIX.md` — master matrix;
+- `../docs/THEME3_INTERACTIVE_TRACK.md` — Theme 3;
+- `../docs/THEME4_INTERACTIVE_TRACK.md` — Theme 4, source audit, reusable components і technical debt.
 
 ## Правило reusable engine
 
-Не додавати JS-логіку безпосередньо в кожне заняття, якщо її можна узагальнити як reusable component.
+Не додавати lesson-specific JS, якщо поведінку можна винести в reusable component.
 
-`HTML placeholder + reusable JS component + JSON lesson config = interactive lesson`
+`HTML shell + reusable JS component + JSON lesson config = interactive lesson`
 
 ## Дані
 
-Інтерактивний web-шар використовує лише синтетичні, навчальні або дозволені відкриті дані. Він не призначений для розміщення службової чи чутливої інформації.
-
-## SQL dialect
-
-Нові матеріали 2.5 використовують PostgreSQL-синтаксис послідовно. У вихідному `Theme 2/practice2.5/task.ipynb` є змішування PostgreSQL і MySQL-конструкцій; це вважається технічним боргом вихідного матеріалу і не переноситься до reusable engine.
+Web-шар використовує лише synthetic, teaching або дозволені open data. Великі model artifacts не завантажуються автоматично; live LLM/RL backend у базовій статичній версії відсутній.
