@@ -10,7 +10,7 @@
 
 ## Матриця
 
-| ID | Тип | Джерело | Назва / робоча назва | Етап ІАЗ | Технологія | Запланований інтерактив | Компоненти | Статус |
+| ID | Тип | Джерело | Назва / робоча назва | Етап ІАЗ | Технологія | Запланований / реалізований інтерактив | Компоненти | Статус |
 |---|---|---|---|---|---|---|---|---|
 | t1-l1 | lecture | `Theme 1/1.1` | Методологічні основи ІАЗ | decision | IAZ methodology; project lifecycle | Interactive IAZ lifecycle + methodology comparison | `analytics-pipeline`, `decision-tradeoff` | **planned** |
 | t1-l2 | lecture | `Theme 1/1.2` | Наукові методи оцінки ефективності застосування інформаційних технологій в ОУВ | decision | IT effectiveness evaluation | Effectiveness scorecard with weighted criteria | `effectiveness-scorecard`, `decision-tradeoff` | **planned** |
@@ -20,13 +20,13 @@
 | t2-l1 | lecture | `Theme 2/alection 1` | Збір та зберігання даних для ІАЗ ОВУ | collection/storage | data sources; storage | Source-to-storage flow explorer | `analytics-pipeline`, `source-flow-map` | **planned** |
 | t2-l2 | group | `Theme 2/gl2.2` | Методи збору даних для ІАЗ ОВУ | collection | web forms; files; APIs; structured collection | Collection method selector | `source-flow-map`, `decision-tradeoff` | **planned** |
 | t2-l3 | practice | `Theme 2/practice 2.3` | Збір даних для інформаційно-аналітичного забезпечення ОУВ | collection | web scraping; Excel; forms; XML/JSON | Multi-source collection challenge | `source-flow-map`, `format-converter-lab` | **planned** |
-| t2-l4 | group | `Theme 2/gl2.4` | Методи зберігання даних ІАЗ ОУВ | storage | relational DB; SQL; normalization; NoSQL | Storage Architecture Lab: model explorer + normalization + SQL + scenario choice | `analytics-pipeline`, `storage-model-explorer`, `schema-normalization-lab`, `sql-query-lab`, `storage-decision-lab`, `knowledge-check` | **implemented** |
-| t2-l5 | practice | `Theme 2/practice2.5` | Реляційна база даних: дві пов’язані таблиці та SQL-запити | storage | PostgreSQL; relational schema; JOIN; GROUP BY | SQL mission lab with schema and query objectives | `schema-normalization-lab`, `sql-query-lab` | **planned** |
-| t3-l1 | lecture | `Theme3/aLection1` | Методологія підготовки даних | preparation | cleaning; transformation; integration; quality | Data Quality Lab | `analytics-pipeline`, `data-quality-lab`, `knowledge-check` | **prototype** |
-| t3-l2 | group | `Theme3/Group lesson 2` | Методи підготовки даних | preparation | cleaning; transformation | Team data-preparation challenge | `data-quality-lab`, `decision-tradeoff` | **planned** |
-| t3-l3 | practice | `Theme3/Practice 3` | Практична підготовка даних | preparation | Pandas; cleaning; transformation | Transformation pipeline lab | `data-quality-lab`, `transformation-pipeline` | **planned** |
-| t3-l4 | group | `Theme3/Group lesson 4` | Інтеграція та узгодження даних | preparation | data integration; conflicts | Integration conflict lab | `integration-conflict-lab`, `decision-tradeoff` | **planned** |
-| t3-l5 | practice | `Theme3/Practice5` | Підготовка даних для подальшого моделювання | preparation | feature preparation; train/test readiness | Feature/readiness lab | `feature-engineering-lab`, `data-quality-lab` | **planned** |
+| t2-l4 | group | `Theme 2/gl2.4` | Методи зберігання даних ІАЗ ОУВ | storage | relational DB; SQL; normalization; NoSQL | Storage Architecture Lab | `analytics-pipeline`, `storage-model-explorer`, `schema-normalization-lab`, `sql-query-lab`, `storage-decision-lab`, `knowledge-check` | **implemented** |
+| t2-l5 | practice | `Theme 2/practice2.5` | Реляційна база даних: дві пов’язані таблиці та SQL-запити | storage | PostgreSQL; relational schema; JOIN; GROUP BY | Six-variant relational schema + SQL Mission Lab | `relational-schema-builder`, `sql-mission-lab`, `knowledge-check` | **implemented** |
+| t3-l1 | lecture | `Theme3/aLection1` | Методологія підготовки даних; Методи попереднього аналізу даних | preparation | data quality; cleaning; transformation; EDA | Data Quality Lab + EDA preview | `analytics-pipeline`, `data-quality-lab`, `eda-explorer`, `knowledge-check` | **implemented** |
+| t3-l2 | group | `Theme3/Group lesson 2` | Попередній аналіз даних | preparation | Pandas; NumPy; descriptive statistics; visualization; correlation; anomalies | EDA Explorer + team profile mission | `analytics-pipeline`, `eda-explorer`, `workflow-mission-lab`, `knowledge-check` | **implemented** |
+| t3-l3 | practice | `Theme3/Practice 3/task.ipynb` | Аналіз набору даних з Kaggle | preparation | data loading; cleaning; descriptive statistics; visualization; correlation | Reproducible EDA Mission | `eda-explorer`, `workflow-mission-lab`, `knowledge-check` | **implemented** |
+| t3-l4 | group | `Theme3/Group lesson 4` | Методи підготовки даних до аналізу (моделювання) | preparation | missing-data handling; normalization/scaling; One-Hot Encoding; train/test split; feature selection; aggregation | Transformation Lab + Data Leakage Lab | `analytics-pipeline`, `transformation-lab`, `split-leakage-lab`, `knowledge-check` | **implemented** |
+| t3-l5 | practice | `Theme3/Practice5/task.ipynb` | Аналіз набору даних з Kaggle (Практика 3.5) | preparation/model-readiness | cleaning; transformation; decomposition; baseline modelling; evaluation | End-to-end Model-Ready Pipeline + Readiness Gate | `workflow-mission-lab`, `split-leakage-lab`, `readiness-scorecard`, `knowledge-check` | **implemented** |
 | t4-l1 | lecture | `Theme4/aLection1` | Огляд сучасних методів аналізу даних в інтересах ІАЗ ОВУ | analysis | statistics; ML; AI; GIS; text/network analysis | Method selector | `method-selector`, `analytics-pipeline` | **planned** |
 | t4-l2 | group | `Theme4/Group lesson 2` | Застосування методів аналізу даних — групове заняття | analysis | analytical methods | Method-selection challenge | `method-selector`, `decision-tradeoff` | **planned** |
 | t4-l3 | practice | `Theme4/practice3` | Практичний аналіз даних | analysis | statistics; data exploration | Metric explorer | `metric-explorer` | **planned** |
@@ -50,26 +50,42 @@
 | t5-l7 | group | `Theme5/GroupLesson57` | Заняття 5.7 — групове | decision | decision support | Decision scenario lab | `decision-tradeoff`, `decision-brief` | **audit-needed** |
 | t5-l8 | practice | `Theme5/Practice58` | Заняття 5.8 — практичне | decision | integrated analytics | Capstone analytical product | `dashboard-builder`, `decision-brief` | **audit-needed** |
 
-## Пріоритет reusable engine
+## Reusable engine — реалізовано
 
-### Уже реалізовано
-- `analytics-pipeline`
-- `data-quality-lab`
-- `knowledge-check`
+### Core
 - `course-catalog`
+- `analytics-pipeline`
+- `knowledge-check`
 
-### Додається разом із заняттям 2.4
-- `storage-model-explorer` — порівняння relational/document/key-value/graph/column моделей.
-- `schema-normalization-lab` — візуалізація переходу від плоскої таблиці до схеми `documents` + `document_types` з PK/FK.
-- `sql-query-lab` — браузерний тренажер SQL на синтетичних навчальних даних; без реального PostgreSQL.
-- `storage-decision-lab` — сценарний вибір моделі зберігання з поясненням компромісів.
+### Theme 2 — storage / SQL
+- `storage-model-explorer`
+- `schema-normalization-lab`
+- `sql-query-lab`
+- `storage-decision-lab`
+- `relational-schema-builder`
+- `sql-mission-lab`
+
+### Theme 3 — data preparation / EDA
+- `data-quality-lab`
+- `eda-explorer`
+- `workflow-mission-lab`
+- `transformation-lab`
+- `split-leakage-lab`
+- `readiness-scorecard`
 
 ### Наступний пакет
 - `source-flow-map`, `format-converter-lab`;
-- `transformation-pipeline`, `integration-conflict-lab`, `feature-engineering-lab`;
 - `method-selector`, `metric-explorer`, `model-comparison`, `model-explorer`, `uncertainty-lab`;
 - `visual-encoding-lab`, `dashboard-builder`, `decision-brief`.
 
+## Методичний контроль Theme 3
+
+У `Theme3/Practice5/task.ipynb` scaling демонструється до `train_test_split`. В інтерактивному шарі це виправлено на послідовність:
+
+`audit → split → fit preprocessing on train → transform train/test → train → evaluate test`.
+
+Це принципово для запобігання data leakage.
+
 ## Правило аудиту
 
-Рядки `working`, `source-derived` та `audit-needed` є **планувальними**, а не твердженням про офіційну назву заняття. Перед реалізацією такого заняття спочатку читаємо його первинний notebook/PDF/plan, після чого оновлюємо `title`, `technology`, `learningGoal` і переводимо запис у `verified`.
+Рядки `working`, `source-derived` та `audit-needed` є **планувальними**, а не твердженням про офіційну назву заняття. Перед реалізацією такого заняття читаємо первинний notebook/PDF/plan, після чого оновлюємо `title`, `technology`, `learningGoal` і статус.
