@@ -10,17 +10,29 @@
 
 > слухач має бачити не окрему Python-команду, а її місце в аналітичному процесі, наслідок для даних і ризик для подальшого висновку.
 
+## Тривалість
+
+Ціль для кожного заняття Theme 3 — **приблизно 30–45 хв активної роботи**. Час не добирається довгим текстом: він формується через scenario, concept block, interactive lab, decision/what-if activity, interpretation та self-check.
+
+Заняття **3.1** використовується як reference implementation типової лекції приблизно на 40 хв і містить reusable `lesson-roadmap` з розкладом часу.
+
 ## Звірені заняття
 
-| ID | Джерело | Зміст за матеріалами репозиторію | Інтерактивний акцент | Статус |
-|---|---|---|---|---|
-| 3.1 | `Theme3/aLection1` | Методологія підготовки даних; методи попереднього аналізу даних | Data Quality Lab + EDA preview | implemented |
-| 3.2 | `Theme3/Group lesson 2` | PDA/EDA; Pandas, NumPy, Matplotlib/Seaborn; cleaning, statistics, visualization, correlation, anomalies | EDA Explorer + team profile mission | implemented |
-| 3.3 | `Theme3/Practice 3/task.ipynb` | Практичний аналіз обраного dataset: load, cleaning, descriptive statistics, visualization, correlation, reporting | Reproducible EDA Mission | implemented |
-| 3.4 | `Theme3/Group lesson 4` | Missing data, normalization/scaling, One-Hot Encoding, train/test split, feature selection, aggregation | Transformation Lab + Leakage Lab | implemented |
-| 3.5 | `Theme3/Practice5/task.ipynb` | End-to-end cleaning, transformation, decomposition, visualization, baseline model, reporting | Model-Ready Pipeline + Readiness Gate | implemented |
+| ID | Джерело | Зміст за матеріалами репозиторію | Інтерактивний акцент | Орієнтир | Статус |
+|---|---|---|---|---|---|
+| 3.1 | `Theme3/aLection1` | Методологія підготовки даних; методи попереднього аналізу даних | Scenario + methodology + Data Quality Lab + Decision Trade-off Lab + EDA preview | 35–45 хв | implemented |
+| 3.2 | `Theme3/Group lesson 2` | PDA/EDA; Pandas, NumPy, Matplotlib/Seaborn; cleaning, statistics, visualization, correlation, anomalies | EDA Explorer + team profile mission | 30–45 хв | implemented |
+| 3.3 | `Theme3/Practice 3/task.ipynb` | Практичний аналіз обраного dataset: load, cleaning, descriptive statistics, visualization, correlation, reporting | Reproducible EDA Mission | 30–45 хв | implemented |
+| 3.4 | `Theme3/Group lesson 4` | Missing data, normalization/scaling, One-Hot Encoding, train/test split, feature selection, aggregation | Transformation Lab + Leakage Lab | 30–45 хв | implemented |
+| 3.5 | `Theme3/Practice5/task.ipynb` | End-to-end cleaning, transformation, decomposition, visualization, baseline model, reporting | Model-Ready Pipeline + Readiness Gate | 30–45 хв | implemented |
 
 ## Reusable components
+
+### `lesson-roadmap`
+Показує видимий timebox, результати навчання і структуру заняття з орієнтовними хвилинами. Використовується для контролю того, щоб web-сторінка не стискалася до короткої демонстрації замість повноцінного заняття.
+
+### `decision-tradeoff`
+Конфігурований блок неоднозначних ситуацій. Слухач обирає рішення, бачить наслідок, rationale і takeaway. У 3.1 використовується для missingness, deduplication, outliers і time semantics.
 
 ### `eda-explorer`
 Показує кілька поглядів на dataset: структура, пропуски, розподіли, кореляції, аномалії. Кожен view завершується аналітичним висновком і ризиком помилкової інтерпретації.
@@ -73,10 +85,11 @@ Web-демонстрації використовують синтетичні �
 
 Тема 3 вважається інтерактивно завершеною, якщо:
 
-1. усі 3.1–3.5 доступні з головної сторінки;
+1. усі 3.1–3.5 доступні з головної сторінки всередині групи «Тема 3»;
 2. між заняттями є внутрішня навігація;
-3. кожне заняття показує місце технології в analytics pipeline або end-to-end workflow;
-4. кожна практична дія пов’язана з evidence/наслідком;
-5. data leakage явно пояснено до переходу в Theme 4;
-6. усі JavaScript і JSON проходять static checks;
-7. вихідні notebooks не переписуються автоматично — редакційний technical debt документується окремо.
+3. кожне заняття розраховане приблизно на 30–45 хв активної роботи;
+4. кожне заняття показує місце технології в analytics pipeline або end-to-end workflow;
+5. кожна практична дія пов’язана з evidence/наслідком;
+6. data leakage явно пояснено до переходу в Theme 4;
+7. усі JavaScript, JSON і catalog links проходять static checks;
+8. вихідні notebooks не переписуються автоматично — редакційний technical debt документується окремо.
