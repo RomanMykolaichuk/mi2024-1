@@ -13,6 +13,8 @@ import { mount as mountWorkflowMissionLab } from '../components/workflow-mission
 import { mount as mountTransformationLab } from '../components/transformation-lab.js';
 import { mount as mountSplitLeakageLab } from '../components/split-leakage-lab.js';
 import { mount as mountReadinessScorecard } from '../components/readiness-scorecard.js';
+import { mount as mountLessonRoadmap } from '../components/lesson-roadmap.js';
+import { mount as mountDecisionTradeoff } from '../components/decision-tradeoff.js';
 
 export const registry = {
   'course-catalog': mountCourseCatalog,
@@ -30,4 +32,6 @@ export const registry = {
   'transformation-lab': mountTransformationLab,
   'split-leakage-lab': mountSplitLeakageLab,
   'readiness-scorecard': mountReadinessScorecard,
+  'lesson-roadmap': mountLessonRoadmap,
+  'decision-tradeoff': mountDecisionTradeoff,
 };

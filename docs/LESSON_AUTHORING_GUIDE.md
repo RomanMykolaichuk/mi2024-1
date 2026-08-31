@@ -12,10 +12,40 @@
 
 Лекція не повинна бути HTML-копією конспекту.
 
-## 2. Рекомендована структура лекції
+## 2. Норматив тривалості
+
+Цільова тривалість **кожного інтерактивного заняття — приблизно 30–45 хв активної роботи** без урахування окремого повного виконання Jupyter notebook або додаткового читання.
+
+Не слід досягати тривалості простим збільшенням тексту. Час має складатися з різних типів активності:
+
+```text
+3–5 хв   постановка проблеми / scenario
+5–7 хв   concept + місце в analytics pipeline
+7–10 хв  основний interactive lab
+5–8 хв   what-if / trade-off / decision activity
+5–8 хв   application / EDA / interpretation
+4–6 хв   self-check + reflection
+```
+
+Орієнтир: **35–40 хв** для типової лекції. Практичне або групове заняття може наближатися до 45 хв завдяки виконанню місій, а не пасивному читанню.
+
+Кожна нова або суттєво оновлена сторінка повинна мати:
+
+- видимий timebox;
+- `duration.min` і `duration.max` у lesson JSON або еквівалентні метадані;
+- короткий маршрут заняття з орієнтовним часом кожного блоку;
+- не менше двох різних активних дій користувача для лекції, якщо це педагогічно виправдано.
+
+Для цього рекомендовано reusable component `lesson-roadmap`.
+
+## 3. Рекомендована структура лекції
 
 ```text
 Hero / problem statement
+↓
+Lesson roadmap / timebox
+↓
+Analytical scenario
 ↓
 Analytics pipeline
 ↓
@@ -25,9 +55,11 @@ Interactive demonstration
 ↓
 What-if / trade-off
 ↓
+Application / EDA / interpretation
+↓
 Why it matters for the analyst
 ↓
-Knowledge check
+Knowledge check + reflection
 ↓
 Notebook / additional materials
 ```
@@ -38,9 +70,9 @@ Notebook / additional materials
 Situation → shared data → team decision → result → comparison → debrief
 ```
 
-## 3. Створення сторінки
+## 4. Створення сторінки
 
-Скопіюйте еталонну сторінку `interactive/lessons/t3-l1.html` і змініть лише змістові секції та посилання на JSON.
+Використовуйте реалізовані заняття як reference patterns. `interactive/lessons/t3-l1.html` є еталоном для **розширеної лекції 30–45 хв**, але не повинен копіюватися механічно.
 
 Приклад компонента:
 
@@ -53,17 +85,22 @@ Situation → shared data → team decision → result → comparison → debrie
 </section>
 ```
 
-## 4. Створення JSON
+## 5. Створення JSON
 
 Створіть `interactive/data/lessons/<lesson-id>.json`.
 
-Мінімальна форма:
+Рекомендована форма:
 
 ```json
 {
   "id": "t3-l1",
   "title": "Назва",
   "type": "lecture",
+  "roadmap": {
+    "duration": {"min": 35, "max": 40},
+    "outcomes": [],
+    "blocks": []
+  },
   "pipeline": {},
   "lab": {},
   "quiz": {}
@@ -72,7 +109,7 @@ Situation → shared data → team decision → result → comparison → debrie
 
 Не вбудовуйте великі масиви реальних даних у page HTML. Дані й сценарії мають бути окремо.
 
-## 5. Додавання нового reusable component
+## 6. Додавання нового reusable component
 
 1. Створити `interactive/js/components/my-component.js`.
 2. Експортувати `mount(element, config)`.
@@ -80,7 +117,15 @@ Situation → shared data → team decision → result → comparison → debrie
 4. Використовувати через `data-component="my-component"`.
 5. Описати expected config у JSDoc або документації.
 
-## 6. Стиль
+Поточні загальні компоненти, що підтримують педагогічну архітектуру:
+
+- `lesson-roadmap` — timebox, outcomes, послідовність блоків;
+- `analytics-pipeline` — місце технології в аналітичному процесі;
+- `decision-tradeoff` — неоднозначні ситуації з наслідками рішень;
+- `knowledge-check` — самоперевірка;
+- тематичні labs — робота з конкретною технологією.
+
+## 7. Стиль
 
 Візуальна мова: **Military Analytical Laboratory**, а не декоративний HUD.
 
@@ -96,7 +141,9 @@ Situation → shared data → team decision → result → comparison → debrie
 
 Обов'язковий змістовий блок: **«Чому це важливо для аналітика?»**.
 
-## 7. Локальна перевірка
+Головна сторінка групує заняття **за темами дисципліни**, а не показує один довгий плоский список.
+
+## 8. Локальна перевірка
 
 ```bash
 cd interactive
@@ -105,23 +152,26 @@ python3 -m http.server 8000
 
 Перевірити:
 
-- головну сторінку;
+- головну сторінку і групування за темами;
 - target lesson;
 - усі кнопки;
-- reset;
+- reset, якщо компонент його має;
 - responsive layout;
 - browser console — без помилок;
-- відсутність абсолютних шляхів типу `/interactive/...`, які можуть ламати GitHub Pages project site.
+- відсутність абсолютних шляхів типу `/interactive/...`, які можуть ламати GitHub Pages project site;
+- реалістичність timebox: сторінка не повинна формально заявляти 40 хв, якщо активний маршрут реально проходиться за 10–15 хв.
 
-## 8. Definition of Done для нового заняття
+## 9. Definition of Done для нового заняття
 
 Заняття вважається готовим, якщо:
 
 - є чітка аналітична проблема;
 - active stage pipeline відповідає змісту;
-- є хоча б один змістовний інтерактив;
+- цільовий маршрут становить приблизно 30–45 хв;
+- timebox розкладено на змістовні блоки, а не «добрано» зайвим текстом;
+- є хоча б один основний змістовний інтерактив і, для лекції, додаткова decision/what-if активність, якщо вона доречна;
 - інтерактив демонструє наслідок рішення, а не лише анімацію;
-- є коротка самоперевірка;
+- є коротка самоперевірка і рефлексія;
 - сторінка працює без build step;
 - дані безпечні для відкритого репозиторію;
 - логіка не дублює існуючий reusable component.

@@ -19,7 +19,7 @@ python3 -m http.server 8000
 
 ```text
 interactive/
-├── index.html                 # landing page / course catalog
+├── index.html                 # landing page / grouped course catalog
 ├── lessons/                   # інтерактивні заняття
 ├── assets/css/main.css        # спільний design system
 ├── assets/css/*.css           # тематичні/component styles
@@ -29,6 +29,23 @@ interactive/
 └── data/                      # course map + lesson scenarios + master matrix
 ```
 
+## Головна сторінка
+
+Каталог організовано **за темами дисципліни**, а не одним плоским списком. Кожна тема має:
+
+- назву й коротке пояснення;
+- статус розроблення;
+- прогрес `implemented / total`;
+- картки тільки тих занять, які вже мають інтерактивний web-шар.
+
+## Норматив тривалості
+
+Ціль для інтерактивного заняття — **приблизно 30–45 хв активної роботи** без повного виконання окремого Jupyter notebook.
+
+Типова лекція має містити scenario, concept/pipeline, основний lab, decision/what-if activity, interpretation та self-check. Для контролю використовується reusable component `lesson-roadmap`.
+
+`3.1` є reference implementation розширеної лекції приблизно на 40 хв.
+
 ## Реалізовані заняття
 
 ### Тема 2
@@ -36,13 +53,20 @@ interactive/
 - `lessons/t2-l5.html` — **2.5 «Реляційна база даних та SQL»**: six-variant relational schema builder, PK/FK practice, PostgreSQL SQL Mission Lab, practical workflow, self-check.
 
 ### Тема 3 — complete interactive track
-- `lessons/t3-l1.html` — **3.1 «Методологія підготовки даних»**: analytics pipeline, Data Quality Lab, EDA preview, self-check.
+- `lessons/t3-l1.html` — **3.1 «Методологія підготовки даних»**: ≈40 хв; scenario, methodology principles, Data Quality Lab, Decision Trade-off Lab, EDA preview, synthesis, self-check.
 - `lessons/t3-l2.html` — **3.2 «Попередній аналіз даних»**: EDA Explorer, team mission, self-check.
 - `lessons/t3-l3.html` — **3.3 «Практичний EDA»**: dataset → audit → statistics → visualization → correlations → conclusion.
 - `lessons/t3-l4.html` — **3.4 «Методи підготовки даних до аналізу (моделювання)»**: transformation lab + train/test leakage lab.
 - `lessons/t3-l5.html` — **3.5 «Наскрізна підготовка даних до моделювання»**: end-to-end mission + leakage check + model-readiness scorecard.
 
 ## Reusable components
+
+### Core pedagogical components
+- `course-catalog` — grouped Theme → Lessons catalog;
+- `lesson-roadmap` — timebox, learning outcomes і блоки заняття;
+- `analytics-pipeline` — місце технології в аналітичному процесі;
+- `decision-tradeoff` — неоднозначні ситуації та наслідки рішення;
+- `knowledge-check` — self-check.
 
 ### Storage / SQL
 - `storage-model-explorer`
@@ -59,7 +83,6 @@ interactive/
 - `transformation-lab`
 - `split-leakage-lab`
 - `readiness-scorecard`
-- `knowledge-check`
 
 ## Theme 3 methodological rule
 
@@ -85,7 +108,6 @@ interactive/
 
 Інтерактивний web-шар використовує лише синтетичні, навчальні або дозволені відкриті дані. Він не призначений для розміщення службової чи чутливої інформації.
 
-## Відомий technical debt вихідних матеріалів
+## SQL dialect
 
-- `Theme 2/practice2.5/task.ipynb` змішує PostgreSQL і MySQL-конструкції; reusable engine використовує послідовний PostgreSQL.
-- `Theme3/Practice5/task.ipynb` демонструє scaling до train/test split; reusable engine свідомо виправляє послідовність, щоб уникати data leakage.
+Нові матеріали 2.5 використовують PostgreSQL-синтаксис послідовно. У вихідному `Theme 2/practice2.5/task.ipynb` є змішування PostgreSQL і MySQL-конструкцій; це вважається технічним боргом вихідного матеріалу і не переноситься до reusable engine.
