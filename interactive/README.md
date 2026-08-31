@@ -32,7 +32,13 @@ interactive/
 ## Реалізовані заняття
 
 - `lessons/t2-l4.html` — **Тема 2, заняття 4 «Методи зберігання даних ІАЗ ОУВ»**: storage model explorer, normalization lab, SQL query lab, storage decision lab, self-check.
+- `lessons/t2-l5.html` — **Тема 2, заняття 5 «Реляційна база даних та SQL»**: six-variant relational schema builder, PK/FK practice, PostgreSQL SQL Mission Lab, practical workflow, self-check.
 - `lessons/t3-l1.html` — reference prototype: pipeline + data preparation lab + self-check.
+
+## Нові reusable components для 2.5
+
+- `relational-schema-builder` — конфігурований тренажер вибору PK/FK для пари таблиць і перегляду PostgreSQL DDL.
+- `sql-mission-lab` — послідовні SQL-місії з editor, structural validation, hints, solution reveal, synthetic result set та поясненням аналітичного сенсу.
 
 ## Master matrix
 
@@ -48,3 +54,7 @@ interactive/
 ## Дані
 
 Інтерактивний web-шар використовує лише синтетичні, навчальні або дозволені відкриті дані. Він не призначений для розміщення службової чи чутливої інформації.
+
+## SQL dialect
+
+Нові матеріали 2.5 використовують PostgreSQL-синтаксис послідовно. У вихідному `Theme 2/practice2.5/task.ipynb` є змішування PostgreSQL і MySQL-конструкцій; це вважається технічним боргом вихідного матеріалу і не переноситься до reusable engine.
