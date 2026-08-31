@@ -23,7 +23,8 @@ export function mount(element,config){
       const item=cases.find(x=>x.id===btn.dataset.case);const opt=item?.options?.[Number(btn.dataset.index)];
       btn.parentElement.querySelectorAll('button').forEach(x=>x.classList.remove('is-correct','is-wrong'));
       btn.classList.add(opt?.correct?'is-correct':'is-wrong');
-      caseRoot.querySelector(`[data-feedback="${CSS.escape(btn.dataset.case)}"]`).innerHTML=`<strong>${opt?.correct?'Так.':'Не найкращий контракт.'}</strong> ${esc(opt?.feedback??'')}`;
+      const feedback=[...caseRoot.querySelectorAll('[data-feedback]')].find(node=>node.dataset.feedback===btn.dataset.case);
+      if(feedback) feedback.innerHTML=`<strong>${opt?.correct?'Так.':'Не найкращий контракт.'}</strong> ${esc(opt?.feedback??'')}`;
       if(opt?.correct){solved.add(item.id);progress.textContent=`${solved.size}/${cases.length}`;}
     }));
   }
