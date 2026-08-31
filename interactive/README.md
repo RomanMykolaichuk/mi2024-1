@@ -1,6 +1,6 @@
 # MI2024 Interactive
 
-Статичний інтерактивний web-шар курсу.
+Статичний інтерактивний web-шар курсу на HTML + CSS + Vanilla JavaScript ES Modules + JSON.
 
 ## Запуск
 
@@ -22,18 +22,29 @@ interactive/
 ├── index.html                 # landing page / course catalog
 ├── lessons/                   # сторінки лекцій і групових занять
 ├── assets/css/main.css        # спільний design system
+├── assets/css/*.css           # page/component-specific styles
 ├── js/app.js                  # bootstrap reusable engine
 ├── js/core/                   # registry + data loader
 ├── js/components/             # reusable components
-└── data/                      # course map + lesson scenarios
+└── data/                      # course map + lesson scenarios + master matrix
 ```
 
-## Еталон
+## Реалізовані заняття
 
-`lessons/t3-l1.html` — перший reference implementation: pipeline + data preparation lab + self-check.
+- `lessons/t2-l4.html` — **Тема 2, заняття 4 «Методи зберігання даних ІАЗ ОУВ»**: storage model explorer, normalization lab, SQL query lab, storage decision lab, self-check.
+- `lessons/t3-l1.html` — reference prototype: pipeline + data preparation lab + self-check.
 
-Мета цього еталону — перевірити архітектуру. Конкретні числа в демонстрації є навчальними й синтетичними.
+## Master matrix
 
-## Правило
+- `data/course-matrix.json` — machine-readable roadmap Theme 1–5.
+- `../docs/COURSE_INTERACTIVE_MATRIX.md` — людиночитний варіант матриці та component roadmap.
+
+## Правило reusable engine
 
 Не додавати JS-логіку безпосередньо в кожну лекцію, якщо її можна узагальнити як reusable component.
+
+`HTML placeholder + reusable JS component + JSON lesson config = interactive lesson`
+
+## Дані
+
+Інтерактивний web-шар використовує лише синтетичні, навчальні або дозволені відкриті дані. Він не призначений для розміщення службової чи чутливої інформації.
