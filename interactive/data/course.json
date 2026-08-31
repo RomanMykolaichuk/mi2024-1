@@ -36,11 +36,26 @@
     },
     {
       "id": "theme-4",
-      "title": "Тема 4 · Методи аналізу даних",
-      "description": "Статистичний аналіз, машинне навчання, нейронні мережі та інші аналітичні методи.",
-      "status": "planned",
-      "progress": {"implemented": 0, "total": 14},
-      "items": []
+      "title": "Тема 4 · Методи аналізу даних і штучний інтелект",
+      "description": "Від вибору методу та класичного ML до нейромереж, CNN, Transfer Learning, RL, текстової аналітики та Generative AI. Для 4.10 у репозиторії немає окремого первинного джерела.",
+      "status": "in-progress",
+      "progress": {"implemented": 13, "total": 14},
+      "items": [
+        {"id":"t4-l1","title":"4.1 · Огляд сучасних методів аналізу даних","description":"Method Selector: статистика, ML/AI, GIS, text/network analysis + operational constraints.","duration":"≈ 35–45 хв","status":"implemented","href":"./lessons/theme4.html?lesson=t4-l1"},
+        {"id":"t4-l2","title":"4.2 · Використання методів ШІ для аналізу даних","description":"Classification/regression/clustering task selector + leakage-safe ML workflow.","duration":"≈ 35–45 хв","status":"implemented","href":"./lessons/theme4.html?lesson=t4-l2"},
+        {"id":"t4-l3","title":"4.3 · Регресія","description":"Regression complexity lab, MAE/RMSE/R², baseline і practical mission.","duration":"≈ 35–45 хв","status":"implemented","href":"./lessons/theme4.html?lesson=t4-l3"},
+        {"id":"t4-l4","title":"4.4 · Оцінка точності та гіперпараметри","description":"Train/CV/test roles, tuning curve, metric choice та overfitting.","duration":"≈ 35–45 хв","status":"implemented","href":"./lessons/theme4.html?lesson=t4-l4"},
+        {"id":"t4-l5","title":"4.5 · Класифікація","description":"Threshold Lab: confusion matrix, precision/recall/F1 та operating point.","duration":"≈ 35–45 хв","status":"implemented","href":"./lessons/theme4.html?lesson=t4-l5"},
+        {"id":"t4-l6","title":"4.6 · Основи штучних нейронних мереж","description":"Architecture Lab: layers, units, dropout, capacity та generalization gap.","duration":"≈ 35–45 хв","status":"implemented","href":"./lessons/theme4.html?lesson=t4-l6"},
+        {"id":"t4-l7","title":"4.7 · Методи глибокого навчання","description":"Deep-learning experiment design: architecture, loss, validation, regularization, leakage control.","duration":"≈ 35–45 хв","status":"implemented","href":"./lessons/theme4.html?lesson=t4-l7"},
+        {"id":"t4-l8","title":"4.8 · TensorFlow: регресія та класифікація","description":"Task-dependent output/loss/metric + reproducible TensorFlow mission.","duration":"≈ 35–45 хв","status":"implemented","href":"./lessons/theme4.html?lesson=t4-l8"},
+        {"id":"t4-l9","title":"4.9 · Глибоке навчання для графічної інформації","description":"Convolution Lab, CNN design, augmentation, transfer learning і domain shift.","duration":"≈ 35–45 хв","status":"implemented","href":"./lessons/theme4.html?lesson=t4-l9"},
+        {"id":"t4-l10","title":"4.10 · Джерело заняття не виділено у репозиторії","description":"Окремого каталогу або первинного навчального матеріалу 4.10 у Theme4 не знайдено. Зміст не вигадується.","status":"source-gap"},
+        {"id":"t4-l11","title":"4.11 · Перспективні напрямки аналізу даних","description":"CNN/RNN/Transformers, GenAI/LLM, model hubs, accelerators, MLOps, Transfer Learning і RL.","duration":"≈ 35–45 хв","status":"implemented","href":"./lessons/theme4.html?lesson=t4-l11"},
+        {"id":"t4-l12","title":"4.12 · Transfer Learning та Reinforcement Learning","description":"Fine-tuning strategies, agent–environment loop, reward design і validation risks.","duration":"≈ 35–45 хв","status":"implemented","href":"./lessons/theme4.html?lesson=t4-l12"},
+        {"id":"t4-l13","title":"4.13 · Практичне використання репозиторіїв моделей у проєктах","description":"Project Design Mission: problem, provenance, baseline, validation, risks, artifact і review brief.","duration":"≈ 38–45 хв","status":"implemented","href":"./lessons/theme4.html?lesson=t4-l13"},
+        {"id":"t4-l14","title":"4.14 · Аналіз текстової інформації та Generative AI","description":"Text Analysis Lab: extraction/classification/summarization + provenance, grounding і human review.","duration":"≈ 35–45 хв","status":"implemented","href":"./lessons/theme4.html?lesson=t4-l14"}
+      ]
     },
     {
       "id": "theme-5",
