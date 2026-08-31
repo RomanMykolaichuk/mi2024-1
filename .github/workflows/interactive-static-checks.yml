@@ -6,6 +6,8 @@ on:
       - "interactive/**"
       - "docs/INTERACTIVE_ARCHITECTURE.md"
       - "docs/LESSON_AUTHORING_GUIDE.md"
+      - "docs/COURSE_INTERACTIVE_MATRIX.md"
+      - "docs/THEME3_INTERACTIVE_TRACK.md"
   push:
     branches:
       - main
@@ -13,6 +15,8 @@ on:
       - "interactive/**"
       - "docs/INTERACTIVE_ARCHITECTURE.md"
       - "docs/LESSON_AUTHORING_GUIDE.md"
+      - "docs/COURSE_INTERACTIVE_MATRIX.md"
+      - "docs/THEME3_INTERACTIVE_TRACK.md"
 
 permissions:
   contents: read
@@ -44,4 +48,31 @@ jobs:
               with path.open(encoding='utf-8') as source:
                   json.load(source)
               print(f'OK: {path}')
+          PY
+
+      - name: Validate course catalog links
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+
+          root = Path('interactive')
+          catalog = json.loads((root / 'data/course.json').read_text(encoding='utf-8'))
+          missing = []
+
+          for item in catalog.get('items', []):
+              href = item.get('href')
+              if not href:
+                  continue
+              target = (root / href.removeprefix('./')).resolve()
+              if not target.is_file():
+                  missing.append((item.get('id'), href))
+              else:
+                  print(f"OK: {item.get('id')} -> {href}")
+
+          if missing:
+              for item_id, href in missing:
+                  print(f'MISSING: {item_id} -> {href}')
+              raise SystemExit('Broken links found in interactive/data/course.json')
           PY
