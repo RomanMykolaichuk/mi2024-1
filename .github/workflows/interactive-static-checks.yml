@@ -4,6 +4,7 @@ on:
   pull_request:
     paths:
       - "interactive/**"
+      - "Theme4/Practice 10/**"
       - "docs/INTERACTIVE_ARCHITECTURE.md"
       - "docs/LESSON_AUTHORING_GUIDE.md"
       - "docs/COURSE_INTERACTIVE_MATRIX.md"
@@ -17,6 +18,7 @@ on:
       - main
     paths:
       - "interactive/**"
+      - "Theme4/Practice 10/**"
       - "docs/INTERACTIVE_ARCHITECTURE.md"
       - "docs/LESSON_AUTHORING_GUIDE.md"
       - "docs/COURSE_INTERACTIVE_MATRIX.md"
@@ -41,7 +43,7 @@ jobs:
         run: |
           find interactive/js -type f -name '*.js' -print0 | xargs -0 -n1 node --check
 
-      - name: Validate JSON files
+      - name: Validate interactive JSON files
         shell: bash
         run: |
           python3 - <<'PY'
@@ -51,297 +53,116 @@ jobs:
           files = sorted(Path('interactive/data').rglob('*.json'))
           if not files:
               raise SystemExit('No JSON files found in interactive/data')
-
           for path in files:
-              with path.open(encoding='utf-8') as source:
-                  json.load(source)
-              print(f'OK: {path}')
+              json.loads(path.read_text(encoding='utf-8'))
+              print(f'OK JSON: {path}')
           PY
 
-      - name: Validate Theme 1 lesson timeboxes, titles and sources
+      - name: Validate course lessons, sources, catalog and matrix
         shell: bash
         run: |
           python3 - <<'PY'
           import json
+          import re
           from pathlib import Path
-          from urllib.parse import urlsplit, unquote
+          from urllib.parse import urlsplit, unquote, parse_qs
 
           errors = []
-          files = sorted(Path('interactive/data/lessons').glob('t1-l*.json'))
-          if len(files) != 5:
-              errors.append(f'Expected 5 Theme 1 lesson JSON files, found {len(files)}')
+          root = Path('interactive')
+          lesson_dir = root / 'data' / 'lessons'
+          lesson_page_dir = (root / 'lessons').resolve()
+          expected_counts = {1: 5, 2: 5, 3: 5, 4: 14, 5: 8}
 
-          lesson_page_dir = Path('interactive/lessons').resolve()
-          expected_confidence = {
+          files_by_theme = {theme: sorted(lesson_dir.glob(f't{theme}-l*.json')) for theme in expected_counts}
+          for theme, expected in expected_counts.items():
+              actual = len(files_by_theme[theme])
+              if actual != expected:
+                  errors.append(f'Theme {theme}: expected {expected} lesson JSON files, found {actual}')
+
+          confidence_required = {
               't1-l1': 'verified',
               't1-l2': 'verified',
               't1-l3': 'verified',
               't1-l4': 'source-derived',
               't1-l5': 'source-derived',
-          }
-
-          for path in files:
-              data = json.loads(path.read_text(encoding='utf-8'))
-              roadmap = data.get('roadmap', {})
-              duration = roadmap.get('duration', {})
-              minimum = duration.get('min')
-              maximum = duration.get('max')
-              blocks = roadmap.get('blocks', [])
-              planned = sum(int(block.get('minutes', 0)) for block in blocks)
-              lesson_id = data.get('id')
-              confidence = data.get('titleConfidence')
-
-              if not isinstance(minimum, int) or minimum < 30:
-                  errors.append(f'{path}: duration.min must be >= 30')
-              if not isinstance(maximum, int) or maximum > 45:
-                  errors.append(f'{path}: duration.max must be <= 45')
-              if isinstance(minimum, int) and isinstance(maximum, int) and minimum > maximum:
-                  errors.append(f'{path}: duration.min > duration.max')
-              if planned < 30 or planned > 45:
-                  errors.append(f'{path}: planned block time must be 30–45 min, got {planned}')
-              if len(blocks) < 5:
-                  errors.append(f'{path}: expected at least 5 active blocks')
-              if lesson_id not in expected_confidence:
-                  errors.append(f'{path}: unexpected Theme 1 id {lesson_id}')
-              elif confidence != expected_confidence[lesson_id]:
-                  errors.append(f'{path}: titleConfidence must be {expected_confidence[lesson_id]}, got {confidence}')
-
-              for source in data.get('sources', []):
-                  href = source.get('href')
-                  if not href:
-                      continue
-                  parsed = urlsplit(href)
-                  if parsed.scheme or parsed.netloc:
-                      continue
-                  target = (lesson_page_dir / unquote(parsed.path)).resolve()
-                  if not target.is_file():
-                      errors.append(f'{path}: missing source material {href}')
-
-              print(f'OK: {path} -> declared {minimum}–{maximum} min; planned {planned} min; title={confidence}')
-
-          if errors:
-              print('\n'.join(f'ERROR: {error}' for error in errors))
-              raise SystemExit('Theme 1 lesson validation failed')
-          PY
-
-      - name: Validate Theme 2 collection lessons, titles, sources and catalog
-        shell: bash
-        run: |
-          python3 - <<'PY'
-          import json
-          from pathlib import Path
-          from urllib.parse import urlsplit, unquote
-
-          errors = []
-          lesson_dir = Path('interactive/data/lessons')
-          lesson_page_dir = Path('interactive/lessons').resolve()
-          expected_confidence = {
               't2-l1': 'verified',
               't2-l2': 'verified',
               't2-l3': 'verified-from-task',
+              't4-l10': 'verified-user-supplied',
+              't5-l5': 'source-derived',
           }
 
-          files = [lesson_dir / f'{lesson_id}.json' for lesson_id in expected_confidence]
-          for path in files:
-              if not path.is_file():
-                  errors.append(f'Missing Theme 2 lesson JSON: {path}')
+          for theme, files in files_by_theme.items():
+              for path in files:
+                  data = json.loads(path.read_text(encoding='utf-8'))
+                  lesson_id = data.get('id')
+                  if lesson_id != path.stem:
+                      errors.append(f'{path}: id must match filename, got {lesson_id}')
+
+                  expected_confidence = confidence_required.get(path.stem)
+                  if expected_confidence and data.get('titleConfidence') != expected_confidence:
+                      errors.append(f'{path}: titleConfidence must be {expected_confidence}, got {data.get("titleConfidence")}')
+
+                  roadmap = data.get('roadmap')
+                  if roadmap:
+                      duration = roadmap.get('duration', {})
+                      minimum = duration.get('min')
+                      maximum = duration.get('max')
+                      blocks = roadmap.get('blocks', [])
+                      planned = sum(int(block.get('minutes', 0)) for block in blocks)
+                      if not isinstance(minimum, int) or minimum < 30:
+                          errors.append(f'{path}: duration.min must be >= 30')
+                      if not isinstance(maximum, int) or maximum > 45:
+                          errors.append(f'{path}: duration.max must be <= 45')
+                      if isinstance(minimum, int) and isinstance(maximum, int) and minimum > maximum:
+                          errors.append(f'{path}: duration.min > duration.max')
+                      if planned < 30 or planned > 45:
+                          errors.append(f'{path}: planned block time must be 30–45 min, got {planned}')
+                      if len(blocks) < 5:
+                          errors.append(f'{path}: expected at least 5 active blocks')
+                      print(f'OK lesson: {path} -> {minimum}–{maximum} min; planned {planned} min')
+                  else:
+                      print(f'OK lesson: {path} -> legacy page without roadmap')
+
+                  for source in data.get('sources', []):
+                      href = source.get('href')
+                      if not href:
+                          continue
+                      parsed = urlsplit(href)
+                      if parsed.scheme or parsed.netloc:
+                          continue
+                      target = (lesson_page_dir / unquote(parsed.path)).resolve()
+                      if not target.is_file():
+                          errors.append(f'{path}: missing source material {href}')
+
+          catalog = json.loads((root / 'data' / 'course.json').read_text(encoding='utf-8'))
+          groups = {group.get('id'): group for group in catalog.get('groups', [])}
+          for theme, expected in expected_counts.items():
+              group = groups.get(f'theme-{theme}')
+              if not group:
+                  errors.append(f'course.json: theme-{theme} group is missing')
                   continue
+              progress = group.get('progress', {})
+              if progress.get('implemented') != expected or progress.get('total') != expected:
+                  errors.append(f'course.json: Theme {theme} progress must be {expected}/{expected}, got {progress}')
+              items = group.get('items', [])
+              if len(items) != expected:
+                  errors.append(f'course.json: Theme {theme} must contain {expected} items, got {len(items)}')
+              if any(item.get('status') != 'implemented' for item in items):
+                  errors.append(f'course.json: all Theme {theme} items must be implemented')
 
-              data = json.loads(path.read_text(encoding='utf-8'))
-              roadmap = data.get('roadmap', {})
-              duration = roadmap.get('duration', {})
-              minimum = duration.get('min')
-              maximum = duration.get('max')
-              blocks = roadmap.get('blocks', [])
-              planned = sum(int(block.get('minutes', 0)) for block in blocks)
-              lesson_id = data.get('id')
-              confidence = data.get('titleConfidence')
+          matrix = json.loads((root / 'data' / 'course-matrix.json').read_text(encoding='utf-8'))
+          for theme, expected in expected_counts.items():
+              items = [item for item in matrix.get('lessons', []) if item.get('theme') == theme]
+              if len(items) != expected:
+                  errors.append(f'course-matrix.json: Theme {theme} must contain {expected} lessons, got {len(items)}')
+              if any(item.get('status') != 'implemented' for item in items):
+                  errors.append(f'course-matrix.json: all Theme {theme} lessons must be implemented')
 
-              if lesson_id != path.stem:
-                  errors.append(f'{path}: id must match filename, got {lesson_id}')
-              if confidence != expected_confidence[path.stem]:
-                  errors.append(f'{path}: titleConfidence must be {expected_confidence[path.stem]}, got {confidence}')
-              if not isinstance(minimum, int) or minimum < 30:
-                  errors.append(f'{path}: duration.min must be >= 30')
-              if not isinstance(maximum, int) or maximum > 45:
-                  errors.append(f'{path}: duration.max must be <= 45')
-              if isinstance(minimum, int) and isinstance(maximum, int) and minimum > maximum:
-                  errors.append(f'{path}: duration.min > duration.max')
-              if planned < 30 or planned > 45:
-                  errors.append(f'{path}: planned block time must be 30–45 min, got {planned}')
-              if len(blocks) < 5:
-                  errors.append(f'{path}: expected at least 5 active blocks')
-
-              for source in data.get('sources', []):
-                  href = source.get('href')
-                  if not href:
-                      continue
-                  parsed = urlsplit(href)
-                  if parsed.scheme or parsed.netloc:
-                      continue
-                  target = (lesson_page_dir / unquote(parsed.path)).resolve()
-                  if not target.is_file():
-                      errors.append(f'{path}: missing source material {href}')
-
-              print(f'OK: {path} -> declared {minimum}–{maximum} min; planned {planned} min; title={confidence}')
-
-          catalog = json.loads(Path('interactive/data/course.json').read_text(encoding='utf-8'))
-          theme2 = next((g for g in catalog.get('groups', []) if g.get('id') == 'theme-2'), None)
-          if not theme2:
-              errors.append('course.json: theme-2 group is missing')
-          else:
-              progress = theme2.get('progress', {})
-              if progress.get('implemented') != 5 or progress.get('total') != 5:
-                  errors.append(f'course.json: Theme 2 progress must be 5/5, got {progress}')
-              ids = [item.get('id') for item in theme2.get('items', [])]
-              expected_ids = [f't2-l{i}' for i in range(1, 6)]
-              if ids != expected_ids:
-                  errors.append(f'course.json: Theme 2 item order must be {expected_ids}, got {ids}')
-              if any(item.get('status') != 'implemented' for item in theme2.get('items', [])):
-                  errors.append('course.json: all Theme 2 items must be implemented')
-
-          matrix = json.loads(Path('interactive/data/course-matrix.json').read_text(encoding='utf-8'))
-          matrix_theme2 = [item for item in matrix.get('lessons', []) if item.get('theme') == 2]
-          if len(matrix_theme2) != 5 or any(item.get('status') != 'implemented' for item in matrix_theme2):
-              errors.append('course-matrix.json: Theme 2 must contain 5 implemented lessons')
-
-          if errors:
-              print('\n'.join(f'ERROR: {error}' for error in errors))
-              raise SystemExit('Theme 2 validation failed')
-          PY
-
-      - name: Validate Theme 4 lesson timeboxes and sources
-        shell: bash
-        run: |
-          python3 - <<'PY'
-          import json
-          from pathlib import Path
-          from urllib.parse import urlsplit, unquote
-
-          errors = []
-          files = sorted(Path('interactive/data/lessons').glob('t4-l*.json'))
-          if len(files) != 13:
-              errors.append(f'Expected 13 Theme 4 lesson JSON files, found {len(files)}')
-
-          lesson_page_dir = Path('interactive/lessons').resolve()
-
-          for path in files:
-              data = json.loads(path.read_text(encoding='utf-8'))
-              roadmap = data.get('roadmap', {})
-              duration = roadmap.get('duration', {})
-              minimum = duration.get('min')
-              maximum = duration.get('max')
-              blocks = roadmap.get('blocks', [])
-              planned = sum(int(block.get('minutes', 0)) for block in blocks)
-
-              if not isinstance(minimum, int) or minimum < 30:
-                  errors.append(f'{path}: duration.min must be >= 30')
-              if not isinstance(maximum, int) or maximum > 45:
-                  errors.append(f'{path}: duration.max must be <= 45')
-              if isinstance(minimum, int) and isinstance(maximum, int) and minimum > maximum:
-                  errors.append(f'{path}: duration.min > duration.max')
-              if planned < 30 or planned > 45:
-                  errors.append(f'{path}: planned block time must be 30–45 min, got {planned}')
-              if len(blocks) < 5:
-                  errors.append(f'{path}: expected at least 5 active blocks')
-
-              for source in data.get('sources', []):
-                  href = source.get('href')
-                  if not href:
-                      continue
-                  parsed = urlsplit(href)
-                  if parsed.scheme or parsed.netloc:
-                      continue
-                  target = (lesson_page_dir / unquote(parsed.path)).resolve()
-                  if not target.is_file():
-                      errors.append(f'{path}: missing source material {href}')
-
-              print(f'OK: {path} -> declared {minimum}–{maximum} min; planned {planned} min')
-
-          if errors:
-              print('\n'.join(f'ERROR: {error}' for error in errors))
-              raise SystemExit('Theme 4 lesson validation failed')
-          PY
-
-      - name: Validate Theme 5 lesson timeboxes, titles and sources
-        shell: bash
-        run: |
-          python3 - <<'PY'
-          import json
-          from pathlib import Path
-          from urllib.parse import urlsplit, unquote
-
-          errors = []
-          files = sorted(Path('interactive/data/lessons').glob('t5-l*.json'))
-          if len(files) != 8:
-              errors.append(f'Expected 8 Theme 5 lesson JSON files, found {len(files)}')
-
-          lesson_page_dir = Path('interactive/lessons').resolve()
-
-          for path in files:
-              data = json.loads(path.read_text(encoding='utf-8'))
-              roadmap = data.get('roadmap', {})
-              duration = roadmap.get('duration', {})
-              minimum = duration.get('min')
-              maximum = duration.get('max')
-              blocks = roadmap.get('blocks', [])
-              planned = sum(int(block.get('minutes', 0)) for block in blocks)
-
-              if not isinstance(minimum, int) or minimum < 30:
-                  errors.append(f'{path}: duration.min must be >= 30')
-              if not isinstance(maximum, int) or maximum > 45:
-                  errors.append(f'{path}: duration.max must be <= 45')
-              if isinstance(minimum, int) and isinstance(maximum, int) and minimum > maximum:
-                  errors.append(f'{path}: duration.min > duration.max')
-              if planned < 30 or planned > 45:
-                  errors.append(f'{path}: planned block time must be 30–45 min, got {planned}')
-              if len(blocks) < 5:
-                  errors.append(f'{path}: expected at least 5 active blocks')
-              if not data.get('titleConfidence'):
-                  errors.append(f'{path}: titleConfidence is required after source audit')
-
-              for source in data.get('sources', []):
-                  href = source.get('href')
-                  if not href:
-                      continue
-                  parsed = urlsplit(href)
-                  if parsed.scheme or parsed.netloc:
-                      continue
-                  target = (lesson_page_dir / unquote(parsed.path)).resolve()
-                  if not target.is_file():
-                      errors.append(f'{path}: missing source material {href}')
-
-              print(f'OK: {path} -> declared {minimum}–{maximum} min; planned {planned} min; title={data.get("titleConfidence")}')
-
-          source_derived = Path('interactive/data/lessons/t5-l5.json')
-          if source_derived.is_file():
-              data = json.loads(source_derived.read_text(encoding='utf-8'))
-              if data.get('titleConfidence') != 'source-derived':
-                  errors.append('t5-l5.json: Practice55 title must remain explicitly source-derived')
-
-          if errors:
-              print('\n'.join(f'ERROR: {error}' for error in errors))
-              raise SystemExit('Theme 5 lesson validation failed')
-          PY
-
-      - name: Validate course catalog links
-        shell: bash
-        run: |
-          python3 - <<'PY'
-          import json
-          from pathlib import Path
-          from urllib.parse import urlsplit, parse_qs
-
-          root = Path('interactive')
-          catalog = json.loads((root / 'data/course.json').read_text(encoding='utf-8'))
-          items = list(catalog.get('items', []))
-
+          items = []
           for group in catalog.get('groups', []):
               items.extend(group.get('items', []))
-
           items.extend(catalog.get('resources', []))
-          missing = []
-
           for item in items:
               href = item.get('href')
               if not href:
@@ -349,21 +170,55 @@ jobs:
               parsed = urlsplit(href)
               target = (root / parsed.path.removeprefix('./')).resolve()
               if not target.is_file():
-                  missing.append((item.get('id'), href, 'page'))
+                  errors.append(f'course.json: missing page {item.get("id")} -> {href}')
                   continue
-
-              query = parse_qs(parsed.query)
-              lesson_ids = query.get('lesson', [])
+              lesson_ids = parse_qs(parsed.query).get('lesson', [])
               if lesson_ids:
-                  lesson_json = root / 'data' / 'lessons' / f'{lesson_ids[0]}.json'
+                  lesson_json = lesson_dir / f'{lesson_ids[0]}.json'
                   if not lesson_json.is_file():
-                      missing.append((item.get('id'), href, 'lesson JSON'))
-                      continue
+                      errors.append(f'course.json: missing lesson JSON {item.get("id")} -> {lesson_ids[0]}')
 
-              print(f"OK: {item.get('id')} -> {href}")
+          theme4_page = (root / 'js' / 'theme4-page.js').read_text(encoding='utf-8')
+          if "'t4-l10'" not in theme4_page:
+              errors.append('theme4-page.js: t4-l10 must be allowed')
+          if 'track-gap' in theme4_page:
+              errors.append('theme4-page.js: legacy 4.10 source-gap navigation remains')
 
-          if missing:
-              for item_id, href, kind in missing:
-                  print(f'MISSING {kind}: {item_id} -> {href}')
-              raise SystemExit('Broken links found in interactive/data/course.json')
+          t410 = json.loads((lesson_dir / 't4-l10.json').read_text(encoding='utf-8'))
+          if t410.get('number') != '4.10':
+              errors.append('t4-l10.json: number must be 4.10')
+          expected_title = 'Практичне використання методів глибокого навчання в межах виконання індивідуальних (групових) проектів'
+          if t410.get('title') != expected_title:
+              errors.append('t4-l10.json: official title changed unexpectedly')
+
+          if errors:
+              print('\n'.join(f'ERROR: {error}' for error in errors))
+              raise SystemExit('Interactive course validation failed')
+          PY
+
+      - name: Validate Theme 4.10 source notebooks and Python cells
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+
+          root = Path('Theme4/Practice 10')
+          expected = ['content.ipynb', 'task.ipynb', 'sample.ipynb']
+          for name in expected:
+              path = root / name
+              if not path.is_file():
+                  raise SystemExit(f'Missing Practice 10 source notebook: {path}')
+              notebook = json.loads(path.read_text(encoding='utf-8'))
+              if notebook.get('nbformat') != 4:
+                  raise SystemExit(f'{path}: expected nbformat 4')
+              print(f'OK notebook JSON: {path}')
+
+          sample = json.loads((root / 'sample.ipynb').read_text(encoding='utf-8'))
+          for index, cell in enumerate(sample.get('cells', [])):
+              if cell.get('cell_type') != 'code':
+                  continue
+              code = ''.join(cell.get('source', []))
+              compile(code, f'sample.ipynb:cell-{index}', 'exec')
+              print(f'OK Python syntax: sample.ipynb cell {index}')
           PY
