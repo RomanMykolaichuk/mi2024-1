@@ -1,6 +1,6 @@
 const esc = value => String(value ?? '').replace(/[&<>'"]/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[char]));
 const lessonId = new URLSearchParams(window.location.search).get('lesson') || 't4-l1';
-const allowed = new Set(['t4-l1','t4-l2','t4-l3','t4-l4','t4-l5','t4-l6','t4-l7','t4-l8','t4-l9','t4-l11','t4-l12','t4-l13','t4-l14']);
+const allowed = new Set(['t4-l1','t4-l2','t4-l3','t4-l4','t4-l5','t4-l6','t4-l7','t4-l8','t4-l9','t4-l10','t4-l11','t4-l12','t4-l13','t4-l14']);
 const root = document.querySelector('[data-role="lesson-root"]');
 
 if (!allowed.has(lessonId)) {
@@ -25,7 +25,7 @@ function renderPage(lesson, source) {
     <nav class="breadcrumb" aria-label="Навігація"><a href="../index.html">MI2024 Interactive</a><span>→</span><span>Тема 4 · ${esc(lesson.number)}</span></nav>
     ${renderTrack(lesson.number)}
     <header class="hero hero--compact">
-      <div class="hero-meta"><span>${esc(lesson.typeLabel ?? lesson.type ?? 'заняття')}</span><span>≈ ${esc(lesson.roadmap?.duration?.min ?? 30)}–${esc(lesson.roadmap?.duration?.max ?? 45)} хв</span></div>
+      <div class="hero-meta"><span>${esc(lesson.typeLabel ?? lesson.type ?? 'заняття')}</span><span>≈ ${esc(lesson.roadmap?.duration?.min ?? 30)}–${esc(lesson.roadmap?.duration?.max ?? 45)} хв</span>${lesson.titleConfidence ? `<span>${esc(lesson.titleConfidence)}</span>` : ''}</div>
       <p class="eyebrow">ТЕМА 4 · ${esc(lesson.number)} · ANALYSIS</p>
       <h1>${esc(lesson.title)}</h1>
       <p class="hero__lead">${esc(lesson.lead)}</p>
@@ -47,5 +47,5 @@ function renderSection(section,index,source) {
 
 function renderTrack(current) {
   const items = ['4.1','4.2','4.3','4.4','4.5','4.6','4.7','4.8','4.9','4.10','4.11','4.12','4.13','4.14'];
-  return `<nav class="track-nav" aria-label="Тема 4">${items.map(number => number === '4.10' ? `<span class="track-gap" title="У репозиторії немає окремого джерела для 4.10">4.10</span>` : `<a class="${number === current ? 'is-current' : ''}" href="theme4.html?lesson=t4-l${number.split('.')[1]}">${number}</a>`).join('')}</nav>`;
+  return `<nav class="track-nav" aria-label="Тема 4">${items.map(number => `<a class="${number === current ? 'is-current' : ''}" href="theme4.html?lesson=t4-l${number.split('.')[1]}">${number}</a>`).join('')}</nav>`;
 }
