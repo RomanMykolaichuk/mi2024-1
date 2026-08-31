@@ -1,0 +1,104 @@
+{
+  "id":"t2-l2",
+  "number":"2.2",
+  "title":"Методи збору даних для ІАЗ ОУВ",
+  "titleConfidence":"verified",
+  "type":"group",
+  "typeLabel":"групове заняття",
+  "lead":"Той самий факт може надійти з Internet, API та формалізованого донесення. Завдання аналітика — не механічно скласти записи разом, а зберегти provenance, привести їх до спільної схеми та відрізнити дубль від незалежного підтвердження.",
+  "roadmap":{
+    "duration":{"min":35,"max":45},
+    "note":"Основа заняття — реальний 2026 груповий кейс репозиторію: три канали збору, synthetic data, 17 вхідних записів і 14 унікальних подій.",
+    "outcomes":[
+      "порівнювати Internet, API та формалізовані документи як різні collection channels",
+      "фіксувати provenance і quality metadata для кожного запису",
+      "відрізняти технічний дубль від незалежного підтвердження події",
+      "приводити різні формати до target schema без втрати змісту",
+      "обґрунтовувати інтегрований результат групового збору"
+    ],
+    "blocks":[
+      {"label":"Scenario","minutes":4,"title":"17 записів → 14 подій","description":"Зрозуміти, чому кількість records не дорівнює кількості реальних events."},
+      {"label":"Concept","minutes":6,"title":"Три collection channels","description":"Internet/CSV, API/JSON і формалізоване донесення як різні способи отримання evidence."},
+      {"label":"Decision","minutes":8,"title":"Collection Method Selector","description":"Обрати канал за latency, structure, reproducibility та provenance."},
+      {"label":"Lab","minutes":10,"title":"Provenance & Dedup Lab","description":"Розібрати пари записів і вирішити: duplicate, confirmation чи distinct event."},
+      {"label":"Integration","minutes":7,"title":"Group merge workflow","description":"Привести три групові масиви до target schema і сформувати єдиний event register."},
+      {"label":"Check","minutes":5,"title":"Self-check","description":"Закріпити правила provenance, schema mapping і deduplication."}
+    ]
+  },
+  "scenario":{
+    "title":"Облік фактів подій із трьох незалежних каналів",
+    "description":"Три групи збирають синтетичні події в умовному районі ALFA. Група 1 працює з Internet/CSV, група 2 — з API/JSON, група 3 — з формалізованими CSV-донесеннями. Після локального QA результати треба інтегрувати в один реєстр без подвійного рахунку.",
+    "facts":[
+      {"value":"3","label":"групи / канали"},
+      {"value":"17","label":"вхідних records"},
+      {"value":"14","label":"унікальних events"},
+      {"value":"0–99","label":"вигадана координатна сітка"}
+    ],
+    "question":"Які ознаки дозволяють обґрунтовано сказати, що два records описують одну подію, а не два незалежні підтвердження або дві різні події?"
+  },
+  "pipeline":{
+    "active":"collection",
+    "stages":[
+      {"id":"sources","label":"Джерела","description":"Internet, API та формалізовані донесення.","output":"channel-specific evidence"},
+      {"id":"collection","label":"Збір","description":"Отримання + source metadata + raw record.","output":"17 input records"},
+      {"id":"storage","label":"Зберігання","description":"Raw files та target register.","output":"traceable records"},
+      {"id":"preparation","label":"Підготовка","description":"Schema mapping, QA, deduplication і reconciliation.","output":"14 unique events"},
+      {"id":"analysis","label":"Аналіз","description":"Частоти, patterns, comparisons.","output":"analytical evidence"},
+      {"id":"visualization","label":"Візуалізація","description":"Map/table/timeline для перевірки результату.","output":"interpretable view"},
+      {"id":"decision","label":"Рішення","description":"Висновок із provenance та uncertainty.","output":"brief"}
+    ]
+  },
+  "collectionMethods":{
+    "intro":"У кожної групи свій канал. Вибір методу визначає не лише зручність, а й те, які metadata і quality checks треба додати.",
+    "cases":[
+      {"id":"internet","label":"GROUP 1","goal":"INTERNET / CSV","title":"Відкрите web-джерело з повторюваними публікаціями","context":"Потрібно збирати події з відкритого джерела, зберігати URL, час отримання і виявляти повторні публікації.","facts":["web","CSV output","provenance","duplicates"],"options":[{"label":"Scraping + raw URL/timestamp + CSV","correct":true,"feedback":"Зберігає machine-readable records і мінімальний provenance для повторної перевірки."},{"label":"Копіювати лише текст без URL","correct":false,"feedback":"Втрачається trace до джерела."},{"label":"Зберігати лише screenshot","correct":false,"feedback":"Може допомогти людині, але слабко підтримує автоматичну інтеграцію."}],"rule":"Для Internet collection URL, received_at і raw identifier мають бути частиною evidence trail."},
+      {"id":"api","label":"GROUP 2","goal":"API / JSON","title":"Структурований endpoint із status code","context":"Потрібно отримувати події через GET, перевіряти HTTP status і JSON schema.","facts":["GET","JSON","status","schema"],"options":[{"label":"API client + status/schema validation","correct":true,"feedback":"Дає контроль транспортного й структурного рівня; semantic QA усе одно потрібен."},{"label":"Ігнорувати status code і завжди парсити body","correct":false,"feedback":"Помилки/redirect можуть бути прийняті за дані."},{"label":"Перетворити відповідь у screenshot","correct":false,"feedback":"Втрачається перевага структурованого API."}],"rule":"API quality = transport check + schema check + semantic check, а не лише успішний request."},
+      {"id":"formal","label":"GROUP 3","goal":"FORMAL REPORT","title":"Формалізовані донесення з помилками введення","context":"Поля контрольовані, але частина рядків має невалідний формат або пропущене значення.","facts":["CSV","controlled schema","human input","QA"],"options":[{"label":"Schema validation + correction log","correct":true,"feedback":"Формальна структура полегшує QA, а журнал виправлень зберігає audit trail."},{"label":"Мовчки виправити значення без журналу","correct":false,"feedback":"Результат стає невідтворюваним."},{"label":"Відкинути весь файл через один bad row","correct":false,"feedback":"Надто грубе правило; краще локалізувати й задокументувати errors."}],"rule":"Формалізований документ не гарантує коректності даних; validation має створювати evidence про виправлення."}
+    ]
+  },
+  "provenanceLab":{
+    "intro":"Порівняйте пари records. Подібність полів — лише початок; враховуйте source, original id, timestamp, coordinates і канал.",
+    "cases":[
+      {"id":"exact-copy","title":"Одна публікація потрапила двічі","context":"URL і original id однакові, payload і timestamp події збігаються; received_at відрізняється на 2 хв.","records":[{"label":"Record A","fields":{"source":"WEB-1","original_id":"A-104","event_time":"08:10","grid":"42,17"}},{"label":"Record B","fields":{"source":"WEB-1","original_id":"A-104","event_time":"08:10","grid":"42,17"}}],"question":"Як рахувати?","options":[{"label":"Duplicate — один event","correct":true,"feedback":"Однаковий source/original id і event payload вказують на повторне ingestion, а не нове підтвердження."},{"label":"Два незалежні підтвердження","correct":false,"feedback":"Немає незалежності: це той самий source record."},{"label":"Дві різні події","correct":false,"feedback":"Немає evidence про окремий event."}]},
+      {"id":"independent","title":"Два джерела повідомляють про той самий факт","context":"Час і координати близькі, але source і original id різні; канали WEB та API незалежні.","records":[{"label":"Record A","fields":{"source":"WEB-2","original_id":"W-71","event_time":"09:22","grid":"51,28"}},{"label":"Record B","fields":{"source":"API-4","original_id":"api-882","event_time":"09:23","grid":"51,28"}}],"question":"Що робити?","options":[{"label":"Один event + два provenance links","correct":true,"feedback":"Якщо reconciliation rule підтверджує один event, незалежні records не слід просто видаляти: вони підсилюють trace/confirmation."},{"label":"Видалити один record без сліду","correct":false,"feedback":"Втрачається evidence про незалежне підтвердження."},{"label":"Автоматично рахувати як дві події","correct":false,"feedback":"Це може подвоїти count одного event."}]},
+      {"id":"nearby","title":"Схожий час, але різні координати","context":"Час відрізняється на 3 хв, category однакова, але spatial position відрізняється істотно.","records":[{"label":"Record A","fields":{"source":"FORM-1","event_time":"10:02","grid":"20,18","type":"T2"}},{"label":"Record B","fields":{"source":"API-3","event_time":"10:05","grid":"34,29","type":"T2"}}],"question":"Чи можна deduplicate?","options":[{"label":"Ні — залишити окремими до додаткової evidence","correct":true,"feedback":"Подібність часу/type недостатня; spatial difference не підтримує автоматичне злиття."},{"label":"Так, бо type однаковий","correct":false,"feedback":"Один type може зустрічатися у багатьох events."},{"label":"Так, бо час близький","correct":false,"feedback":"Temporal proximity сама по собі не доводить identity."}]},
+      {"id":"missing-source","title":"Запис без source identifier","context":"Event fields заповнені, але source_id і received_at відсутні.","records":[{"label":"Record","fields":{"source":"—","original_id":"—","event_time":"11:20","grid":"61,44"}}],"question":"Чи можна включити до register?","options":[{"label":"Quarantine / flag до відновлення provenance","correct":true,"feedback":"Запис може бути змістовно корисним, але без provenance його треба явно позначити й не прирівнювати до fully traceable evidence."},{"label":"Прийняти як fully trusted","correct":false,"feedback":"Немає можливості перевірити origin."},{"label":"Автоматично вигадати source_id","correct":false,"feedback":"Synthetic identifier не відновлює provenance."}]}
+    ]
+  },
+  "integrationMission":{
+    "intro":"Після роботи трьох груп створіть один відтворюваний event register.",
+    "steps":[
+      {"id":"raw","title":"Зберегти три raw inputs","task":"Не перезаписувати вихідні CSV/JSON; зафіксувати source channel і file/hash/version.","evidence":"3 immutable raw artifacts","feedback":"Raw layer потрібен для повторного audit."},
+      {"id":"map","title":"Зіставити поля з target schema","task":"Узгодити event_id, event_time, type, coordinates, source_id, received_at.","evidence":"field mapping table","feedback":"Schema mapping має бути явним, а не прихованим у коді."},
+      {"id":"qa","title":"Виконати channel-specific QA","task":"WEB: provenance/duplicates; API: status/schema; formal reports: field validation/correction log.","evidence":"QA log per channel","feedback":"Кожний канал має свої failure modes."},
+      {"id":"reconcile","title":"Reconcile potential duplicates","task":"Порівняти source/original id, event time, location, type та independent confirmation.","evidence":"merge/reject rationale","feedback":"Deduplication повинна бути explainable."},
+      {"id":"register","title":"Сформувати 14 unique events","task":"Зберегти event-level record разом із links на один або кілька source records.","evidence":"event register + provenance links","feedback":"Мета — не втратити підтвердження під час зменшення record count."},
+      {"id":"report","title":"Підготувати короткий integration brief","task":"Пояснити 17 → 14, основні QA issues і залишкову uncertainty.","evidence":"1-paragraph methodology note","feedback":"Користувач аналітики має знати, як сформовано число 14."}
+    ],
+    "complete":"Три канали інтегровані в один register, а кожен event має trace до raw source records."
+  },
+  "sections":[
+    {"id":"collectionMethods","component":"collection-method-selector","eyebrow":"THREE CHANNELS","title":"Internet, API чи формалізоване донесення?","description":"Різні канали вимагають різних quality controls, хоча фінально мають потрапити в одну target schema."},
+    {"id":"provenanceLab","component":"provenance-lab","eyebrow":"PROVENANCE & DEDUP","title":"Duplicate чи незалежне підтвердження?","description":"Порівнюйте identity event і identity record — це різні речі."},
+    {"id":"integrationMission","component":"workflow-mission-lab","eyebrow":"GROUP INTEGRATION","title":"17 records → 14 unique events","description":"Зберіть відтворюваний merge workflow від raw inputs до інтегрованого register."}
+  ],
+  "analystNote":{"title":"Deduplication не повинна знищувати evidence","text":"Коли два source records описують один event, правильний результат часто не «видалити один рядок», а створити один event-level record із двома provenance links. Так аналітика уникає подвійного рахунку й одночасно зберігає незалежне підтвердження."},
+  "quiz":[
+    {"question":"Чому 17 records можуть відповідати 14 events?","options":["Бо частина records може описувати ті самі events або повторне ingestion","Бо JSON завжди створює три зайві записи","Бо CSV не підтримує унікальні значення"],"answer":0,"explanation":"Record identity і event identity не тотожні."},
+    {"question":"Який набір ознак найкраще підтримує deduplication?","options":["Лише однаковий type","Source/original id + time + location + payload + reconciliation rule","Лише близький час"],"answer":1,"explanation":"Потрібна комбінація evidence, а не одна слабка ознака."},
+    {"question":"Що робити з двома незалежними source records, які підтверджують один event?","options":["Залишити один event і зберегти обидва provenance links","Знищити один source record без сліду","Завжди рахувати як два events"],"answer":0,"explanation":"Так зберігається confirmation без подвійного count."},
+    {"question":"Чому API channel теж потребує QA?","options":["HTTP success і JSON schema не гарантують semantic correctness","API завжди повертає HTML","QA потрібен лише для ручних форм"],"answer":0,"explanation":"Transport/schema/semantic quality — різні рівні."},
+    {"question":"Який evidence має супроводжувати correction формалізованого донесення?","options":["Журнал виправлення або validation log","Нічого, якщо аналітик впевнений","Лише новий filename"],"answer":0,"explanation":"Correction має бути audit-able."}
+  ],
+  "reflection":"Як би ви пояснили керівнику різницю між «17 отриманих повідомлень» і «14 встановлених подій», не втративши інформацію про рівень підтвердження?",
+  "sources":[
+    {"label":"2.2 source notebook · content.ipynb","href":"../../Theme%202/gl2.2/content.ipynb"},
+    {"label":"2026 enhanced group case · README","href":"../../Theme%202/gl2.2/2026/iaz_t2_l2_practical_enhanced/README.md"},
+    {"label":"2026 group case · index.html","href":"../../Theme%202/gl2.2/2026/iaz_t2_l2_practical_enhanced/index.html"},
+    {"label":"Group 1 · Internet events CSV","href":"../../Theme%202/gl2.2/2026/iaz_t2_l2_practical_enhanced/data/group1_internet_events.csv"},
+    {"label":"Group 2 · API events JSON","href":"../../Theme%202/gl2.2/2026/iaz_t2_l2_practical_enhanced/data/group2_api_events.json"},
+    {"label":"Group 3 · Formal reports CSV","href":"../../Theme%202/gl2.2/2026/iaz_t2_l2_practical_enhanced/data/group3_formal_reports.csv"},
+    {"label":"Target schema","href":"../../Theme%202/gl2.2/2026/iaz_t2_l2_practical_enhanced/data/target_schema.json"}
+  ],
+  "sourceNote":"Назву 2.2 підтверджено первинним content.ipynb. Ситуаційний web-layer спирається на synthetic 2026 case і не використовує реальні оперативні дані."
+}
