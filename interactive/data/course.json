@@ -1,69 +1,43 @@
 {
-  "title": "MI2024 Interactive",
-  "groups": [
-    {
-      "id": "theme-1",
-      "title": "Тема 1 · Методологічні та інструментальні засади ІАЗ",
-      "description": "Методологія ІАЗ, оцінювання ефективності ІТ, середовище розробки та архітектура аналітичного засобу.",
-      "status": "planned",
-      "progress": {"implemented": 0, "total": 5},
-      "items": []
-    },
-    {
-      "id": "theme-2",
-      "title": "Тема 2 · Збір і зберігання даних",
-      "description": "Від способів отримання даних до моделей зберігання, реляційної схеми та SQL.",
-      "status": "in-progress",
-      "progress": {"implemented": 2, "total": 5},
-      "items": [
-        {"id":"t2-l4","title":"2.4 · Методи зберігання даних ІАЗ ОУВ","description":"Storage Architecture Lab: моделі даних, нормалізація PK/FK, SQL та сценарний вибір сховища.","status":"implemented","href":"./lessons/t2-l4.html"},
-        {"id":"t2-l5","title":"2.5 · Реляційна база даних та SQL","description":"Практичний SQL Mission Lab: шість варіантів схеми, PK/FK і PostgreSQL.","status":"implemented","href":"./lessons/t2-l5.html"}
-      ]
-    },
-    {
-      "id": "theme-3",
-      "title": "Тема 3 · Підготовка даних до аналізу",
-      "description": "Повний маршрут: data quality → EDA → практичний audit → transformation → leakage control → model readiness.",
-      "status": "implemented",
-      "progress": {"implemented": 5, "total": 5},
-      "items": [
-        {"id":"t3-l1","title":"3.1 · Методологія підготовки даних","description":"Розширена 40-хвилинна лекція: methodology, Data Quality Lab, decision trade-offs, EDA preview і self-check.","duration":"≈ 35–45 хв","status":"implemented","href":"./lessons/t3-l1.html"},
-        {"id":"t3-l2","title":"3.2 · Попередній аналіз даних","description":"EDA Explorer + team mission: структура, пропуски, розподіли, кореляції та аномалії.","duration":"≈ 30–45 хв","status":"implemented","href":"./lessons/t3-l2.html"},
-        {"id":"t3-l3","title":"3.3 · Практичний EDA","description":"Від dataset до відтворюваного профілю: audit, statistics, visualization, relationships, conclusion.","duration":"≈ 30–45 хв","status":"implemented","href":"./lessons/t3-l3.html"},
-        {"id":"t3-l4","title":"3.4 · Трансформація та декомпозиція","description":"Transformation Lab + leakage lab: missing data, scaling, encoding, feature selection і train/test.","duration":"≈ 30–45 хв","status":"implemented","href":"./lessons/t3-l4.html"},
-        {"id":"t3-l5","title":"3.5 · Підготовка до моделювання","description":"End-to-end model-ready pipeline, baseline model, independent evaluation і readiness gate.","duration":"≈ 30–45 хв","status":"implemented","href":"./lessons/t3-l5.html"}
-      ]
-    },
-    {
-      "id": "theme-4",
-      "title": "Тема 4 · Методи аналізу даних і штучний інтелект",
-      "description": "Від вибору методу та класичного ML до нейромереж, CNN, Transfer Learning, RL, текстової аналітики та Generative AI. Для 4.10 у репозиторії немає окремого первинного джерела.",
-      "status": "in-progress",
-      "progress": {"implemented": 13, "total": 14},
-      "items": [
-        {"id":"t4-l1","title":"4.1 · Огляд сучасних методів аналізу даних","description":"Method Selector: статистика, ML/AI, GIS, text/network analysis + operational constraints.","duration":"≈ 35–45 хв","status":"implemented","href":"./lessons/theme4.html?lesson=t4-l1"},
-        {"id":"t4-l2","title":"4.2 · Використання методів ШІ для аналізу даних","description":"Classification/regression/clustering task selector + leakage-safe ML workflow.","duration":"≈ 35–45 хв","status":"implemented","href":"./lessons/theme4.html?lesson=t4-l2"},
-        {"id":"t4-l3","title":"4.3 · Регресія","description":"Regression complexity lab, MAE/RMSE/R², baseline і practical mission.","duration":"≈ 35–45 хв","status":"implemented","href":"./lessons/theme4.html?lesson=t4-l3"},
-        {"id":"t4-l4","title":"4.4 · Оцінка точності та гіперпараметри","description":"Train/CV/test roles, tuning curve, metric choice та overfitting.","duration":"≈ 35–45 хв","status":"implemented","href":"./lessons/theme4.html?lesson=t4-l4"},
-        {"id":"t4-l5","title":"4.5 · Класифікація","description":"Threshold Lab: confusion matrix, precision/recall/F1 та operating point.","duration":"≈ 35–45 хв","status":"implemented","href":"./lessons/theme4.html?lesson=t4-l5"},
-        {"id":"t4-l6","title":"4.6 · Основи штучних нейронних мереж","description":"Architecture Lab: layers, units, dropout, capacity та generalization gap.","duration":"≈ 35–45 хв","status":"implemented","href":"./lessons/theme4.html?lesson=t4-l6"},
-        {"id":"t4-l7","title":"4.7 · Методи глибокого навчання","description":"Deep-learning experiment design: architecture, loss, validation, regularization, leakage control.","duration":"≈ 35–45 хв","status":"implemented","href":"./lessons/theme4.html?lesson=t4-l7"},
-        {"id":"t4-l8","title":"4.8 · TensorFlow: регресія та класифікація","description":"Task-dependent output/loss/metric + reproducible TensorFlow mission.","duration":"≈ 35–45 хв","status":"implemented","href":"./lessons/theme4.html?lesson=t4-l8"},
-        {"id":"t4-l9","title":"4.9 · Глибоке навчання для графічної інформації","description":"Convolution Lab, CNN design, augmentation, transfer learning і domain shift.","duration":"≈ 35–45 хв","status":"implemented","href":"./lessons/theme4.html?lesson=t4-l9"},
-        {"id":"t4-l10","title":"4.10 · Джерело заняття не виділено у репозиторії","description":"Окремого каталогу або первинного навчального матеріалу 4.10 у Theme4 не знайдено. Зміст не вигадується.","status":"source-gap"},
-        {"id":"t4-l11","title":"4.11 · Перспективні напрямки аналізу даних","description":"CNN/RNN/Transformers, GenAI/LLM, model hubs, accelerators, MLOps, Transfer Learning і RL.","duration":"≈ 35–45 хв","status":"implemented","href":"./lessons/theme4.html?lesson=t4-l11"},
-        {"id":"t4-l12","title":"4.12 · Transfer Learning та Reinforcement Learning","description":"Fine-tuning strategies, agent–environment loop, reward design і validation risks.","duration":"≈ 35–45 хв","status":"implemented","href":"./lessons/theme4.html?lesson=t4-l12"},
-        {"id":"t4-l13","title":"4.13 · Практичне використання репозиторіїв моделей у проєктах","description":"Project Design Mission: problem, provenance, baseline, validation, risks, artifact і review brief.","duration":"≈ 38–45 хв","status":"implemented","href":"./lessons/theme4.html?lesson=t4-l13"},
-        {"id":"t4-l14","title":"4.14 · Аналіз текстової інформації та Generative AI","description":"Text Analysis Lab: extraction/classification/summarization + provenance, grounding і human review.","duration":"≈ 35–45 хв","status":"implemented","href":"./lessons/theme4.html?lesson=t4-l14"}
-      ]
-    },
-    {
-      "id": "theme-5",
-      "title": "Тема 5 · Візуалізація та підтримка рішення",
-      "description": "Візуальна аналітика, dashboards, представлення результатів і перехід до аналітичного висновку.",
-      "status": "audit-needed",
-      "progress": {"implemented": 0, "total": 8},
-      "items": []
-    }
+  "title":"MI2024 Interactive",
+  "groups":[
+    {"id":"theme-1","title":"Тема 1 · Методологічні та інструментальні засади ІАЗ","description":"Методологія ІАЗ, оцінювання ефективності ІТ, середовище розробки та архітектура аналітичного засобу.","status":"planned","progress":{"implemented":0,"total":5},"items":[]},
+    {"id":"theme-2","title":"Тема 2 · Збір і зберігання даних","description":"Від способів отримання даних до моделей зберігання, реляційної схеми та SQL.","status":"in-progress","progress":{"implemented":2,"total":5},"items":[
+      {"id":"t2-l4","title":"2.4 · Методи зберігання даних ІАЗ ОУВ","description":"Storage Architecture Lab: моделі даних, нормалізація PK/FK, SQL та сценарний вибір сховища.","status":"implemented","href":"./lessons/t2-l4.html"},
+      {"id":"t2-l5","title":"2.5 · Реляційна база даних та SQL","description":"Практичний SQL Mission Lab: шість варіантів схеми, PK/FK і PostgreSQL.","status":"implemented","href":"./lessons/t2-l5.html"}
+    ]},
+    {"id":"theme-3","title":"Тема 3 · Підготовка даних до аналізу","description":"Повний маршрут: data quality → EDA → практичний audit → transformation → leakage control → model readiness.","status":"implemented","progress":{"implemented":5,"total":5},"items":[
+      {"id":"t3-l1","title":"3.1 · Методологія підготовки даних","description":"Розширена 40-хвилинна лекція: methodology, Data Quality Lab, decision trade-offs, EDA preview і self-check.","duration":"≈ 35–45 хв","status":"implemented","href":"./lessons/t3-l1.html"},
+      {"id":"t3-l2","title":"3.2 · Попередній аналіз даних","description":"EDA Explorer + team mission: структура, пропуски, розподіли, кореляції та аномалії.","duration":"≈ 30–45 хв","status":"implemented","href":"./lessons/t3-l2.html"},
+      {"id":"t3-l3","title":"3.3 · Практичний EDA","description":"Від dataset до відтворюваного профілю: audit, statistics, visualization, relationships, conclusion.","duration":"≈ 30–45 хв","status":"implemented","href":"./lessons/t3-l3.html"},
+      {"id":"t3-l4","title":"3.4 · Трансформація та декомпозиція","description":"Transformation Lab + leakage lab: missing data, scaling, encoding, feature selection і train/test.","duration":"≈ 30–45 хв","status":"implemented","href":"./lessons/t3-l4.html"},
+      {"id":"t3-l5","title":"3.5 · Підготовка до моделювання","description":"End-to-end model-ready pipeline, baseline model, independent evaluation і readiness gate.","duration":"≈ 30–45 хв","status":"implemented","href":"./lessons/t3-l5.html"}
+    ]},
+    {"id":"theme-4","title":"Тема 4 · Методи аналізу даних і штучний інтелект","description":"Від вибору методу та класичного ML до нейромереж, CNN, Transfer Learning, RL, текстової аналітики та Generative AI. Для 4.10 у репозиторії немає окремого первинного джерела.","status":"in-progress","progress":{"implemented":13,"total":14},"items":[
+      {"id":"t4-l1","title":"4.1 · Огляд сучасних методів аналізу даних","description":"Method Selector: статистика, ML/AI, GIS, text/network analysis + operational constraints.","duration":"≈ 35–45 хв","status":"implemented","href":"./lessons/theme4.html?lesson=t4-l1"},
+      {"id":"t4-l2","title":"4.2 · Використання методів ШІ для аналізу даних","description":"Classification/regression/clustering task selector + leakage-safe ML workflow.","duration":"≈ 35–45 хв","status":"implemented","href":"./lessons/theme4.html?lesson=t4-l2"},
+      {"id":"t4-l3","title":"4.3 · Регресія","description":"Regression complexity lab, MAE/RMSE/R², baseline і practical mission.","duration":"≈ 35–45 хв","status":"implemented","href":"./lessons/theme4.html?lesson=t4-l3"},
+      {"id":"t4-l4","title":"4.4 · Оцінка точності та гіперпараметри","description":"Train/CV/test roles, tuning curve, metric choice та overfitting.","duration":"≈ 35–45 хв","status":"implemented","href":"./lessons/theme4.html?lesson=t4-l4"},
+      {"id":"t4-l5","title":"4.5 · Класифікація","description":"Threshold Lab: confusion matrix, precision/recall/F1 та operating point.","duration":"≈ 35–45 хв","status":"implemented","href":"./lessons/theme4.html?lesson=t4-l5"},
+      {"id":"t4-l6","title":"4.6 · Основи штучних нейронних мереж","description":"Architecture Lab: layers, units, dropout, capacity та generalization gap.","duration":"≈ 35–45 хв","status":"implemented","href":"./lessons/theme4.html?lesson=t4-l6"},
+      {"id":"t4-l7","title":"4.7 · Методи глибокого навчання","description":"Deep-learning experiment design: architecture, loss, validation, regularization, leakage control.","duration":"≈ 35–45 хв","status":"implemented","href":"./lessons/theme4.html?lesson=t4-l7"},
+      {"id":"t4-l8","title":"4.8 · TensorFlow: регресія та класифікація","description":"Task-dependent output/loss/metric + reproducible TensorFlow mission.","duration":"≈ 35–45 хв","status":"implemented","href":"./lessons/theme4.html?lesson=t4-l8"},
+      {"id":"t4-l9","title":"4.9 · Глибоке навчання для графічної інформації","description":"Convolution Lab, CNN design, augmentation, transfer learning і domain shift.","duration":"≈ 35–45 хв","status":"implemented","href":"./lessons/theme4.html?lesson=t4-l9"},
+      {"id":"t4-l10","title":"4.10 · Джерело заняття не виділено у репозиторії","description":"Окремого каталогу або первинного навчального матеріалу 4.10 у Theme4 не знайдено. Зміст не вигадується.","status":"source-gap"},
+      {"id":"t4-l11","title":"4.11 · Перспективні напрямки аналізу даних","description":"CNN/RNN/Transformers, GenAI/LLM, model hubs, accelerators, MLOps, Transfer Learning і RL.","duration":"≈ 35–45 хв","status":"implemented","href":"./lessons/theme4.html?lesson=t4-l11"},
+      {"id":"t4-l12","title":"4.12 · Transfer Learning та Reinforcement Learning","description":"Fine-tuning strategies, agent–environment loop, reward design і validation risks.","duration":"≈ 35–45 хв","status":"implemented","href":"./lessons/theme4.html?lesson=t4-l12"},
+      {"id":"t4-l13","title":"4.13 · Практичне використання репозиторіїв моделей у проєктах","description":"Project Design Mission: problem, provenance, baseline, validation, risks, artifact і review brief.","duration":"≈ 38–45 хв","status":"implemented","href":"./lessons/theme4.html?lesson=t4-l13"},
+      {"id":"t4-l14","title":"4.14 · Аналіз текстової інформації та Generative AI","description":"Text Analysis Lab: extraction/classification/summarization + provenance, grounding і human review.","duration":"≈ 35–45 хв","status":"implemented","href":"./lessons/theme4.html?lesson=t4-l14"}
+    ]},
+    {"id":"theme-5","title":"Тема 5 · Методологія відображення даних","description":"Від visual encoding і HTML/CSS dashboard до графічного дизайну, інтегрованих visual products, адаптації під аудиторію та короткого аналітичного brief.","status":"implemented","progress":{"implemented":8,"total":8},"items":[
+      {"id":"t5-l1","title":"5.1 · Методологічні основи візуалізації даних","description":"Visual Encoding + Design Critique + Evidence → Brief.","duration":"≈ 35–45 хв","status":"implemented","href":"./lessons/theme5.html?lesson=t5-l1"},
+      {"id":"t5-l2","title":"5.2 · Огляд інструментів візуалізації даних на основі HTML + CSS","description":"Semantic HTML/CSS, responsive layout і Dashboard Builder.","duration":"≈ 35–45 хв","status":"implemented","href":"./lessons/theme5.html?lesson=t5-l2"},
+      {"id":"t5-l3","title":"5.3 · Практичне використання інструментів візуалізації даних","description":"10 Visualization Missions: map, time series, network, heatmap, dashboard, uncertainty та інші.","duration":"≈ 35–45 хв","status":"implemented","href":"./lessons/theme5.html?lesson=t5-l3"},
+      {"id":"t5-l4","title":"5.4 · Підбір візуальних елементів для візуалізації даних","description":"Visual encoding challenge за task, data type, audience і perceptual accuracy.","duration":"≈ 35–45 хв","status":"implemented","href":"./lessons/theme5.html?lesson=t5-l4"},
+      {"id":"t5-l5","title":"5.5 · Практичне створення дашборду військового аналітика","description":"Source-derived від dashboard-артефактів Practice55: KPI, chart, table, map, coordinated views.","duration":"≈ 35–45 хв","status":"implemented","href":"./lessons/theme5.html?lesson=t5-l5"},
+      {"id":"t5-l6","title":"5.6 · Основи графічного дизайну та його використання для візуалізації даних","description":"Composition, hierarchy, contrast, color, typography, whitespace і truthful scales.","duration":"≈ 35–45 хв","status":"implemented","href":"./lessons/theme5.html?lesson=t5-l6"},
+      {"id":"t5-l7","title":"5.7 · Застосування принципів графічного дизайну для візуалізації даних","description":"Group dashboard redesign, structured critique і design rationale.","duration":"≈ 35–45 хв","status":"implemented","href":"./lessons/theme5.html?lesson=t5-l7"},
+      {"id":"t5-l8","title":"5.8 · Розробка та демонстрація візуалізацій для різних аудиторій","description":"Audience Adaptation Lab: expert, leader, public; simple/detailed modes і audience-specific brief.","duration":"≈ 35–45 хв","status":"implemented","href":"./lessons/theme5.html?lesson=t5-l8"}
+    ]}
   ]
 }
