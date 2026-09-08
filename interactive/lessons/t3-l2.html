@@ -1,1 +1,315 @@
-<!doctype html><html lang="uk"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="Інтерактивне групове заняття 3.2 з попереднього аналізу даних"><title>Заняття 3.2 · Попередній аналіз даних</title><link rel="stylesheet" href="../assets/css/main.css"><link rel="stylesheet" href="../assets/css/data-preparation.css"></head><body><main class="page-shell"><nav class="breadcrumb"><a href="../index.html">MI2024 Interactive</a><span>→</span><span>Тема 3 · Заняття 2</span></nav><nav class="track-nav" aria-label="Тема 3"><a href="t3-l1.html">3.1</a><a class="is-current" href="t3-l2.html">3.2</a><a href="t3-l3.html">3.3</a><a href="t3-l4.html">3.4</a><a href="t3-l5.html">3.5</a></nav><header class="hero hero--compact"><p class="eyebrow">ТЕМА 3 · ЗАНЯТТЯ 2 · EDA LAB</p><h1>Що потрібно з’ясувати про дані до того, як їх «виправляти»?</h1><p class="hero__lead">Попередній аналіз даних перетворює невідомий dataset на профіль: структура, якість, розподіли, зв’язки, аномалії та гіпотези.</p></header><section class="section-shell"><div class="section-heading"><p class="eyebrow">ANALYTICS PIPELINE</p><h2>EDA як частина підготовки</h2></div><div data-component="analytics-pipeline" data-source="../data/lessons/t3-l2.json" data-select="pipeline"></div></section><section class="section-shell"><div class="section-heading"><p class="eyebrow">1 · EXPLORE</p><h2>Прочитайте dataset з різних боків</h2><p>Перемикайте структуру, пропуски, розподіли, кореляції та аномалії. Дані синтетичні.</p></div><div data-component="eda-explorer" data-source="../data/lessons/t3-l2.json" data-select="eda"></div></section><section class="analyst-note"><p class="eyebrow">WHY IT MATTERS FOR THE ANALYST</p><h2>EDA має завершуватися рішеннями про подальшу обробку</h2><p>Графік сам по собі не є висновком. Результат EDA — перелік проблем даних, перевірених закономірностей, невизначеностей і гіпотез, які визначають наступні кроки.</p></section><section class="section-shell"><div class="section-heading"><p class="eyebrow">2 · TEAM MISSION</p><h2>Зберіть профіль даних</h2></div><div data-component="workflow-mission-lab" data-source="../data/lessons/t3-l2.json" data-select="mission"></div></section><section class="section-shell"><div class="section-heading"><p class="eyebrow">SELF-CHECK</p><h2>Перевірте ключові принципи EDA</h2></div><div data-component="knowledge-check" data-source="../data/lessons/t3-l2.json" data-select="quiz"></div></section><section class="section-shell"><div class="section-heading"><p class="eyebrow">SOURCE MATERIALS</p><h2>Матеріали заняття</h2></div><div class="source-links"><a href="../../Theme3/Group%20lesson%202/content1.ipynb">content1.ipynb</a><a href="../../Theme3/Group%20lesson%202/content2.ipynb">content2.ipynb</a><a href="../../Theme3/Group%20lesson%202/sample1.ipynb">sample1.ipynb</a></div></section></main><script type="module" src="../js/app.js"></script></body></html>
+<!doctype html>
+<html lang="uk">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="90-хвилинне інтерактивне заняття 3.2 з EDA та реальними Python-прикладами">
+  <title>Заняття 3.2 · Попередній аналіз даних + Python</title>
+  <link rel="stylesheet" href="../assets/css/main.css">
+  <link rel="stylesheet" href="../assets/css/data-preparation.css">
+  <link rel="stylesheet" href="../assets/css/python-lab.css">
+</head>
+<body>
+  <main class="page-shell">
+    <nav class="breadcrumb" aria-label="Навігація">
+      <a href="../index.html">MI2024 Interactive</a><span>→</span><span>Тема 3 · Заняття 2</span>
+    </nav>
+
+    <nav class="track-nav" aria-label="Тема 3">
+      <a href="t3-l1.html">3.1</a><a class="is-current" href="t3-l2.html">3.2</a><a href="t3-l3.html">3.3</a><a href="t3-l4.html">3.4</a><a href="t3-l5.html">3.5</a>
+    </nav>
+
+    <header class="hero hero--compact">
+      <div class="hero-meta"><span>Групове заняття + code lab</span><span>≈ 90 хв</span><span>EDA · Pandas · Matplotlib</span></div>
+      <p class="eyebrow">ТЕМА 3 · ЗАНЯТТЯ 2 · EDA LAB</p>
+      <h1>Що потрібно з’ясувати про дані до того, як їх «виправляти»?</h1>
+      <p class="hero__lead">Попередній аналіз даних перетворює невідомий dataset на профіль: структура, якість, розподіли, зв’язки, аномалії та гіпотези. Тут кожний тип evidence одразу відтворюється в Python.</p>
+    </header>
+
+    <section class="section-shell">
+      <div class="section-heading">
+        <p class="eyebrow">LEARNING ROUTE</p>
+        <h2>Маршрут заняття: 90 хвилин</h2>
+        <p>Результат заняття — не набір графіків, а короткий EDA-висновок: що відомо про dataset, які ризики виявлено і що треба робити далі.</p>
+      </div>
+      <div class="lesson-timebox">
+        <article><strong>0–8 хв</strong><span>Питання EDA</span><p>Сформулювати, що саме треба з’ясувати до preprocessing.</p></article>
+        <article><strong>8–20 хв</strong><span>Structure & quality</span><p>Shape, типи, пропуски, дублікати й валідність часу.</p></article>
+        <article><strong>20–35 хв</strong><span>Descriptive statistics</span><p>Розподіли, квартилі, перцентилі та grouped summaries.</p></article>
+        <article><strong>35–50 хв</strong><span>Visualization</span><p>Missingness, boxplot і часовий профіль за допомогою Matplotlib.</p></article>
+        <article><strong>50–65 хв</strong><span>Relationships</span><p>Кореляції та порівняння джерел/типів подій без перебільшення причинності.</p></article>
+        <article><strong>65–75 хв</strong><span>Anomalies</span><p>IQR detector → перелік рядків для предметної перевірки.</p></article>
+        <article><strong>75–83 хв</strong><span>Team mission</span><p>Зібрати evidence в короткий аналітичний профіль dataset.</p></article>
+        <article><strong>83–90 хв</strong><span>Self-check</span><p>Сформулювати 3–5 перевірених спостережень і наступні кроки.</p></article>
+      </div>
+    </section>
+
+    <section class="section-shell">
+      <div class="section-heading">
+        <p class="eyebrow">ANALYTICS PIPELINE</p>
+        <h2>EDA як частина підготовки</h2>
+        <p>EDA не є декоративним етапом перед «справжнім аналізом». Саме тут ми отримуємо evidence для правил preprocessing і перевіряємо, чи не створюємо хибну картину даних.</p>
+      </div>
+      <div data-component="analytics-pipeline" data-source="../data/lessons/t3-l2.json" data-select="pipeline"></div>
+    </section>
+
+    <section class="section-shell scenario-brief">
+      <div class="section-heading">
+        <p class="eyebrow">0 · АНАЛІТИЧНЕ ПИТАННЯ</p>
+        <h2>Що ми повинні знати про dataset через 60 хвилин?</h2>
+        <p>Використовуємо той самий синтетичний набір, що і в 3.1: кілька джерел, категорії подій, затримка, confidence і timestamp. Завдання EDA — не «знайти щось цікаве», а системно перевірити п’ять класів evidence.</p>
+      </div>
+      <div class="scenario-grid">
+        <article><strong>1</strong><span>Structure</span><p>Які поля, типи, обсяг і одиниця спостереження?</p></article>
+        <article><strong>2</strong><span>Quality</span><p>Де пропуски, дублікати та невалідні значення?</p></article>
+        <article><strong>3</strong><span>Distributions</span><p>Що типове, що рідкісне, наскільки дані асиметричні?</p></article>
+        <article><strong>4–5</strong><span>Relations + anomalies</span><p>Які зв’язки варто перевіряти далі і які записи потребують окремої верифікації?</p></article>
+      </div>
+    </section>
+
+    <section class="section-shell">
+      <div class="section-heading">
+        <p class="eyebrow">1 · INTERACTIVE EXPLORE</p>
+        <h2>Прочитайте dataset з різних боків</h2>
+        <p>Перемикайте структуру, пропуски, розподіли, кореляції та аномалії. Дані синтетичні. Після кожної вкладки сформулюйте одне речення evidence.</p>
+      </div>
+      <div data-component="eda-explorer" data-source="../data/lessons/t3-l2.json" data-select="eda"></div>
+    </section>
+
+    <section class="section-shell">
+      <div class="section-heading">
+        <p class="eyebrow">2 · PYTHON LAB 1</p>
+        <h2>Structure + quality: перші команди мають відповідати на конкретні питання</h2>
+        <p>Не обмежуйтеся <span class="code-inline">df.head()</span>. Перший профіль має одразу показувати форму, типи, missingness і проблеми timestamp.</p>
+      </div>
+      <div class="python-lab-grid">
+        <div class="python-code-card">
+          <div class="python-code-card__head"><strong>Структурний профіль</strong><span>pandas</span></div>
+          <pre><code>raw = build_dataset()
+df = raw.copy()
+
+df["timestamp_parsed"] = pd.to_datetime(
+    df["timestamp"], errors="coerce", utc=True
+)
+
+print("shape:", df.shape)
+print(df.dtypes)
+print(df.isna().sum().sort_values(ascending=False))
+
+invalid_time = df["timestamp_parsed"].isna().sum()
+exact_duplicates = df.duplicated().sum()
+print("invalid timestamps:", invalid_time)
+print("exact duplicates:", exact_duplicates)</code></pre>
+        </div>
+        <aside class="python-result-card">
+          <h3>Evidence, а не просто output</h3>
+          <p>Після виконання коду треба сформулювати висновки: «у колонці confidence є пропуски», «частина timestamp не парситься», «є точні дублікати».</p>
+          <div class="expected-output"><strong>Аналітичний формат:</strong> факт → можливий ризик → що перевірити далі.</div>
+        </aside>
+      </div>
+      <div class="run-command"><strong>Повний runnable example:</strong> <code>python interactive/examples/t3_l2_eda.py</code></div>
+    </section>
+
+    <section class="section-shell">
+      <div class="section-heading">
+        <p class="eyebrow">3 · PYTHON LAB 2</p>
+        <h2>Описова статистика: дивимося не лише на середнє</h2>
+        <p>Для skewed distributions і рідкісних подій медіана та перцентилі часто інформативніші за середнє.</p>
+      </div>
+      <div class="python-lab-grid">
+        <div class="python-code-card">
+          <div class="python-code-card__head"><strong>Describe + grouped profile</strong><span>pandas</span></div>
+          <pre><code>print(
+    df[["delay_min", "confidence"]]
+      .describe(percentiles=[0.5, 0.75, 0.9, 0.95])
+      .round(2)
+)
+
+by_source = (
+    df.groupby("source")
+      .agg(
+          events=("event_id", "count"),
+          median_delay=("delay_min", "median"),
+          mean_confidence=("confidence", "mean"),
+          missing_confidence=("confidence", lambda s: s.isna().sum()),
+      )
+      .round(2)
+)
+print(by_source)</code></pre>
+        </div>
+        <aside class="python-result-card">
+          <h3>Питання до результату</h3>
+          <ul>
+            <li>Чи сильно відрізняється median від mean?</li>
+            <li>Наскільки p90/p95 віддалені від типового значення?</li>
+            <li>Чи відрізняються джерела за delay або missingness?</li>
+            <li>Чи може різниця бути наслідком різного обсягу спостережень?</li>
+          </ul>
+        </aside>
+      </div>
+      <div class="lab-task">
+        <h3>Міні-завдання</h3>
+        <p>Змініть групування з <span class="code-inline">source</span> на <span class="code-inline">event_type</span>. Порівняйте median delay і p90 для кожного типу подій.</p>
+      </div>
+    </section>
+
+    <section class="section-shell">
+      <div class="section-heading">
+        <p class="eyebrow">4 · PYTHON LAB 3</p>
+        <h2>Три графіки, кожен з конкретною аналітичною функцією</h2>
+        <p>Графік додається не тому, що «EDA має містити візуалізації», а тому що він відповідає на питання, яке таблично бачити складніше.</p>
+      </div>
+      <div class="python-lab-grid">
+        <div class="python-code-card">
+          <div class="python-code-card__head"><strong>Missingness by source</strong><span>matplotlib</span></div>
+          <pre><code>import matplotlib.pyplot as plt
+
+missing = (
+    df.groupby("source")["confidence"]
+      .apply(lambda s: s.isna().mean())
+      .sort_values()
+)
+
+fig, ax = plt.subplots(figsize=(8, 4.5))
+ax.bar(missing.index, missing.values)
+ax.set_title("Missing confidence by source")
+ax.set_xlabel("Source")
+ax.set_ylabel("Missing share")
+fig.tight_layout()
+plt.show()</code></pre>
+        </div>
+        <aside class="python-result-card">
+          <h3>Що ще генерує повний script</h3>
+          <ul>
+            <li><strong>bar chart:</strong> missing confidence by source;</li>
+            <li><strong>boxplot:</strong> delay distribution by event type;</li>
+            <li><strong>time series:</strong> кількість подій у 4-годинних інтервалах.</li>
+          </ul>
+          <p>Повний script зберігає PNG у <span class="code-inline">interactive/examples/t3_l2_eda_output/</span>.</p>
+        </aside>
+      </div>
+      <div class="exercise-steps">
+        <article><strong>Крок 1</strong><p>Подивіться на графік і сформулюйте тільки те, що безпосередньо видно.</p></article>
+        <article><strong>Крок 2</strong><p>Назвіть одну можливу інтерпретацію, але не видавайте її за факт.</p></article>
+        <article><strong>Крок 3</strong><p>Сформулюйте, які додаткові дані потрібні для перевірки інтерпретації.</p></article>
+      </div>
+    </section>
+
+    <section class="section-shell">
+      <div class="section-heading">
+        <p class="eyebrow">5 · PYTHON LAB 4</p>
+        <h2>Кореляція — це сигнал до перевірки, а не доказ причини</h2>
+        <p>У невеликому dataset коефіцієнт кореляції легко переоцінити. Він має бути частиною evidence-пакета разом із графіком, контекстом і перевіркою confounders.</p>
+      </div>
+      <div class="python-lab-grid">
+        <div class="python-code-card">
+          <div class="python-code-card__head"><strong>Numeric relationships</strong><span>pandas</span></div>
+          <pre><code>numeric = df[["delay_min", "confidence"]]
+
+corr = numeric.corr(numeric_only=True).round(3)
+print(corr)
+
+# Додатково порівняйте групи, а не лише global correlation
+print(
+    df.groupby("event_type")
+      .agg(
+          median_delay=("delay_min", "median"),
+          mean_confidence=("confidence", "mean")
+      )
+      .round(2)
+)</code></pre>
+        </div>
+        <aside class="python-result-card">
+          <h3>Правильне формулювання</h3>
+          <p>«У вибірці спостерігається слабкий/помірний/сильний статистичний зв’язок» — коректніше, ніж «confidence впливає на delay».</p>
+          <div class="expected-output"><strong>Перевірка:</strong> чи не пояснюється global relationship різними event types або sources?</div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="section-shell">
+      <div class="section-heading">
+        <p class="eyebrow">6 · PYTHON LAB 5</p>
+        <h2>Anomaly detection має завершуватися списком для перевірки</h2>
+        <p>EDA знаходить кандидата на аномалію; предметна верифікація вирішує, чи це помилка, рідкісна подія або окремий режим процесу.</p>
+      </div>
+      <div class="python-lab-grid">
+        <div class="python-code-card">
+          <div class="python-code-card__head"><strong>IQR anomaly review</strong><span>pandas</span></div>
+          <pre><code>q1 = df["delay_min"].quantile(0.25)
+q3 = df["delay_min"].quantile(0.75)
+iqr = q3 - q1
+upper = q3 + 1.5 * iqr
+
+flagged = df.loc[
+    df["delay_min"].gt(upper),
+    ["event_id", "source", "sector", "event_type", "delay_min", "timestamp"]
+].sort_values("delay_min", ascending=False)
+
+print(flagged)</code></pre>
+        </div>
+        <aside class="python-result-card">
+          <h3>Наступна дія</h3>
+          <p>Для кожного flagged row поставте питання: чи підтверджується provenance, чи є технічна причина, чи траплялися подібні випадки, як рядок впливає на метрики?</p>
+          <p><strong>Не робіть:</strong> автоматичне видалення всіх flagged rows без перевірки.</p>
+        </aside>
+      </div>
+    </section>
+
+    <section class="analyst-note">
+      <p class="eyebrow">WHY IT MATTERS FOR THE ANALYST</p>
+      <h2>EDA має завершуватися рішеннями про подальшу обробку</h2>
+      <p>Графік сам по собі не є висновком. Результат EDA — перелік проблем даних, перевірених закономірностей, невизначеностей і гіпотез, які визначають наступні кроки.</p>
+    </section>
+
+    <section class="section-shell">
+      <div class="section-heading">
+        <p class="eyebrow">7 · TEAM MISSION</p>
+        <h2>Зберіть профіль даних</h2>
+        <p>Використайте інтерактивну місію як структуру, але підкріпіть кожен пункт результатом Python-команди або графіка.</p>
+      </div>
+      <div data-component="workflow-mission-lab" data-source="../data/lessons/t3-l2.json" data-select="mission"></div>
+      <div class="lab-task">
+        <h3>Формат фінального EDA-висновку</h3>
+        <ol>
+          <li><strong>Quality:</strong> 1–2 конкретні проблеми з кількісним evidence.</li>
+          <li><strong>Distribution:</strong> що є типовим і що формує хвіст розподілу.</li>
+          <li><strong>Groups:</strong> одна перевірена різниця між source/event type.</li>
+          <li><strong>Anomaly:</strong> які записи потребують предметної верифікації.</li>
+          <li><strong>Next action:</strong> яке preprocessing-рішення або додаткову перевірку виконати далі.</li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="section-shell">
+      <div class="section-heading">
+        <p class="eyebrow">8 · SELF-CHECK</p>
+        <h2>Перевірте ключові принципи EDA</h2>
+        <p>Відповідайте з позиції аналітика: що саме підтверджує висновок і де закінчується evidence та починається інтерпретація.</p>
+      </div>
+      <div data-component="knowledge-check" data-source="../data/lessons/t3-l2.json" data-select="quiz"></div>
+      <div class="reflection-box">
+        <strong>Фінальна перевірка</strong>
+        <p>Якщо ваш EDA завершується лише «побудували histogram і correlation matrix», робота ще не завершена. Сформулюйте 3–5 evidence-based observations і конкретний наступний крок.</p>
+      </div>
+    </section>
+
+    <section class="section-shell">
+      <div class="section-heading">
+        <p class="eyebrow">SOURCE MATERIALS</p>
+        <h2>Матеріали заняття та повний код</h2>
+        <p>Python-script запускається локально без notebook і генерує табличний EDA та три графіки.</p>
+      </div>
+      <div class="source-links">
+        <a href="../examples/t3_l2_eda.py">Python: повний EDA example</a>
+        <a href="../examples/t3_l1_preparation.py">Python: dataset + preprocessing</a>
+        <a href="../../Theme3/Group%20lesson%202/content1.ipynb">content1.ipynb</a>
+        <a href="../../Theme3/Group%20lesson%202/content2.ipynb">content2.ipynb</a>
+        <a href="../../Theme3/Group%20lesson%202/sample1.ipynb">sample1.ipynb</a>
+        <a href="t3-l3.html">Далі: 3.3 Практичний EDA →</a>
+      </div>
+    </section>
+  </main>
+  <script type="module" src="../js/app.js"></script>
+</body>
+</html>
