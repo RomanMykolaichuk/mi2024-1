@@ -116,7 +116,7 @@ def save_plots(df: pd.DataFrame) -> None:
     ]
     labels = [name for name, _ in df.groupby("event_type", sort=True)]
     fig, ax = plt.subplots(figsize=(8, 4.5))
-    ax.boxplot(groups, labels=labels)
+    ax.boxplot(groups, tick_labels=labels)
     ax.set_title("Delay distribution by event type")
     ax.set_xlabel("Event type")
     ax.set_ylabel("Delay, min")
