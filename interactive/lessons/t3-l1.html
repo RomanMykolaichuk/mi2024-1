@@ -3,10 +3,11 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="description" content="Інтерактивна лекція 3.1 про методологію підготовки даних та EDA">
-  <title>Лекція 3.1 · Методологія підготовки даних</title>
+  <meta name="description" content="90-хвилинна інтерактивна лекція 3.1 про методологію підготовки даних із реальними Python-прикладами">
+  <title>Лекція 3.1 · Методологія підготовки даних + Python</title>
   <link rel="stylesheet" href="../assets/css/main.css">
   <link rel="stylesheet" href="../assets/css/data-preparation.css">
+  <link rel="stylesheet" href="../assets/css/python-lab.css">
 </head>
 <body>
   <main class="page-shell">
@@ -19,19 +20,28 @@
     </nav>
 
     <header class="hero hero--compact">
-      <div class="hero-meta"><span>Лекція</span><span>≈ 40 хв</span><span>Data preparation</span></div>
+      <div class="hero-meta"><span>Лекція + code lab</span><span>≈ 90 хв</span><span>Python · Pandas · Data preparation</span></div>
       <p class="eyebrow">ТЕМА 3 · ЗАНЯТТЯ 1</p>
       <h1>Підготовка даних — це методологія, а не косметичне очищення таблиці</h1>
-      <p class="hero__lead">Від якості, походження, семантики та порядку перетворень залежить достовірність усього наступного аналізу. Мета заняття — навчитися бачити preprocessing як серію обґрунтованих аналітичних рішень.</p>
+      <p class="hero__lead">Від якості, походження, семантики та порядку перетворень залежить достовірність усього наступного аналізу. У цьому занятті методологічні рішення одразу перевіряються на реальному виконуваному Python-коді.</p>
     </header>
 
     <section class="section-shell">
       <div class="section-heading">
         <p class="eyebrow">LEARNING ROUTE</p>
-        <h2>Маршрут заняття: 35–45 хвилин</h2>
-        <p>Час розподілений не на пасивне читання, а на послідовні рішення, перевірку evidence та коротку самоперевірку.</p>
+        <h2>Маршрут заняття: 90 хвилин</h2>
+        <p>Заняття побудоване як цикл: аналітична постановка → діагностика → Python-перетворення → перевірка наслідків → пояснюваний висновок.</p>
       </div>
-      <div data-component="lesson-roadmap" data-source="../data/lessons/t3-l1.json" data-select="roadmap"></div>
+      <div class="lesson-timebox">
+        <article><strong>0–8 хв</strong><span>Аналітична ситуація</span><p>Визначити, чому зібрані дані ще не є доказовою базою.</p></article>
+        <article><strong>8–18 хв</strong><span>Методологія</span><p>Pipeline, provenance, semantics, contextual quality і reproducibility.</p></article>
+        <article><strong>18–32 хв</strong><span>Python lab 1</span><p>Створити dataset і провести первинний профіль якості.</p></article>
+        <article><strong>32–47 хв</strong><span>Python lab 2</span><p>Часові формати, точні дублікати й семантична ідентичність події.</p></article>
+        <article><strong>47–62 хв</strong><span>Python lab 3</span><p>Дослідити missingness за джерелами та обґрунтувати імпутацію.</p></article>
+        <article><strong>62–72 хв</strong><span>Python lab 4</span><p>Виявити аномалії IQR-правилом і не видаляти їх автоматично.</p></article>
+        <article><strong>72–82 хв</strong><span>Decision labs</span><p>Порівняти методологічні рішення з інтерактивним quality/trade-off.</p></article>
+        <article><strong>82–90 хв</strong><span>Синтез і self-check</span><p>Звести preprocessing та EDA в один відтворюваний цикл.</p></article>
+      </div>
     </section>
 
     <section class="section-shell scenario-brief">
@@ -65,7 +75,7 @@
       <div class="section-heading">
         <p class="eyebrow">2 · МЕТОДОЛОГІЧНІ ПРИНЦИПИ</p>
         <h2>П’ять правил, які мають передувати коду</h2>
-        <p>Команда `dropna()` або `fillna()` нічого не говорить про те, чи є рішення аналітично коректним. Спочатку потрібна логіка.</p>
+        <p>Команда <span class="code-inline">dropna()</span> або <span class="code-inline">fillna()</span> нічого не говорить про те, чи є рішення аналітично коректним. Спочатку потрібна логіка.</p>
       </div>
       <div class="concept-grid">
         <article><span>01</span><h3>Goal-first</h3><p>Спочатку формулюється аналітичне питання, target і одиниця спостереження. Без цього неможливо визначити, які ознаки релевантні, а які проблеми якості справді критичні.</p></article>
@@ -78,8 +88,150 @@
 
     <section class="section-shell">
       <div class="section-heading">
-        <p class="eyebrow">3 · DATA QUALITY LAB</p>
-        <h2>Підготуйте синтетичний набір даних</h2>
+        <p class="eyebrow">3 · PYTHON LAB 1</p>
+        <h2>Не починайте з очищення: спочатку побудуйте профіль якості</h2>
+        <p>Синтетичний dataset навмисно містить пропуски, точні дублікати, неоднорідні timestamps і рідкісний екстремальний delay. Перший крок — тільки діагностика.</p>
+      </div>
+      <div class="python-lab-grid">
+        <div class="python-code-card">
+          <div class="python-code-card__head"><strong>Первинний профіль dataset</strong><span>pandas</span></div>
+          <pre><code>raw = build_dataset(seed=42)
+
+print(raw.shape)
+print(raw.dtypes)
+print(raw.isna().sum())
+
+print("Exact duplicates:", raw.duplicated().sum())
+
+potential_key = ["timestamp", "sector", "event_type"]
+print(
+    "Potential event matches:",
+    raw.duplicated(potential_key, keep=False).sum()
+)</code></pre>
+        </div>
+        <aside class="python-result-card">
+          <h3>Що аналізуємо</h3>
+          <ul>
+            <li><strong>shape</strong> — чи відповідає обсяг очікуванню;</li>
+            <li><strong>dtypes</strong> — чи не залишилися числа/час як текст;</li>
+            <li><strong>missingness</strong> — де саме виникають пропуски;</li>
+            <li><strong>exact duplicates</strong> — технічне повторення;</li>
+            <li><strong>potential matches</strong> — кандидати на одну подію, а не автоматичні дублікати.</li>
+          </ul>
+          <div class="expected-output"><strong>Ключова ідея:</strong> профіль якості описує проблему, але ще не дає права автоматично змінювати дані.</div>
+        </aside>
+      </div>
+      <div class="run-command"><strong>Повний runnable example:</strong> <code>python interactive/examples/t3_l1_preparation.py</code></div>
+    </section>
+
+    <section class="section-shell">
+      <div class="section-heading">
+        <p class="eyebrow">4 · PYTHON LAB 2</p>
+        <h2>Timestamp і дублікати: технічна операція має зберігати семантику</h2>
+        <p>Поганий timestamp краще спочатку позначити, а не тихо видалити. Дублювання також треба розрізняти: точна технічна копія — не те саме, що незалежне підтвердження.</p>
+      </div>
+      <div class="python-lab-grid">
+        <div class="python-code-card">
+          <div class="python-code-card__head"><strong>Parse + flag + exact deduplication</strong><span>pandas</span></div>
+          <pre><code>df = raw.copy()
+
+df["timestamp_parsed"] = pd.to_datetime(
+    df["timestamp"],
+    errors="coerce",
+    utc=True
+)
+df["timestamp_valid"] = df["timestamp_parsed"].notna()
+
+invalid = df.loc[~df["timestamp_valid"]]
+print(invalid[["event_id", "source", "timestamp"]])
+
+before = len(df)
+df = df.drop_duplicates().copy()
+print("Removed exact duplicates:", before - len(df))</code></pre>
+        </div>
+        <aside class="python-result-card">
+          <h3>Методологічне пояснення</h3>
+          <p><span class="code-inline">errors="coerce"</span> перетворює некоректний час на <span class="code-inline">NaT</span>. Це не «виправлення», а спосіб зробити проблему видимою.</p>
+          <p><span class="code-inline">drop_duplicates()</span> застосовано лише до повністю однакових рядків. Якщо збігаються час, сектор і тип події, але джерело інше — такий запис може бути corroboration.</p>
+        </aside>
+      </div>
+      <div class="lab-task">
+        <h3>Міні-завдання</h3>
+        <p>Змініть ключ потенційного дубля на <span class="code-inline">["timestamp", "sector", "event_type", "source"]</span>. Порівняйте кількість кандидатів і поясніть, що саме змінилося в семантиці правила.</p>
+      </div>
+    </section>
+
+    <section class="section-shell">
+      <div class="section-heading">
+        <p class="eyebrow">5 · PYTHON LAB 3</p>
+        <h2>Пропуски треба дослідити за джерелами до імпутації</h2>
+        <p>Одна й та сама частка missing values може означати зовсім різні речі, якщо пропуски розподілені випадково або концентруються в одному каналі.</p>
+      </div>
+      <div class="python-lab-grid">
+        <div class="python-code-card">
+          <div class="python-code-card__head"><strong>Missingness by source + group-aware imputation</strong><span>pandas</span></div>
+          <pre><code>missing_by_source = (
+    df.groupby("source")["confidence"]
+      .apply(lambda s: s.isna().mean())
+      .sort_values(ascending=False)
+)
+print(missing_by_source)
+
+source_median = df.groupby("source")["confidence"].transform("median")
+global_median = df["confidence"].median()
+
+df["confidence_imputed"] = (
+    df["confidence"]
+      .fillna(source_median)
+      .fillna(global_median)
+)</code></pre>
+        </div>
+        <aside class="python-result-card">
+          <h3>Що має побачити слухач</h3>
+          <ul>
+            <li>Чи є джерело з помітно вищою часткою пропусків?</li>
+            <li>Чи справедливо заповнювати всі пропуски одним глобальним середнім?</li>
+            <li>Чому імпутовану колонку краще створити окремо, а raw-значення зберегти?</li>
+          </ul>
+          <div class="expected-output"><strong>Висновок:</strong> імпутація — це припущення про невідоме значення, а не нейтральна технічна дія.</div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="section-shell">
+      <div class="section-heading">
+        <p class="eyebrow">6 · PYTHON LAB 4</p>
+        <h2>Аномалію спочатку позначаємо, а не видаляємо</h2>
+        <p>IQR-правило корисне як автоматичний detector, але остаточна інтерпретація потребує provenance і предметного контексту.</p>
+      </div>
+      <div class="python-lab-grid">
+        <div class="python-code-card">
+          <div class="python-code-card__head"><strong>IQR flag</strong><span>pandas</span></div>
+          <pre><code>q1 = df["delay_min"].quantile(0.25)
+q3 = df["delay_min"].quantile(0.75)
+iqr = q3 - q1
+upper = q3 + 1.5 * iqr
+
+df["delay_is_outlier"] = df["delay_min"].gt(upper)
+
+review = df.loc[
+    df["delay_is_outlier"],
+    ["event_id", "source", "sector", "delay_min", "timestamp"]
+]
+print(review)</code></pre>
+        </div>
+        <aside class="python-result-card">
+          <h3>Не робимо цього автоматично</h3>
+          <pre><code>df = df[df["delay_min"] &lt;= upper]</code></pre>
+          <p>Такий рядок коротший, але методологічно небезпечний: він робить статистичну рідкість підставою для видалення без перевірки контексту.</p>
+        </aside>
+      </div>
+    </section>
+
+    <section class="section-shell">
+      <div class="section-heading">
+        <p class="eyebrow">7 · DATA QUALITY LAB</p>
+        <h2>Порівняйте Python-логіку з інтерактивною моделлю</h2>
         <p>Застосовуйте дії послідовно. Не дивіться лише на «quality score»: простежуйте, які записи й припущення змінюються після кожного кроку.</p>
       </div>
       <div data-component="data-quality-lab" data-source="../data/lessons/t3-l1.json" data-select="lab"></div>
@@ -87,7 +239,7 @@
 
     <section class="section-shell">
       <div class="section-heading">
-        <p class="eyebrow">4 · DECISION TRADE-OFF LAB</p>
+        <p class="eyebrow">8 · DECISION TRADE-OFF LAB</p>
         <h2>Коли «очистити» — недостатня відповідь</h2>
         <p>Чотири ситуації навмисно неоднозначні. Мета — обрати не найшвидшу операцію, а рішення, яке найкраще зберігає зміст і доказовість.</p>
       </div>
@@ -96,7 +248,7 @@
 
     <section class="section-shell">
       <div class="section-heading">
-        <p class="eyebrow">5 · EDA PREVIEW</p>
+        <p class="eyebrow">9 · EDA PREVIEW</p>
         <h2>Перш ніж трансформувати — дослідіть</h2>
         <p>EDA дає evidence для частини preprocessing-рішень. Перегляньте п’ять типів сигналів: структура, пропуски, розподіли, зв’язки та аномалії.</p>
       </div>
@@ -105,7 +257,27 @@
 
     <section class="section-shell">
       <div class="section-heading">
-        <p class="eyebrow">6 · SYNTHESIS</p>
+        <p class="eyebrow">10 · REPRODUCIBILITY</p>
+        <h2>Зафіксуйте не лише результат, а й рішення</h2>
+        <p>У runnable example кожен preprocessing-крок записується в audit log: назва кроку, кількість змінених рядків і пояснення рішення.</p>
+      </div>
+      <div class="python-code-card">
+        <div class="python-code-card__head"><strong>Мінімальний audit record</strong><span>Python dict → DataFrame</span></div>
+        <pre><code>audit.append({
+    "step": "drop_exact_duplicates",
+    "affected_rows": before - len(df),
+    "decision": "do not collapse independent corroborating reports"
+})
+
+audit_df = pd.DataFrame(audit)
+print(audit_df)</code></pre>
+      </div>
+      <div class="expected-output"><strong>Аналітична цінність:</strong> через тиждень або для іншого аналітика буде зрозуміло не тільки «що сталося з таблицею», а й «чому це рішення було прийняте».</div>
+    </section>
+
+    <section class="section-shell">
+      <div class="section-heading">
+        <p class="eyebrow">11 · SYNTHESIS</p>
         <h2>Підготовка даних і EDA працюють як цикл</h2>
         <p>Не варто уявляти процес як жорстку лінію «спочатку очистили все, потім подивилися». Часто EDA виявляє проблему, після чого preprocessing змінює dataset, а повторна перевірка підтверджує або спростовує рішення.</p>
       </div>
@@ -124,7 +296,7 @@
 
     <section class="section-shell">
       <div class="section-heading">
-        <p class="eyebrow">7 · SELF-CHECK</p>
+        <p class="eyebrow">12 · SELF-CHECK</p>
         <h2>Перевірте методологічне розуміння</h2>
         <p>П’ять запитань перевіряють не синтаксис Pandas, а логіку прийняття рішень щодо даних.</p>
       </div>
@@ -138,10 +310,11 @@
     <section class="section-shell">
       <div class="section-heading">
         <p class="eyebrow">SOURCE MATERIALS</p>
-        <h2>Матеріали лекції та продовження</h2>
-        <p>Інтерактивна сторінка формує методологічну рамку. Notebook і PDF залишаються джерелами для детальнішого опрацювання та реалізації в Python.</p>
+        <h2>Матеріали лекції та повний код</h2>
+        <p>Інтерактивна сторінка формує методологічну рамку, а Python-script дає можливість повністю відтворити приклад локально.</p>
       </div>
       <div class="source-links">
+        <a href="../examples/t3_l1_preparation.py">Python: повний preprocessing example</a>
         <a href="../../Theme3/aLection1/content1.ipynb">Методологія підготовки</a>
         <a href="../../Theme3/aLection1/content2.ipynb">Методи EDA</a>
         <a href="../../Theme3/aLection1/questions.ipynb">Questions</a>
