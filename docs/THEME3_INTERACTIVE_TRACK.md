@@ -12,24 +12,61 @@
 
 ## Тривалість
 
-Ціль для кожного заняття Theme 3 — **приблизно 30–45 хв активної роботи**. Час не добирається довгим текстом: він формується через scenario, concept block, interactive lab, decision/what-if activity, interpretation та self-check.
+Базова ціль для занять Theme 3 — **приблизно 30–45 хв активної роботи**. Для занять, де інтерактивний матеріал поєднується з повним code lab, допускається розширений формат до **90 хв**, якщо час формується виконанням і інтерпретацією коду, а не додаванням пасивного тексту.
 
-Заняття **3.1** використовується як reference implementation типової лекції приблизно на 40 хв і містить reusable `lesson-roadmap` з розкладом часу.
+Заняття **3.1** і **3.2** є свідомо розширеними 90-хвилинними заняттями. Вони поєднують reusable web-components із реальними runnable Python-сценаріями на `pandas`, `numpy` і `matplotlib`.
 
 ## Звірені заняття
 
 | ID | Джерело | Зміст за матеріалами репозиторію | Інтерактивний акцент | Орієнтир | Статус |
 |---|---|---|---|---|---|
-| 3.1 | `Theme3/aLection1` | Методологія підготовки даних; методи попереднього аналізу даних | Scenario + methodology + Data Quality Lab + Decision Trade-off Lab + EDA preview | 35–45 хв | implemented |
-| 3.2 | `Theme3/Group lesson 2` | PDA/EDA; Pandas, NumPy, Matplotlib/Seaborn; cleaning, statistics, visualization, correlation, anomalies | EDA Explorer + team profile mission | 30–45 хв | implemented |
+| 3.1 | `Theme3/aLection1` | Методологія підготовки даних; методи попереднього аналізу даних | Scenario + methodology + 4 Python labs + Data Quality Lab + Decision Trade-off Lab + EDA preview + audit log | 90 хв | implemented |
+| 3.2 | `Theme3/Group lesson 2` | PDA/EDA; Pandas, NumPy, Matplotlib; cleaning, statistics, visualization, correlation, anomalies | EDA Explorer + 5 Python labs + team profile mission + evidence-based EDA conclusion | 90 хв | implemented |
 | 3.3 | `Theme3/Practice 3/task.ipynb` | Практичний аналіз обраного dataset: load, cleaning, descriptive statistics, visualization, correlation, reporting | Reproducible EDA Mission | 30–45 хв | implemented |
 | 3.4 | `Theme3/Group lesson 4` | Missing data, normalization/scaling, One-Hot Encoding, train/test split, feature selection, aggregation | Transformation Lab + Leakage Lab | 30–45 хв | implemented |
 | 3.5 | `Theme3/Practice5/task.ipynb` | End-to-end cleaning, transformation, decomposition, visualization, baseline model, reporting | Model-Ready Pipeline + Readiness Gate | 30–45 хв | implemented |
 
+## Runnable Python examples
+
+### `interactive/examples/t3_l1_preparation.py`
+
+Повністю відтворюваний preprocessing example. Скрипт:
+
+- генерує синтетичний dataset із контрольованими quality problems;
+- показує exact duplicates і potential event matches;
+- перевіряє timestamp через `pd.to_datetime(..., errors="coerce", utc=True)`;
+- аналізує missingness за джерелами;
+- демонструє group-aware imputation без затирання raw-column;
+- позначає IQR-outliers замість автоматичного видалення;
+- формує простий audit log рішень.
+
+Запуск:
+
+```bash
+python interactive/examples/t3_l1_preparation.py
+```
+
+### `interactive/examples/t3_l2_eda.py`
+
+Повний EDA example, який повторно використовує synthetic dataset 3.1 і показує:
+
+- structure / dtypes / missingness;
+- descriptive statistics і percentiles;
+- grouped summaries за source та event type;
+- correlation як сигнал для перевірки, а не причинний висновок;
+- IQR anomaly review;
+- три matplotlib-візуалізації, що зберігаються локально.
+
+Запуск:
+
+```bash
+python interactive/examples/t3_l2_eda.py
+```
+
 ## Reusable components
 
 ### `lesson-roadmap`
-Показує видимий timebox, результати навчання і структуру заняття з орієнтовними хвилинами. Використовується для контролю того, щоб web-сторінка не стискалася до короткої демонстрації замість повноцінного заняття.
+Показує видимий timebox, результати навчання і структуру заняття з орієнтовними хвилинами. Використовується для контролю того, щоб web-сторінка не стискалася до короткої демонстрації замість повноцінного заняття. Для розширених 90-хвилинних code labs допускається еквівалентний статичний timebox, якщо він точніше відображає структуру виконання коду.
 
 ### `decision-tradeoff`
 Конфігурований блок неоднозначних ситуацій. Слухач обирає рішення, бачить наслідок, rationale і takeaway. У 3.1 використовується для missingness, deduplication, outliers і time semantics.
@@ -79,7 +116,7 @@ interpret + document limitations
 
 ## Дані
 
-Web-демонстрації використовують синтетичні приклади, близькі за структурою до задач військової аналітики, але без реальних оперативних даних. Вихідні notebooks можуть використовувати загальні Kaggle datasets для відпрацювання Python.
+Web-демонстрації та runnable Python examples використовують синтетичні приклади, близькі за структурою до задач військової аналітики, але без реальних оперативних даних. Вихідні notebooks можуть використовувати загальні Kaggle datasets для відпрацювання Python.
 
 ## Definition of Done для Theme 3
 
@@ -87,7 +124,7 @@ Web-демонстрації використовують синтетичні �
 
 1. усі 3.1–3.5 доступні з головної сторінки всередині групи «Тема 3»;
 2. між заняттями є внутрішня навігація;
-3. кожне заняття розраховане приблизно на 30–45 хв активної роботи;
+3. 3.1 і 3.2 мають розширений 90-хвилинний маршрут із runnable Python code labs, а 3.3–3.5 — приблизно 30–45 хв активної роботи;
 4. кожне заняття показує місце технології в analytics pipeline або end-to-end workflow;
 5. кожна практична дія пов’язана з evidence/наслідком;
 6. data leakage явно пояснено до переходу в Theme 4;
