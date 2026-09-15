@@ -1,12 +1,12 @@
 {
   "id":"t4-l1",
   "number":"4.1",
-  "title":"Огляд сучасних методів аналізу даних в інтересах ІАЗ ОВУ",
+  "title":"Огляд сучасних методів аналізу даних в інтересах ІАЗ ОУВ",
   "type":"lecture",
   "typeLabel":"лекція",
   "lead":"Лекція формує карту сучасних методів аналізу даних: від статистики, часових і геопросторових методів до Deep Learning, Computer Vision, NLP/LLM та перспективних AI-підходів. Фокус — на методах, типах даних, результатах і межах застосування.",
   "roadmap":{
-    "duration":{"min":80,"max":90},
+    "duration":{"min":40,"max":45},
     "outcomes":[
       "пояснювати місце методів аналізу даних у системі ІАЗ ОУВ",
       "розуміти логіку всієї Теми 4 та місце заняття 4.1 у подальшому курсі",
@@ -16,13 +16,13 @@
       "пояснювати роль NLP, LLM, RAG, multimodal AI, XAI, RL і human-in-the-loop"
     ],
     "blocks":[
-      {"label":"Context","minutes":7,"title":"Місце Теми 4 в ІАЗ","description":"Від підготовлених даних до аналітичних результатів через обраний метод."},
-      {"label":"Course map","minutes":8,"title":"Логіка Теми 4","description":"Як 4.1 дає карту методів, а наступні заняття поглиблюють AI, ML, DL, image і text analysis."},
-      {"label":"Taxonomy","minutes":10,"title":"Класифікація методів","description":"Статистичні, просторово-часові, структурні, ML та AI/Deep Learning."},
-      {"label":"Classical","minutes":18,"title":"Статистика і часові ряди","description":"Baseline-методи, залежності, перевірка гіпотез, регресія, прогноз і невизначеність."},
-      {"label":"Spatial + structure","minutes":18,"title":"Простір, кластери, аномалії, мережі","description":"GIS, sensor fusion, clustering, anomaly detection і network analysis."},
-      {"label":"AI methods","minutes":19,"title":"Deep Learning, CV, NLP/LLM","description":"Візуальні та текстові методи з чітким розрізненням типів задач."},
-      {"label":"Future + practice","minutes":10,"title":"Перспективні AI-методи і Method Selector","description":"Multimodal AI, XAI, RL, human-in-the-loop та інтерактивне закріплення вибору методу."}
+      {"label":"Context","minutes":5,"title":"Місце Теми 4 в ІАЗ","description":"Від підготовлених даних до аналітичних результатів через обраний метод."},
+      {"label":"Course map","minutes":5,"title":"Логіка Теми 4","description":"Як 4.1 дає карту методів, а наступні заняття поглиблюють AI, ML, DL, image і text analysis."},
+      {"label":"Taxonomy","minutes":6,"title":"Класифікація методів","description":"Статистичні, просторово-часові, структурні, ML та AI/Deep Learning."},
+      {"label":"Classical","minutes":8,"title":"Статистика і часові ряди","description":"Baseline-методи, залежності, перевірка гіпотез, регресія, прогноз і невизначеність."},
+      {"label":"Spatial + structure","minutes":7,"title":"Простір, кластери, аномалії, мережі","description":"GIS, sensor fusion, clustering, anomaly detection і network analysis."},
+      {"label":"AI methods","minutes":9,"title":"Deep Learning, CV, NLP/LLM","description":"Візуальні та текстові методи з чітким розрізненням типів задач."},
+      {"label":"Future + practice","minutes":5,"title":"Перспективні AI-методи і Method Selector","description":"Multimodal AI, XAI, RL, human-in-the-loop та інтерактивне закріплення вибору методу."}
     ]
   },
   "infographicsTitle":"Візуальна карта методів",
@@ -64,7 +64,7 @@
     {"label":"content2.ipynb","href":"../../Theme4/aLection1/content2.ipynb"},
     {"label":"questions.ipynb","href":"../../Theme4/aLection1/questions.ipynb"},
     {"label":"LECTURE_STRUCTURE_2026.md","href":"../../Theme4/aLection1/LECTURE_STRUCTURE_2026.md"},
-    {"label":"infographics2","href":"../../Theme4/aLection1/infographics2/"}
+    {"label":"infographics2 README","href":"../../Theme4/aLection1/infographics2/README.md"}
   ],
-  "sourceNote":"Інфографіки є навчальними візуалізаціями та використовують синтетичні/ілюстративні дані; вони не відображають реальну оперативну обстановку."
+  "sourceNote":"Інтерактивна сторінка є концентрованим 40–45-хвилинним маршрутом; повна лекція може використовувати розширений сценарій. Інфографіки містять синтетичні/ілюстративні дані й не відображають реальну оперативну обстановку."
 }
