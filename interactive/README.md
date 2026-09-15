@@ -15,6 +15,8 @@ python3 -m http.server 8000
 
 Для базової web-версії немає npm-залежностей і build step. Потрібні лише browser та будь-який local static server.
 
+Для runnable Python examples потрібні Python packages, що використовуються конкретним заняттям: `numpy`, `pandas`, `matplotlib`, `scikit-learn`.
+
 ## Структура
 
 ```text
@@ -22,6 +24,7 @@ interactive/
 ├── index.html                 # grouped course catalog
 ├── lessons/                   # lesson pages / shared shells
 ├── assets/css/*.css           # design system + thematic styles
+├── examples/*.py              # runnable teaching examples
 ├── js/app.js                  # bootstrap reusable engine
 ├── js/core/                   # registry + data loader
 ├── js/components/             # reusable components
@@ -38,7 +41,9 @@ interactive/
 
 ## Норматив тривалості
 
-Ціль для web-заняття — **приблизно 30–45 хв активної роботи** без повного виконання окремого Jupyter notebook.
+Базова ціль web-заняття — **приблизно 30–45 хв активної роботи**.
+
+Для full code labs допускається розширення до **90 хв**, якщо додатковий час формується виконанням та інтерпретацією коду. Поточні extended lessons — **3.1 і 3.2**.
 
 Типовий маршрут: scenario → concept/pipeline → main interactive → decision/mission → interpretation → self-check/reflection. `lesson-roadmap` показує timebox і структуру.
 
@@ -46,7 +51,7 @@ interactive/
 
 ### Тема 1 — 5/5
 
-Theme 1 використовує один data-driven shell:
+Theme 1 використовує data-driven shell:
 
 ```text
 lessons/theme1.html?lesson=t1-l1
@@ -65,40 +70,21 @@ lessons/theme1.html?lesson=t1-l5
 - 1.4 — DB → REST API → UI architecture;
 - 1.5 — 8-variant GET/POST/DELETE Integration Flow Lab.
 
-Назви **1.1–1.3** підтверджені первинними `lesson.ipynb`. Для **1.4–1.5** окремих primary plans з офіційними назвами у repository не знайдено, тому web-labels явно мають `titleConfidence: source-derived`.
-
-Red-team note: legacy `1.4_1.5/02Analytics_03UI(UX)/app.py` містить hardcoded PostgreSQL credentials. Interactive track прямо навчає відокремлювати secrets від source code (`.env`/environment config + `.gitignore`).
-
 ### Тема 2 — 5/5
 
-2.1–2.3 використовують data-driven shell:
-
-```text
-lessons/theme2.html?lesson=t2-l1
-lessons/theme2.html?lesson=t2-l2
-lessons/theme2.html?lesson=t2-l3
-```
-
-2.4–2.5 зберігають свої сторінки, але вся Тема 2 має спільну навігацію `2.1 → 2.5`.
+2.1–2.3 використовують data-driven shell; 2.4–2.5 зберігають свої сторінки, але вся Тема 2 має спільну навігацію `2.1 → 2.5`.
 
 Наскрізний track:
 
 `information need → collection channel → raw evidence → validation/provenance → CSV/JSON/XML → reconciliation → storage model → relational schema → SQL → analytical result`
 
-Реалізовано:
-- 2.1 — Collection Method Selector + ETL/quality workflow + CSV/JSON/XML + bridge до storage;
-- 2.2 — Internet/CSV, API/JSON, formal reports + Provenance Lab + synthetic case `17 records → 14 unique events`;
-- 2.3 — web scraping, Excel, form, XML + GitHub evidence + failure modes;
-- 2.4 — Storage Architecture Lab;
-- 2.5 — Relational Schema + SQL Mission Lab.
-
 ### Тема 3 — 5/5
 
-- 3.1 methodology + Data Quality + decision trade-offs + EDA;
-- 3.2 EDA Explorer + team mission;
-- 3.3 practical reproducible EDA;
-- 3.4 transformation + leakage lab;
-- 3.5 end-to-end model-ready pipeline.
+- **3.1 — 90 хв:** methodology + Data Quality + decision trade-offs + EDA + 4 Python labs; runnable `examples/t3_l1_preparation.py`;
+- **3.2 — 90 хв:** EDA Explorer + 5 Python labs + team mission; runnable `examples/t3_l2_eda.py` генерує три matplotlib PNG;
+- 3.3 — practical reproducible EDA;
+- 3.4 — transformation + leakage lab;
+- 3.5 — end-to-end model-ready pipeline.
 
 ### Тема 4 — 14/14
 
@@ -110,7 +96,39 @@ lessons/theme4.html?lesson=t4-l1
 lessons/theme4.html?lesson=t4-l14
 ```
 
-4.10 тепер реалізоване як:
+#### 4.1 — visual lecture
+
+4.1 містить **10 послідовних інфографік** із `Theme4/aLection1/infographics2/` та інтерактивний Method Selector.
+
+Маршрут:
+
+`Theme 4 context → course logic → method taxonomy → statistics → time series → geospatial/fusion → clustering/anomaly/network → DL/CV → NLP/LLM/RAG → future AI → method selection`
+
+#### 4.2 — Python ML Lab
+
+4.2 поєднує Task Type Selector, leakage-safe workflow і reusable `python-ml-lab`.
+
+Три вкладки:
+
+- **Regression:** `LinearRegression`, noise, fitted line, MAE, R²;
+- **Classification:** `LogisticRegression`, decision threshold, precision/recall, FP/FN;
+- **Clustering:** `KMeans`, `k`, centroids, inertia.
+
+Runnable reference:
+
+```bash
+python interactive/examples/t4_l2_ml_tasks.py --task all
+```
+
+Окремі приклади:
+
+```bash
+python interactive/examples/t4_l2_ml_tasks.py --task regression --noise 25
+python interactive/examples/t4_l2_ml_tasks.py --task classification --threshold 0.65
+python interactive/examples/t4_l2_ml_tasks.py --task clustering --k 4
+```
+
+#### 4.10 — deep-learning project practice
 
 **«Практичне використання методів глибокого навчання в межах виконання індивідуальних (групових) проектів»**.
 
@@ -124,26 +142,13 @@ Theme4/Practice 10/
 └── sample.ipynb
 ```
 
-Interactive route:
-
-```text
-lessons/theme4.html?lesson=t4-l10
-```
-
-4.10 використовує вже наявний reusable engine:
-
-- Architecture Lab (`neural-network-lab`);
-- experiment decisions (`decision-tradeoff`);
-- Individual Project Mission (`workflow-mission-lab`);
-- Group Project Mission (`workflow-mission-lab`);
-- evidence readiness gate (`readiness-scorecard`);
-- self-check (`knowledge-check`).
+4.10 використовує `neural-network-lab`, `decision-tradeoff`, individual/group `workflow-mission-lab`, `readiness-scorecard` і `knowledge-check`.
 
 `sample.ipynb` генерує synthetic 16×16 images локально і показує `baseline → CNN → early stopping → final test → confusion matrix → error analysis` без зовнішніх даних.
 
 ### Тема 5 — 8/8
 
-Theme 5 також використовує один data-driven shell:
+Theme 5 також використовує data-driven shell:
 
 ```text
 lessons/theme5.html?lesson=t5-l1
@@ -160,8 +165,6 @@ lessons/theme5.html?lesson=t5-l8
 - 5.6 — graphic-design foundations;
 - 5.7 — group redesign, critique and design rationale;
 - 5.8 — audience adaptation: technical expert / leader / public view.
-
-Для **5.5** назва `Практичне створення дашборду військового аналітика` позначена `source-derived` від фактичних артефактів `Practice55/start` і `Practice55/pr35`.
 
 ## Reusable components
 
@@ -204,6 +207,7 @@ lessons/theme5.html?lesson=t5-l8
 ### Analysis / AI — Theme 4
 - `method-selector`
 - `metric-tradeoff-lab`
+- `python-ml-lab`
 - `neural-network-lab`
 - `convolution-lab`
 - `transfer-rl-lab`
@@ -217,6 +221,22 @@ lessons/theme5.html?lesson=t5-l8
 - `visualization-mission-lab`
 - `insight-brief-lab`
 
+## Browser simulation і runnable code
+
+Browser simulation використовується для швидкого reasoning і parameter exploration, але не подається як результат реального model training.
+
+Поточні runnable references:
+
+```text
+examples/t3_l1_preparation.py
+examples/t3_l2_eda.py
+examples/t4_l2_ml_tasks.py
+```
+
+Для 4.2 використовується схема:
+
+`task formulation → Python code → parameter → graph/metrics → runnable reproduction → interpretation`.
+
 ## Methodological rules
 
 Theme 1:
@@ -229,11 +249,11 @@ Theme 2:
 
 Record identity and event identity are not the same. Deduplication має уникати подвійного рахунку, але не знищувати evidence про незалежні підтвердження.
 
-Technology selection follows the problem and success criteria. Secrets do not belong in Git/source code.
-
 Правильна модель переходу до ML/DL:
 
 `data audit → split → fit preprocessing on train → transform train/validation/test → train/tune → freeze candidate → final evaluation on held-out test → error analysis`
+
+ML task type визначається аналітичним питанням і target/labels **до** вибору алгоритму.
 
 Для DL-project:
 
@@ -245,7 +265,9 @@ Technology selection follows the problem and success criteria. Secrets do not be
 
 `analytical question → visual encoding → scale/context → pattern → verification → interpretation → implication / next step`
 
-Audience adaptation може змінювати detail, terminology та interaction, але не повинна змінювати факти, scale, provenance або приховувати critical uncertainty.
+## CI
+
+`Interactive static checks` перевіряє JS, JSON, catalog/matrix/routes/sources, Theme 4.10 package, 10 visual assets 4.1, а також headless-запуск runnable Python examples 3.1, 3.2 і 4.2 та очікувані PNG outputs.
 
 ## Документація
 
@@ -254,7 +276,7 @@ Audience adaptation може змінювати detail, terminology та interac
 - `../docs/THEME1_INTERACTIVE_TRACK.md` — Theme 1;
 - `../docs/THEME2_INTERACTIVE_TRACK.md` — Theme 2;
 - `../docs/THEME3_INTERACTIVE_TRACK.md` — Theme 3;
-- `../docs/THEME4_INTERACTIVE_TRACK.md` — Theme 4, включно з 4.10;
+- `../docs/THEME4_INTERACTIVE_TRACK.md` — Theme 4, включно з 4.1, 4.2 і 4.10;
 - `../docs/THEME5_INTERACTIVE_TRACK.md` — Theme 5.
 
 ## Правило reusable engine
@@ -262,6 +284,8 @@ Audience adaptation може змінювати detail, terminology та interac
 Не додавати lesson-specific JS, якщо поведінку можна зібрати з наявних reusable components.
 
 `HTML shell + reusable JS component + JSON lesson config = interactive lesson`
+
+Унікальна поведінка додається як reusable component лише тоді, коли вона представляє повторно застосовну педагогічну взаємодію. `python-ml-lab` є саме таким компонентом.
 
 ## Дані
 
