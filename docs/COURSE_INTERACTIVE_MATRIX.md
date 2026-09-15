@@ -31,7 +31,7 @@ Theme 1, Theme 2 (2.1–2.3), Theme 4 і Theme 5 використовують da
 | 3.5 | `Theme3/Practice5` · model-ready practice | model-readiness | Baseline + readiness scorecard | **implemented** |
 | 4.1 | `Theme4/aLection1` · **Огляд сучасних методів аналізу даних в інтересах ІАЗ ОУВ** | analysis | Visual lecture: 10 infographics + Method Selector | **implemented** |
 | 4.2 | `Theme4/Group lesson 2/content1.ipynb` · AI methods | analysis | ML task selector + `python-ml-lab`: regression/classification/clustering + runnable scikit-learn/matplotlib | **implemented** |
-| 4.3 | `Theme4/practice3` · regression | analysis | Regression metrics/complexity | **implemented** |
+| 4.3 | `Theme4/practice3/task.ipynb` · regression practical | analysis | `regression-diagnostics-lab`: Linear/Ridge/Tree + actual-vs-predicted + residuals + complexity curve + runnable Python | **implemented** |
 | 4.4 | `Theme4/Group lesson 4` · accuracy/hyperparameters | evaluation | Metric/tuning trade-offs | **implemented** |
 | 4.5 | `Theme4/practice5` · classification | evaluation | Threshold / precision / recall / F1 | **implemented** |
 | 4.6 | `Theme4/aLection6` · neural networks | analysis | Neural Architecture Lab | **implemented** |
@@ -70,19 +70,20 @@ Theme 1, Theme 2 (2.1–2.3), Theme 4 і Theme 5 використовують da
 `data-quality-lab`, `eda-explorer`, `transformation-lab`, `split-leakage-lab`, `readiness-scorecard`
 
 ### Theme 4 — analysis / AI
-`method-selector`, `metric-tradeoff-lab`, `python-ml-lab`, `neural-network-lab`, `convolution-lab`, `transfer-rl-lab`, `text-analysis-lab`; 4.10 додатково повторно використовує core `workflow-mission-lab`, `decision-tradeoff` та shared `readiness-scorecard`.
+`method-selector`, `metric-tradeoff-lab`, `python-ml-lab`, `regression-diagnostics-lab`, `neural-network-lab`, `convolution-lab`, `transfer-rl-lab`, `text-analysis-lab`; 4.10 додатково повторно використовує core `workflow-mission-lab`, `decision-tradeoff` та shared `readiness-scorecard`.
 
 ### Theme 5 — visualization
 `visual-encoding-lab`, `dashboard-builder`, `design-critique-lab`, `audience-adaptation-lab`, `visualization-mission-lab`, `insight-brief-lab`
 
 ## Runnable teaching examples
 
-CI та документація відстежують три поточні reference scripts:
+CI та документація відстежують чотири reference scripts:
 
 ```text
 interactive/examples/t3_l1_preparation.py
 interactive/examples/t3_l2_eda.py
 interactive/examples/t4_l2_ml_tasks.py
+interactive/examples/t4_l3_regression_workflow.py
 ```
 
 4.2 використовує synthetic data і три постановки:
@@ -90,6 +91,15 @@ interactive/examples/t4_l2_ml_tasks.py
 - regression — `LinearRegression`, noise → fitted line / MAE / R²;
 - classification — `LogisticRegression`, threshold → precision / recall / class boundary;
 - clustering — `KMeans`, k → clusters / centroids / inertia.
+
+4.3 поглиблює regression workflow:
+
+- baseline — `LinearRegression`;
+- regularized alternative — `Ridge`;
+- nonlinear/high-capacity alternative — `DecisionTreeRegressor`;
+- diagnostics — actual-vs-predicted, residuals, train/test MAE, complexity curve;
+- outputs — three PNG plots + model comparison CSV;
+- principle — complexity is justified only by generalization evidence, not by train score.
 
 ## Методичні контролі
 
@@ -100,6 +110,7 @@ interactive/examples/t4_l2_ml_tasks.py
 - Scaling/imputation/feature selection, що навчаються з даних, fit-яться лише на train після split.
 - Held-out test не використовується для model/hyperparameter selection.
 - ML task type визначається target/labels і аналітичним питанням до вибору алгоритму.
+- Regression evaluation має включати baseline, error metrics у одиницях target, residual analysis, train/validation behavior і фінальний held-out test.
 - DL project має baseline, clean evaluation, error analysis, reproducibility та limitations; high training score не є самодостатнім результатом.
 - Груповий DL project має один shared problem/experiment protocol, review history та integrated final run.
 - GenAI output відокремлюється від source evidence та проходить human review.
