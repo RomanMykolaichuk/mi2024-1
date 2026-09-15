@@ -1,14 +1,89 @@
 {
-  "id":"t4-l3","number":"4.3","title":"Використання методів штучного інтелекту для аналізу даних: регресія","type":"practice","typeLabel":"практичне заняття","lead":"Регресійна модель корисна лише тоді, коли її помилка оцінена на незалежних даних і інтерпретована в одиницях реальної задачі.",
-  "roadmap":{"duration":{"min":35,"max":45},"outcomes":["побудувати коректний regression workflow","відрізняти MAE, RMSE/MSE і R²","розпізнавати underfitting та overfitting","порівнювати baseline і складніші регресори"],"blocks":[{"label":"Scenario","minutes":4,"title":"Сформулювати числовий target","description":"Прогноз часу виконання логістичного запиту на синтетичних даних."},{"label":"Concept","minutes":6,"title":"Regression metrics","description":"MAE, RMSE, R² та їх аналітичний зміст."},{"label":"Lab","minutes":10,"title":"Complexity vs generalization","description":"Змінити складність і спостерігати train/test gap."},{"label":"Mission","minutes":9,"title":"Regression workflow","description":"Baseline → comparison → independent evaluation."},{"label":"Interpret","minutes":6,"title":"Перекласти помилку у контекст","description":"Не зводити висновок до одного R²."},{"label":"Check","minutes":5,"title":"Самоперевірка","description":"Закріпити метрики й дизайн оцінювання."}]},
-  "scenario":{"title":"Прогноз тривалості обробки заявки","description":"Синтетичний набір містить кількість позицій, відстань, навантаження, пріоритет та фактичний час обробки. Target — хвилини, тому це regression.","facts":[{"value":"1 500","label":"історичних записів"},{"value":"5","label":"ознак"},{"value":"minutes","label":"target"},{"value":"20%","label":"held-out test"}],"question":"Яка модель дає достатню точність без надлишкової складності та як це довести?"},
-  "pipeline":{"active":"analysis","stages":[{"id":"sources","label":"Джерела","description":"Історичні записи.","output":"raw data"},{"id":"collection","label":"Збір","description":"Фіксація заявок.","output":"dataset"},{"id":"storage","label":"Зберігання","description":"Керований набір.","output":"stored data"},{"id":"preparation","label":"Підготовка","description":"Quality audit, split, train-only preprocessing.","output":"train/test"},{"id":"analysis","label":"Регресія","description":"Baseline та альтернативні моделі.","output":"numeric predictions"},{"id":"visualization","label":"Оцінювання","description":"Errors, residuals, actual vs predicted.","output":"metrics"},{"id":"decision","label":"Інтерпретація","description":"Чи прийнятна помилка для задачі.","output":"model judgement"}]},
-  "regressionLab":{"mode":"regression","complexity":38,"contextNote":"Модель обирають не за train score, а за якістю узагальнення на unseen data."},
-  "mission":{"intro":"Пройдіть практичний regression workflow і зафіксуйте evidence на кожному етапі.","steps":[{"id":"target","title":"Визначити target","task":"Чітко вкажіть одиницю прогнозу та допустиму помилку.","evidence":"target = minutes; acceptable error","feedback":"Метрика тепер має прикладний сенс."},{"id":"split","title":"Ізолювати test","task":"Розділіть train/test до data-driven preprocessing.","evidence":"80/20 split + random_state/strategy","feedback":"Незалежна оцінка збережена."},{"id":"baseline","title":"Навчити Linear Regression","task":"Створіть простий baseline до Ridge/Lasso/Tree.","evidence":"baseline MAE/RMSE/R²","feedback":"Є контрольна точка для покращення."},{"id":"compare","title":"Порівняти альтернативи","task":"Порівняйте Ridge, Lasso та Decision Tree за однаковим test protocol.","evidence":"comparison table","feedback":"Алгоритми порівнюються на однакових умовах."},{"id":"residuals","title":"Перевірити помилки","task":"Подивіться на великі residuals і систематичний bias.","evidence":"residual plot / worst cases","feedback":"Середня метрика доповнена аналізом помилок."},{"id":"conclusion","title":"Сформулювати висновок","task":"Поясніть, чому обрана модель придатна або непридатна.","evidence":"metric + uncertainty + limitations","feedback":"Висновок прив’язаний до задачі, а не до абстрактного score."}],"complete":"Regression workflow завершено: результат має бути відтворюваним і порівнюваним із baseline."},
-  "sections":[{"eyebrow":"1 · REGRESSION METRICS","title":"Що відбувається зі складністю та помилкою","description":"Переміщуйте slider: train error майже завжди поліпшується зі складністю, test error — ні.","component":"metric-tradeoff-lab","select":"regressionLab"},{"eyebrow":"2 · PRACTICAL MISSION","title":"Від target до інтерпретованого test result","description":"Пройдіть pipeline, який потім повторите в Jupyter Notebook.","component":"workflow-mission-lab","select":"mission"}],
-  "analystNote":{"title":"R² не замінює аналіз помилок","text":"Модель може мати прийнятний R² і водночас давати неприйнятні помилки на важливій частині діапазону. MAE/RMSE, residuals і worst-case analysis допомагають зрозуміти реальну ціну помилки."},
-  "quiz":{"questions":[{"prompt":"Яка метрика має ті самі одиниці, що й target?","options":["MAE","R²","Accuracy"],"answer":0},{"prompt":"Що означає великий gap: train MAE низький, test MAE значно вищий?","options":["Ймовірне overfitting","Гарантовано добра модель","Кластеризація"],"answer":0},{"prompt":"Навіщо baseline?","options":["Для контрольної точки","Для витоку test","Для заміни звіту"],"answer":0},{"prompt":"Чи достатньо одного R²?","options":["Так","Ні, потрібні також error metrics і аналіз residuals","Лише якщо R² < 0"],"answer":1}],"feedback":{"4":"Регресійний дизайн зрозумілий.","3":"Добре; повторіть residual analysis.","2":"Перегляньте Complexity Lab.","1":"Поверніться до metric interpretation.","0":"Почніть із target і test protocol."}},
-  "reflection":"Яка величина MAE була б реально прийнятною для вашої навчальної задачі і чому?",
-  "sources":[{"label":"task.ipynb","href":"../../Theme4/practice3/task.ipynb"},{"label":"Student_Performance.csv","href":"../../Theme4/practice3/Student_Performance.csv"}],
-  "sourceNote":"У вихідному notebook змішані приклади House Prices/SalePrice і Student_Performance.csv. Інтерактив використовує окремий узгоджений синтетичний regression-сценарій; оригінальний notebook не змінюється."
+  "id":"t4-l3",
+  "number":"4.3",
+  "title":"Використання методів штучного інтелекту для аналізу даних: регресія",
+  "type":"practice",
+  "typeLabel":"практичне заняття",
+  "lead":"Регресійна модель корисна лише тоді, коли її помилка оцінена на незалежних даних, порівняна з baseline і пояснена через actual-vs-predicted, residuals та реальну ціну помилки.",
+  "roadmap":{
+    "duration":{"min":40,"max":45},
+    "outcomes":[
+      "побудувати коректний regression workflow із held-out test",
+      "читати MAE, RMSE і R² разом, а не ізольовано",
+      "порівнювати Linear Regression, Ridge і Decision Tree на однаковому split",
+      "розпізнавати underfitting та overfitting через train/test gap і complexity curve",
+      "інтерпретувати actual-vs-predicted та residual plots",
+      "формулювати висновок про придатність моделі в одиницях target"
+    ],
+    "blocks":[
+      {"label":"Scenario","minutes":4,"title":"Сформулювати числовий target","description":"Прогноз часу виконання логістичного запиту на синтетичних даних."},
+      {"label":"Metrics","minutes":5,"title":"MAE, RMSE, R²","description":"Що вимірює кожна метрика і чому однієї недостатньо."},
+      {"label":"Python lab","minutes":14,"title":"Model + diagnostics","description":"Linear, Ridge, Decision Tree; код, параметр, actual-vs-predicted і residuals."},
+      {"label":"Complexity","minutes":6,"title":"Bias–variance trade-off","description":"max_depth, train/test gap і момент, коли складність перестає допомагати."},
+      {"label":"Mission","minutes":9,"title":"Regression workflow","description":"Baseline → comparison → diagnostics → independent evaluation."},
+      {"label":"Interpret","minutes":4,"title":"Перекласти помилку у контекст","description":"Порівняти test MAE з допустимою прикладною похибкою."},
+      {"label":"Check","minutes":3,"title":"Самоперевірка","description":"Закріпити метрики, residuals і правила tuning/test."}
+    ]
+  },
+  "scenario":{
+    "title":"Прогноз тривалості обробки заявки",
+    "description":"Синтетичний набір містить кількість позицій, відстань, навантаження, пріоритет і довжину черги. Target — хвилини, тому це regression. Сценарій навчальний і не містить реальних оперативних даних.",
+    "facts":[
+      {"value":"650","label":"synthetic records у runnable example"},
+      {"value":"5","label":"ознак"},
+      {"value":"minutes","label":"numeric target"},
+      {"value":"20%","label":"held-out test"}
+    ],
+    "question":"Чи виправдана складніша модель порівняно з linear baseline і якими evidence це довести?"
+  },
+  "pipeline":{"active":"analysis","stages":[
+    {"id":"sources","label":"Джерела","description":"Навчальні історичні записи.","output":"raw data"},
+    {"id":"collection","label":"Збір","description":"Фіксація заявок та ознак.","output":"dataset"},
+    {"id":"storage","label":"Зберігання","description":"Керований набір.","output":"stored data"},
+    {"id":"preparation","label":"Підготовка","description":"Quality audit, split, train-only preprocessing.","output":"train/test"},
+    {"id":"analysis","label":"Регресія","description":"Baseline, Ridge, Decision Tree.","output":"numeric predictions"},
+    {"id":"visualization","label":"Діагностика","description":"Actual vs predicted, residuals, complexity curve.","output":"metrics + plots"},
+    {"id":"decision","label":"Інтерпретація","description":"Чи прийнятна помилка для задачі.","output":"model judgement"}
+  ]},
+  "regressionDiagnostics":{
+    "defaultModel":"tree",
+    "maxDepth":5,
+    "ridgeAlpha":2.0,
+    "runCommand":"python interactive/examples/t4_l3_regression_workflow.py --max-depth 5",
+    "note":"Browser charts are an interactive synthetic reconstruction for reasoning. The runnable script executes real scikit-learn models, calculates train/test metrics and saves actual-vs-predicted, residual and complexity plots."
+  },
+  "regressionLab":{"mode":"regression","complexity":38,"contextNote":"Модель обирають не за train score. Для tuning використовують validation/CV; held-out test відкривають після фіксації кандидата."},
+  "mission":{
+    "intro":"Пройдіть практичний regression workflow і зафіксуйте evidence на кожному етапі.",
+    "steps":[
+      {"id":"target","title":"Визначити target","task":"Чітко вкажіть одиницю прогнозу та допустиму помилку.","evidence":"target = minutes; acceptable MAE","feedback":"Метрика отримує прикладний сенс."},
+      {"id":"split","title":"Ізолювати test","task":"Розділіть train/test до data-driven preprocessing і не використовуйте test для tuning.","evidence":"80/20 split + random_state; tuning protocol","feedback":"Незалежна фінальна оцінка збережена."},
+      {"id":"baseline","title":"Навчити Linear Regression","task":"Створіть простий baseline до regularized/tree моделей.","evidence":"baseline train/test MAE, RMSE, R²","feedback":"Є контрольна точка для складніших алгоритмів."},
+      {"id":"compare","title":"Порівняти альтернативи","task":"Порівняйте Ridge та Decision Tree за тим самим split і метриками.","evidence":"model comparison table","feedback":"Алгоритми порівнюються на однакових умовах."},
+      {"id":"residuals","title":"Перевірити помилки","task":"Подивіться на actual-vs-predicted, residuals і найбільші помилки.","evidence":"plots + worst cases","feedback":"Середня метрика доповнена структурою помилок."},
+      {"id":"complexity","title":"Перевірити складність","task":"Для дерева порівняйте train/test MAE при різних max_depth через validation/CV.","evidence":"complexity curve + selected depth","feedback":"Вибір складності пояснений evidence, а не train score."},
+      {"id":"conclusion","title":"Сформулювати висновок","task":"Поясніть, чи дає складніша модель достатній виграш відносно baseline і чи прийнятна помилка в хвилинах.","evidence":"metric + diagnostics + limitations","feedback":"Висновок прив’язаний до задачі, а не до абстрактного score."}
+    ],
+    "complete":"Regression workflow завершено: baseline, comparison, diagnostics, complexity і held-out evaluation утворюють один evidence chain."
+  },
+  "sections":[
+    {"eyebrow":"1 · PYTHON REGRESSION LAB","title":"Baseline → regularization → tree → diagnostics","description":"Перемикайте Linear Regression, Ridge і Decision Tree. Змінюйте alpha/max_depth, читайте Python-код та пояснюйте зміни MAE/RMSE/R², residuals і train/test gap.","component":"regression-diagnostics-lab","select":"regressionDiagnostics","after":"Міні-завдання: назвіть модель, яка є baseline; поясніть, де ви бачите underfitting/overfitting; сформулюйте, яку додаткову перевірку зробили б перед фінальним test."},
+    {"eyebrow":"2 · COMPLEXITY PREVIEW","title":"Чому train error не може бути критерієм вибору","description":"Переміщуйте slider: train error майже завжди поліпшується зі складністю, test/generalization — ні.","component":"metric-tradeoff-lab","select":"regressionLab"},
+    {"eyebrow":"3 · PRACTICAL MISSION","title":"Від target до інтерпретованого test result","description":"Пройдіть pipeline, який потім повторюється в runnable Python/Jupyter workflow.","component":"workflow-mission-lab","select":"mission"}
+  ],
+  "analystNote":{"title":"Найкраща модель — не обов'язково найскладніша","text":"Якщо Linear Regression дає менший test MAE, стабільніші residuals і достатню прикладну точність, складніше дерево не має переваги лише через свою гнучкість. R² не замінює MAE/RMSE, residual analysis, worst-case review і baseline comparison."},
+  "quiz":{"questions":[
+    {"prompt":"Яка метрика має ті самі одиниці, що й target?","options":["MAE","R²","Accuracy"],"answer":0},
+    {"prompt":"Що означає великий gap: train MAE низький, test/validation MAE значно вищий?","options":["Ймовірне overfitting","Гарантовано добра модель","Кластеризація"],"answer":0},
+    {"prompt":"Навіщо Linear Regression baseline?","options":["Щоб мати просту контрольну точку для складніших моделей","Щоб використати test для tuning","Щоб замінити residual analysis"],"answer":0},
+    {"prompt":"Що шукають на residual plot?","options":["Випадковий розкид біля нуля і систематичні патерни/великі помилки","Лише максимальний R²","Кількість кластерів"],"answer":0},
+    {"prompt":"Де слід обирати max_depth?","options":["На validation/CV, залишивши test для фінальної оцінки","Безпосередньо за найкращим test MAE після десятків спроб","Тільки за train MAE"],"answer":0}
+  ],"feedback":{"5":"Regression evidence chain зрозумілий.","4":"Добре; перевірте роль held-out test.","3":"Повторіть residuals і complexity curve.","2":"Поверніться до Python Regression Lab.","1":"Почніть із baseline та metric interpretation.","0":"Поверніться до target, split і допустимої похибки."}},
+  "reflection":"Який test MAE у хвилинах був би реально прийнятним для вашої навчальної задачі, і який виграш відносно baseline виправдав би складнішу модель?",
+  "sources":[
+    {"label":"task.ipynb","href":"../../Theme4/practice3/task.ipynb"},
+    {"label":"Student_Performance.csv","href":"../../Theme4/practice3/Student_Performance.csv"},
+    {"label":"t4_l3_regression_workflow.py","href":"../examples/t4_l3_regression_workflow.py"}
+  ],
+  "sourceNote":"У вихідному notebook змішані House Prices/SalePrice та Student_Performance.csv. Web-layer не переписує source notebook: 4.3 використовує окремий узгоджений synthetic regression scenario і runnable reference, щоб не маскувати цю неузгодженість."
 }
