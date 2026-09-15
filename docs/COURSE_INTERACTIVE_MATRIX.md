@@ -33,7 +33,7 @@ Theme 1, Theme 2 (2.1–2.3), Theme 4 і Theme 5 використовують da
 | 4.2 | `Theme4/Group lesson 2/content1.ipynb` · AI methods | analysis | ML task selector + `python-ml-lab`: regression/classification/clustering + runnable scikit-learn/matplotlib | **implemented** |
 | 4.3 | `Theme4/practice3/task.ipynb` · regression practical | analysis | `regression-diagnostics-lab`: Linear/Ridge/Tree + actual-vs-predicted + residuals + complexity curve + runnable Python | **implemented** |
 | 4.4 | `Theme4/Group lesson 4` · accuracy/hyperparameters | evaluation | `cv-tuning-lab`: train/CV curve + scoring/folds + freeze candidate/test gate + runnable GridSearchCV | **implemented** |
-| 4.5 | `Theme4/practice5` · classification | evaluation | Threshold / precision / recall / F1 | **implemented** |
+| 4.5 | `Theme4/practice5/task.ipynb` · classification practical | evaluation/decision | `classification-threshold-lab`: validation precision/recall/F1 + FP/FN cost + confusion matrix + freeze threshold/test gate + runnable LogisticRegression | **implemented** |
 | 4.6 | `Theme4/aLection6` · neural networks | analysis | Neural Architecture Lab | **implemented** |
 | 4.7 | `Theme4/Group lesson 7` · deep learning | analysis | DL experiment mission | **implemented** |
 | 4.8 | `Theme4/practice8` · TensorFlow | analysis | TensorFlow task mission | **implemented** |
@@ -70,14 +70,14 @@ Theme 1, Theme 2 (2.1–2.3), Theme 4 і Theme 5 використовують da
 `data-quality-lab`, `eda-explorer`, `transformation-lab`, `split-leakage-lab`, `readiness-scorecard`
 
 ### Theme 4 — analysis / AI
-`method-selector`, `metric-tradeoff-lab`, `python-ml-lab`, `regression-diagnostics-lab`, `cv-tuning-lab`, `neural-network-lab`, `convolution-lab`, `transfer-rl-lab`, `text-analysis-lab`; 4.10 додатково повторно використовує core `workflow-mission-lab`, `decision-tradeoff` та shared `readiness-scorecard`.
+`method-selector`, `metric-tradeoff-lab`, `python-ml-lab`, `regression-diagnostics-lab`, `cv-tuning-lab`, `classification-threshold-lab`, `neural-network-lab`, `convolution-lab`, `transfer-rl-lab`, `text-analysis-lab`; 4.10 додатково повторно використовує core `workflow-mission-lab`, `decision-tradeoff` та shared `readiness-scorecard`.
 
 ### Theme 5 — visualization
 `visual-encoding-lab`, `dashboard-builder`, `design-critique-lab`, `audience-adaptation-lab`, `visualization-mission-lab`, `insight-brief-lab`
 
 ## Runnable teaching examples
 
-CI та документація відстежують п’ять reference scripts:
+CI та документація відстежують шість reference scripts:
 
 ```text
 interactive/examples/t3_l1_preparation.py
@@ -85,6 +85,7 @@ interactive/examples/t3_l2_eda.py
 interactive/examples/t4_l2_ml_tasks.py
 interactive/examples/t4_l3_regression_workflow.py
 interactive/examples/t4_l4_cv_tuning_workflow.py
+interactive/examples/t4_l5_classification_workflow.py
 ```
 
 4.2 використовує synthetic data і три постановки:
@@ -111,6 +112,17 @@ interactive/examples/t4_l4_cv_tuning_workflow.py
 - browser test gate вимагає freeze candidate до відкриття test;
 - runnable outputs — CV depth curve, GridSearch heatmap, final confusion matrix, search-results CSV і summary CSV.
 
+4.5 поглиблює classification decision workflow:
+
+- synthetic imbalanced classification dataset;
+- stratified `train / validation / test`;
+- `StandardScaler + LogisticRegression` fit лише на train;
+- threshold grid оцінюється тільки на validation;
+- metrics — accuracy, precision, recall, F1, TP/FP/FN/TN;
+- decision objective — weighted cost `FP×cost_FP + FN×cost_FN`;
+- browser test gate вимагає freeze operating point;
+- runnable outputs — validation trade-off/cost plots, final test confusion matrix, threshold table і summary CSV.
+
 ## Методичні контролі
 
 - Базове web-заняття: **30–45 хв активної роботи**; full code lab може бути **до 90 хв**.
@@ -118,10 +130,11 @@ interactive/examples/t4_l4_cv_tuning_workflow.py
 - **Record identity ≠ event identity**: deduplication не повинна знищувати evidence незалежного підтвердження.
 - Browser simulation не підміняє live scraping, реальний PostgreSQL, Jupyter, Apps Script, зовнішні API або runnable ML code.
 - Scaling/imputation/feature selection, що навчаються з даних, fit-яться лише на train після split.
-- Held-out test не використовується для model/hyperparameter selection; GridSearchCV/CV працюють лише всередині training pool.
+- Held-out test не використовується для model/hyperparameter/threshold selection.
+- GridSearchCV/CV працюють лише всередині training pool; threshold tuning працює на validation або out-of-fold evidence.
 - ML task type визначається target/labels і аналітичним питанням до вибору алгоритму.
 - Regression evaluation має включати baseline, error metrics у одиницях target, residual analysis, train/validation behavior і фінальний held-out test.
-- Classification tuning має враховувати metric choice, class imbalance, CV variability і compute budget, а не лише best mean score.
+- Classification evaluation має розділяти probability score і decision threshold; class imbalance, FP/FN consequence і operating point важливіші за одну accuracy.
 - DL project має baseline, clean evaluation, error analysis, reproducibility та limitations; high training score не є самодостатнім результатом.
 - Груповий DL project має один shared problem/experiment protocol, review history та integrated final run.
 - GenAI output відокремлюється від source evidence та проходить human review.
