@@ -128,6 +128,35 @@ python interactive/examples/t4_l2_ml_tasks.py --task classification --threshold 
 python interactive/examples/t4_l2_ml_tasks.py --task clustering --k 4
 ```
 
+#### 4.3 — Regression Diagnostics Lab
+
+4.3 поглиблює regression workflow від постановки задачі до evidence-based model judgement. Reusable `regression-diagnostics-lab` дозволяє:
+
+- перемикати `LinearRegression`, `Ridge` і `DecisionTreeRegressor`;
+- змінювати Ridge `alpha` або tree `max_depth`;
+- бачити train/test MAE, test RMSE і R²;
+- перемикати `Actual vs predicted`, `Residuals` і `Complexity curve`;
+- читати відповідний scikit-learn code preview;
+- пояснювати underfitting/overfitting та роль baseline.
+
+Runnable reference:
+
+```bash
+python interactive/examples/t4_l3_regression_workflow.py --max-depth 5
+```
+
+Script генерує:
+
+```text
+interactive/examples/t4_l3_regression_output/
+├── actual_vs_predicted.png
+├── residuals.png
+├── complexity_curve.png
+└── model_comparison.csv
+```
+
+Ключовий принцип 4.3: **складніша модель повинна довести перевагу на generalization evidence; низький train error не є аргументом сам по собі**.
+
 #### 4.10 — deep-learning project practice
 
 **«Практичне використання методів глибокого навчання в межах виконання індивідуальних (групових) проектів»**.
@@ -208,6 +237,7 @@ lessons/theme5.html?lesson=t5-l8
 - `method-selector`
 - `metric-tradeoff-lab`
 - `python-ml-lab`
+- `regression-diagnostics-lab`
 - `neural-network-lab`
 - `convolution-lab`
 - `transfer-rl-lab`
@@ -231,11 +261,16 @@ Browser simulation використовується для швидкого reas
 examples/t3_l1_preparation.py
 examples/t3_l2_eda.py
 examples/t4_l2_ml_tasks.py
+examples/t4_l3_regression_workflow.py
 ```
 
 Для 4.2 використовується схема:
 
 `task formulation → Python code → parameter → graph/metrics → runnable reproduction → interpretation`.
+
+Для 4.3:
+
+`numeric target → baseline → alternative models → parameter/complexity → actual-vs-predicted/residuals → runnable comparison → model judgement`.
 
 ## Methodological rules
 
@@ -255,6 +290,8 @@ Record identity and event identity are not the same. Deduplication має уни
 
 ML task type визначається аналітичним питанням і target/labels **до** вибору алгоритму.
 
+Regression model selection не робиться за train score або повторним підбором на held-out test: baseline, validation/CV, residual diagnostics і фінальний test мають різні ролі.
+
 Для DL-project:
 
 `problem contract → provenance → baseline → controlled experiments → independent evaluation → failure modes → reproducibility → limitations / next step`
@@ -267,7 +304,7 @@ ML task type визначається аналітичним питанням і
 
 ## CI
 
-`Interactive static checks` перевіряє JS, JSON, catalog/matrix/routes/sources, Theme 4.10 package, 10 visual assets 4.1, а також headless-запуск runnable Python examples 3.1, 3.2 і 4.2 та очікувані PNG outputs.
+`Interactive static checks` перевіряє JS, JSON, catalog/matrix/routes/sources, Theme 4.10 package, 10 visual assets 4.1, а також headless-запуск runnable Python examples 3.1, 3.2, 4.2 і 4.3 та очікувані PNG/CSV outputs.
 
 ## Документація
 
@@ -276,7 +313,7 @@ ML task type визначається аналітичним питанням і
 - `../docs/THEME1_INTERACTIVE_TRACK.md` — Theme 1;
 - `../docs/THEME2_INTERACTIVE_TRACK.md` — Theme 2;
 - `../docs/THEME3_INTERACTIVE_TRACK.md` — Theme 3;
-- `../docs/THEME4_INTERACTIVE_TRACK.md` — Theme 4, включно з 4.1, 4.2 і 4.10;
+- `../docs/THEME4_INTERACTIVE_TRACK.md` — Theme 4, включно з 4.1–4.3 і 4.10;
 - `../docs/THEME5_INTERACTIVE_TRACK.md` — Theme 5.
 
 ## Правило reusable engine
@@ -285,7 +322,7 @@ ML task type визначається аналітичним питанням і
 
 `HTML shell + reusable JS component + JSON lesson config = interactive lesson`
 
-Унікальна поведінка додається як reusable component лише тоді, коли вона представляє повторно застосовну педагогічну взаємодію. `python-ml-lab` є саме таким компонентом.
+Унікальна поведінка додається як reusable component лише тоді, коли вона представляє повторно застосовну педагогічну взаємодію. `python-ml-lab` і `regression-diagnostics-lab` є такими компонентами.
 
 ## Дані
 
