@@ -275,6 +275,7 @@ jobs:
           python interactive/examples/t4_l2_ml_tasks.py --task all
           python interactive/examples/t4_l3_regression_workflow.py --max-depth 5
           python interactive/examples/t4_l4_cv_tuning_workflow.py --scoring f1_macro --cv 5
+          python interactive/examples/t4_l5_classification_workflow.py --fn-cost 8 --fp-cost 1
 
           python - <<'PY'
           from pathlib import Path
@@ -295,6 +296,11 @@ jobs:
               Path('interactive/examples/t4_l4_cv_tuning_output/test_confusion_matrix.png'),
               Path('interactive/examples/t4_l4_cv_tuning_output/gridsearch_results.csv'),
               Path('interactive/examples/t4_l4_cv_tuning_output/summary.csv'),
+              Path('interactive/examples/t4_l5_classification_output/validation_threshold_tradeoff.png'),
+              Path('interactive/examples/t4_l5_classification_output/validation_cost_curve.png'),
+              Path('interactive/examples/t4_l5_classification_output/test_confusion_matrix.png'),
+              Path('interactive/examples/t4_l5_classification_output/threshold_table.csv'),
+              Path('interactive/examples/t4_l5_classification_output/summary.csv'),
           ]
           for path in expected:
               if not path.is_file() or path.stat().st_size == 0:
