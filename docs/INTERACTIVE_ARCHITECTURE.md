@@ -73,7 +73,7 @@ shared reusable components
 
 `theme4-page.js` формує breadcrumb, track navigation, hero, `lesson-roadmap`, scenario, pipeline, component sections, analyst note, self-check і source links, після чого запускає загальний `app.js`.
 
-Для **4.1** shared shell додатково вміє показувати велику visual lecture з 10 інфографік. Для **4.2** він рендерить `python-ml-lab`, що пов'язує Python-код, інтерактивний параметр, SVG-графік і метрики. Для **4.3** той самий shell використовує reusable `regression-diagnostics-lab`: model selection, Ridge alpha / tree max_depth, actual-vs-predicted, residuals, complexity curve та code preview. Для **4.4** використовується reusable `cv-tuning-lab`: train/CV curve, folds/scoring controls, candidate freeze і test gate, який не дозволяє використовувати held-out test як tuning feedback.
+Для **4.1** shared shell додатково вміє показувати велику visual lecture з 10 інфографік. Для **4.2** він рендерить `python-ml-lab`, що пов'язує Python-код, інтерактивний параметр, SVG-графік і метрики. Для **4.3** той самий shell використовує reusable `regression-diagnostics-lab`: model selection, Ridge alpha / tree max_depth, actual-vs-predicted, residuals, complexity curve та code preview. Для **4.4** використовується reusable `cv-tuning-lab`: train/CV curve, folds/scoring controls, candidate freeze і test gate, який не дозволяє використовувати held-out test як tuning feedback. Для **4.5** використовується reusable `classification-threshold-lab`: probability score → threshold → confusion matrix/metrics → validation FP/FN cost → freeze operating point → held-out test gate.
 
 Це не SPA framework: сторінка залишається static HTML + browser JavaScript.
 
@@ -152,6 +152,7 @@ Component не повинен залежати від ID конкретної л
 - `python-ml-lab`
 - `regression-diagnostics-lab`
 - `cv-tuning-lab`
+- `classification-threshold-lab`
 - `neural-network-lab`
 - `convolution-lab`
 - `transfer-rl-lab`
@@ -177,6 +178,7 @@ interactive/examples/t3_l2_eda.py
 interactive/examples/t4_l2_ml_tasks.py
 interactive/examples/t4_l3_regression_workflow.py
 interactive/examples/t4_l4_cv_tuning_workflow.py
+interactive/examples/t4_l5_classification_workflow.py
 ```
 
 Для 4.2 модель така:
@@ -235,13 +237,35 @@ reveal held-out test once
 confusion matrix + limitations
 ```
 
+Для 4.5 decision-threshold workflow:
+
+```text
+positive-class semantics
+    ↓
+stratified train / validation / test
+    ↓
+fit probability model on train
+    ↓
+validation precision / recall / F1 by threshold
+    ↓
+FP/FN weighted cost
+    ↓
+freeze operating threshold
+    ↓
+reveal held-out test once
+    ↓
+confusion matrix + analytical consequence
+```
+
 Web-графік є швидкою навчальною реконструкцією; script є відтворюваним reference implementation.
 
 ## 8. State management
 
 У v1 немає global state manager. Стан належить компоненту.
 
-`cv-tuning-lab` є прикладом локального pedagogical state: після freeze candidate test може бути відкритий, але будь-яка зміна tuning choices автоматично invalidates цей стан і знову приховує test. Це не потребує global state manager.
+`cv-tuning-lab` є прикладом локального pedagogical state: після freeze candidate test може бути відкритий, але будь-яка зміна tuning choices автоматично invalidates цей стан і знову приховує test.
+
+`classification-threshold-lab` використовує той самий принцип для decision policy: зміна threshold або FP/FN cost assumptions після відкриття test invalidates frozen operating point і знову закриває test.
 
 Якщо з'явиться комплексний тренажер із картою, timeline, багатьма об'єктами та shared state, його можна винести в окремий application layer або використати framework лише для цього складного компонента.
 
@@ -278,7 +302,7 @@ Query route типу `theme4.html?lesson=t4-l1` також залишаєтьс�
 
 Виняток дозволяється для повних code labs, де додатковий час утворюється виконанням та інтерпретацією коду, а не пасивним текстом. Поточний приклад — **Theme 3.1 і 3.2 по 90 хв**.
 
-Theme 4 наразі зберігає контракт 30–45 хв для всіх 14 lesson JSON. Заняття 4.2–4.4 використовують верхню частину діапазону через interactive code/diagnostics/tuning practice.
+Theme 4 наразі зберігає контракт 30–45 хв для всіх 14 lesson JSON. Заняття 4.2–4.5 використовують верхню частину діапазону через interactive code/diagnostics/tuning/threshold practice.
 
 ## 12. CI contracts
 
@@ -291,8 +315,8 @@ Theme 4 наразі зберігає контракт 30–45 хв для вс�
 - Theme 4 timebox та офіційний контракт 4.10;
 - 10 visual assets заняття 4.1;
 - JSON/Python syntax для primary package 4.10;
-- реальний headless-запуск runnable Python examples 3.1, 3.2, 4.2, 4.3 і 4.4;
-- створення очікуваних PNG/CSV artifacts для 3.2, 4.2, 4.3 та 4.4.
+- реальний headless-запуск runnable Python examples 3.1, 3.2, 4.2, 4.3, 4.4 і 4.5;
+- створення очікуваних PNG/CSV artifacts для 3.2, 4.2, 4.3, 4.4 та 4.5.
 
 CI не підмінює browser/manual QA, але ловить структурні та reproducibility-помилки до merge.
 
