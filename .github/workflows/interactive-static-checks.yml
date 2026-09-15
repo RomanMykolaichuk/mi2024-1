@@ -4,6 +4,7 @@ on:
   pull_request:
     paths:
       - "interactive/**"
+      - "Theme4/aLection1/infographics2/**"
       - "Theme4/Practice 10/**"
       - "docs/INTERACTIVE_ARCHITECTURE.md"
       - "docs/LESSON_AUTHORING_GUIDE.md"
@@ -18,6 +19,7 @@ on:
       - main
     paths:
       - "interactive/**"
+      - "Theme4/aLection1/infographics2/**"
       - "Theme4/Practice 10/**"
       - "docs/INTERACTIVE_ARCHITECTURE.md"
       - "docs/LESSON_AUTHORING_GUIDE.md"
@@ -37,6 +39,17 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install teaching-example dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install numpy pandas matplotlib scikit-learn
 
       - name: Validate JavaScript syntax
         shell: bash
@@ -63,7 +76,6 @@ jobs:
         run: |
           python3 - <<'PY'
           import json
-          import re
           from pathlib import Path
           from urllib.parse import urlsplit, unquote, parse_qs
 
@@ -196,6 +208,36 @@ jobs:
               raise SystemExit('Interactive course validation failed')
           PY
 
+      - name: Validate Theme 4.1 visual assets
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          from urllib.parse import unquote, urlsplit
+
+          lesson = json.loads(Path('interactive/data/lessons/t4-l1.json').read_text(encoding='utf-8'))
+          items = lesson.get('infographics', [])
+          if len(items) != 10:
+              raise SystemExit(f't4-l1.json: expected 10 infographics, found {len(items)}')
+
+          base = Path('interactive/lessons').resolve()
+          seen = set()
+          for item in items:
+              src = item.get('src')
+              if not src:
+                  raise SystemExit('t4-l1.json: infographic without src')
+              if src in seen:
+                  raise SystemExit(f't4-l1.json: duplicate infographic src {src}')
+              seen.add(src)
+              path = (base / unquote(urlsplit(src).path)).resolve()
+              if not path.is_file():
+                  raise SystemExit(f'Missing Theme 4.1 infographic: {src}')
+              if path.suffix.lower() != '.png' or path.stat().st_size == 0:
+                  raise SystemExit(f'Invalid Theme 4.1 infographic file: {path}')
+              print(f'OK infographic: {path}')
+          PY
+
       - name: Validate Theme 4.10 source notebooks and Python cells
         shell: bash
         run: |
@@ -221,4 +263,30 @@ jobs:
               code = ''.join(cell.get('source', []))
               compile(code, f'sample.ipynb:cell-{index}', 'exec')
               print(f'OK Python syntax: sample.ipynb cell {index}')
+          PY
+
+      - name: Run reproducible Python teaching examples
+        shell: bash
+        env:
+          MPLBACKEND: Agg
+        run: |
+          python interactive/examples/t3_l1_preparation.py
+          python interactive/examples/t3_l2_eda.py
+          python interactive/examples/t4_l2_ml_tasks.py --task all
+
+          python - <<'PY'
+          from pathlib import Path
+
+          expected = [
+              Path('interactive/examples/t3_l2_eda_output/missing_confidence_by_source.png'),
+              Path('interactive/examples/t3_l2_eda_output/delay_by_event_type.png'),
+              Path('interactive/examples/t3_l2_eda_output/events_over_time.png'),
+              Path('interactive/examples/t4_l2_ml_output/regression.png'),
+              Path('interactive/examples/t4_l2_ml_output/classification.png'),
+              Path('interactive/examples/t4_l2_ml_output/clustering.png'),
+          ]
+          for path in expected:
+              if not path.is_file() or path.stat().st_size == 0:
+                  raise SystemExit(f'Missing or empty generated plot: {path}')
+              print(f'OK generated plot: {path}')
           PY
