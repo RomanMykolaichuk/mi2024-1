@@ -73,7 +73,7 @@ shared reusable components
 
 `theme4-page.js` формує breadcrumb, track navigation, hero, `lesson-roadmap`, scenario, pipeline, component sections, analyst note, self-check і source links, після чого запускає загальний `app.js`.
 
-Для **4.1** shared shell додатково вміє показувати велику visual lecture з 10 інфографік. Для **4.2** він рендерить звичайну component section, у якій reusable `python-ml-lab` пов'язує Python-код, інтерактивний параметр, SVG-графік і метрики.
+Для **4.1** shared shell додатково вміє показувати велику visual lecture з 10 інфографік. Для **4.2** він рендерить `python-ml-lab`, що пов'язує Python-код, інтерактивний параметр, SVG-графік і метрики. Для **4.3** той самий shell використовує reusable `regression-diagnostics-lab`: model selection, Ridge alpha / tree max_depth, actual-vs-predicted, residuals, complexity curve та code preview.
 
 Це не SPA framework: сторінка залишається static HTML + browser JavaScript.
 
@@ -150,6 +150,7 @@ Component не повинен залежати від ID конкретної л
 - `method-selector`
 - `metric-tradeoff-lab`
 - `python-ml-lab`
+- `regression-diagnostics-lab`
 - `neural-network-lab`
 - `convolution-lab`
 - `transfer-rl-lab`
@@ -173,6 +174,7 @@ Browser interaction не підмінює реальне навчання мод
 interactive/examples/t3_l1_preparation.py
 interactive/examples/t3_l2_eda.py
 interactive/examples/t4_l2_ml_tasks.py
+interactive/examples/t4_l3_regression_workflow.py
 ```
 
 Для 4.2 модель така:
@@ -189,6 +191,26 @@ interactive chart / metrics
 runnable script reproduces the example
     ↓
 analytical interpretation
+```
+
+Для 4.3 pipeline поглиблюється:
+
+```text
+numeric target
+    ↓
+Linear Regression baseline
+    ↓
+Ridge / Decision Tree comparison
+    ↓
+alpha / max_depth
+    ↓
+actual vs predicted + residuals + train/test gap
+    ↓
+complexity curve
+    ↓
+runnable scikit-learn comparison
+    ↓
+model judgement in target units
 ```
 
 Web-графік є швидкою навчальною реконструкцією; script є відтворюваним reference implementation.
@@ -232,7 +254,7 @@ Query route типу `theme4.html?lesson=t4-l1` також залишаєтьс�
 
 Виняток дозволяється для повних code labs, де додатковий час утворюється виконанням та інтерпретацією коду, а не пасивним текстом. Поточний приклад — **Theme 3.1 і 3.2 по 90 хв**.
 
-Theme 4 наразі зберігає контракт 30–45 хв для всіх 14 lesson JSON.
+Theme 4 наразі зберігає контракт 30–45 хв для всіх 14 lesson JSON. Заняття 4.2 і 4.3 використовують верхню частину діапазону через interactive code/diagnostics practice.
 
 ## 12. CI contracts
 
@@ -245,8 +267,8 @@ Theme 4 наразі зберігає контракт 30–45 хв для вс�
 - Theme 4 timebox та офіційний контракт 4.10;
 - 10 visual assets заняття 4.1;
 - JSON/Python syntax для primary package 4.10;
-- реальний headless-запуск runnable Python examples 3.1, 3.2 і 4.2;
-- створення очікуваних PNG-графіків для 3.2 та 4.2.
+- реальний headless-запуск runnable Python examples 3.1, 3.2, 4.2 і 4.3;
+- створення очікуваних PNG/CSV artifacts для 3.2, 4.2 та 4.3.
 
 CI не підмінює browser/manual QA, але ловить структурні та reproducibility-помилки до merge.
 
