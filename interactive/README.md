@@ -157,6 +157,37 @@ interactive/examples/t4_l3_regression_output/
 
 Ключовий принцип 4.3: **складніша модель повинна довести перевагу на generalization evidence; низький train error не є аргументом сам по собі**.
 
+#### 4.4 — Cross-Validation & Hyperparameter Tuning Lab
+
+4.4 реалізує evaluation protocol як дію, а не лише пояснення. Reusable `cv-tuning-lab` дозволяє:
+
+- змінювати `max_depth` Random Forest;
+- перемикати 3/5/7-fold CV;
+- порівнювати `accuracy` та `f1_macro`;
+- бачити train score, CV mean/std і generalization gap;
+- спостерігати train/CV curve та overfitting;
+- **не бачити held-out test**, доки candidate не зафіксовано;
+- автоматично знову приховувати test після зміни tuning choices.
+
+Runnable reference:
+
+```bash
+python interactive/examples/t4_l4_cv_tuning_workflow.py --scoring f1_macro --cv 5
+```
+
+Script використовує synthetic imbalanced classification data, ізолює test до tuning і генерує:
+
+```text
+interactive/examples/t4_l4_cv_tuning_output/
+├── cv_depth_curve.png
+├── gridsearch_heatmap.png
+├── test_confusion_matrix.png
+├── gridsearch_results.csv
+└── summary.csv
+```
+
+Ключовий принцип 4.4: **GridSearchCV/CV працюють тільки всередині training pool; held-out test відкривається після freeze candidate і не керує model selection**.
+
 #### 4.10 — deep-learning project practice
 
 **«Практичне використання методів глибокого навчання в межах виконання індивідуальних (групових) проектів»**.
@@ -238,6 +269,7 @@ lessons/theme5.html?lesson=t5-l8
 - `metric-tradeoff-lab`
 - `python-ml-lab`
 - `regression-diagnostics-lab`
+- `cv-tuning-lab`
 - `neural-network-lab`
 - `convolution-lab`
 - `transfer-rl-lab`
@@ -262,6 +294,7 @@ examples/t3_l1_preparation.py
 examples/t3_l2_eda.py
 examples/t4_l2_ml_tasks.py
 examples/t4_l3_regression_workflow.py
+examples/t4_l4_cv_tuning_workflow.py
 ```
 
 Для 4.2 використовується схема:
@@ -271,6 +304,10 @@ examples/t4_l3_regression_workflow.py
 Для 4.3:
 
 `numeric target → baseline → alternative models → parameter/complexity → actual-vs-predicted/residuals → runnable comparison → model judgement`.
+
+Для 4.4:
+
+`isolate test → define scoring/search space → Stratified CV → GridSearchCV → freeze candidate → one final test → error analysis`.
 
 ## Methodological rules
 
@@ -292,6 +329,8 @@ ML task type визначається аналітичним питанням і
 
 Regression model selection не робиться за train score або повторним підбором на held-out test: baseline, validation/CV, residual diagnostics і фінальний test мають різні ролі.
 
+Hyperparameter tuning не використовує held-out test як feedback loop. Якщо test переглядається після кожної комбінації, він фактично стає validation set і фінальна оцінка перестає бути незалежною.
+
 Для DL-project:
 
 `problem contract → provenance → baseline → controlled experiments → independent evaluation → failure modes → reproducibility → limitations / next step`
@@ -304,7 +343,7 @@ Regression model selection не робиться за train score або пов�
 
 ## CI
 
-`Interactive static checks` перевіряє JS, JSON, catalog/matrix/routes/sources, Theme 4.10 package, 10 visual assets 4.1, а також headless-запуск runnable Python examples 3.1, 3.2, 4.2 і 4.3 та очікувані PNG/CSV outputs.
+`Interactive static checks` перевіряє JS, JSON, catalog/matrix/routes/sources, Theme 4.10 package, 10 visual assets 4.1, а також headless-запуск runnable Python examples 3.1, 3.2, 4.2, 4.3 і 4.4 та очікувані PNG/CSV outputs.
 
 ## Документація
 
@@ -313,7 +352,7 @@ Regression model selection не робиться за train score або пов�
 - `../docs/THEME1_INTERACTIVE_TRACK.md` — Theme 1;
 - `../docs/THEME2_INTERACTIVE_TRACK.md` — Theme 2;
 - `../docs/THEME3_INTERACTIVE_TRACK.md` — Theme 3;
-- `../docs/THEME4_INTERACTIVE_TRACK.md` — Theme 4, включно з 4.1–4.3 і 4.10;
+- `../docs/THEME4_INTERACTIVE_TRACK.md` — Theme 4, включно з 4.1–4.4 і 4.10;
 - `../docs/THEME5_INTERACTIVE_TRACK.md` — Theme 5.
 
 ## Правило reusable engine
@@ -322,7 +361,7 @@ Regression model selection не робиться за train score або пов�
 
 `HTML shell + reusable JS component + JSON lesson config = interactive lesson`
 
-Унікальна поведінка додається як reusable component лише тоді, коли вона представляє повторно застосовну педагогічну взаємодію. `python-ml-lab` і `regression-diagnostics-lab` є такими компонентами.
+Унікальна поведінка додається як reusable component лише тоді, коли вона представляє повторно застосовну педагогічну взаємодію. `python-ml-lab`, `regression-diagnostics-lab` і `cv-tuning-lab` є такими компонентами.
 
 ## Дані
 
