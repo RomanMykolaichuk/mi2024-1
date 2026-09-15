@@ -17,6 +17,7 @@ import { mount as mountLessonRoadmap } from '../components/lesson-roadmap.js';
 import { mount as mountDecisionTradeoff } from '../components/decision-tradeoff.js';
 import { mount as mountMethodSelector } from '../components/method-selector.js';
 import { mount as mountMetricTradeoffLab } from '../components/metric-tradeoff-lab.js';
+import { mount as mountPythonMlLab } from '../components/python-ml-lab.js';
 import { mount as mountNeuralNetworkLab } from '../components/neural-network-lab.js';
 import { mount as mountConvolutionLab } from '../components/convolution-lab.js';
 import { mount as mountTransferRlLab } from '../components/transfer-rl-lab.js';
@@ -57,6 +58,7 @@ export const registry = {
   'decision-tradeoff': mountDecisionTradeoff,
   'method-selector': mountMethodSelector,
   'metric-tradeoff-lab': mountMetricTradeoffLab,
+  'python-ml-lab': mountPythonMlLab,
   'neural-network-lab': mountNeuralNetworkLab,
   'convolution-lab': mountConvolutionLab,
   'transfer-rl-lab': mountTransferRlLab,
