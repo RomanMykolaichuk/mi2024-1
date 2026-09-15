@@ -188,6 +188,37 @@ interactive/examples/t4_l4_cv_tuning_output/
 
 Ключовий принцип 4.4: **GridSearchCV/CV працюють тільки всередині training pool; held-out test відкривається після freeze candidate і не керує model selection**.
 
+#### 4.5 — Classification Threshold Lab
+
+4.5 переводить classification із «отримати label» у **decision policy над probability score**. Reusable `classification-threshold-lab` дозволяє:
+
+- змінювати decision threshold;
+- змінювати відносну ціну false negative від 1× до 12× ціни false positive;
+- бачити validation curves `precision / recall / F1`;
+- читати TP/FP/FN/TN та accuracy/precision/recall/F1;
+- порівнювати поточний threshold із мінімумом weighted validation cost;
+- **не бачити held-out test**, доки operating point не зафіксовано;
+- автоматично invalidates test result після зміни threshold або cost assumptions.
+
+Runnable reference:
+
+```bash
+python interactive/examples/t4_l5_classification_workflow.py --fn-cost 8 --fp-cost 1
+```
+
+Script навчає `LogisticRegression` на synthetic imbalanced data, використовує stratified train/validation/test split, підбирає threshold лише на validation і генерує:
+
+```text
+interactive/examples/t4_l5_classification_output/
+├── validation_threshold_tradeoff.png
+├── validation_cost_curve.png
+├── test_confusion_matrix.png
+├── threshold_table.csv
+└── summary.csv
+```
+
+Ключовий принцип 4.5: **model score, threshold selection і final test мають різні ролі; operating threshold обирається на validation evidence з урахуванням FP/FN consequence, а не підганяється під held-out test**.
+
 #### 4.10 — deep-learning project practice
 
 **«Практичне використання методів глибокого навчання в межах виконання індивідуальних (групових) проектів»**.
@@ -270,6 +301,7 @@ lessons/theme5.html?lesson=t5-l8
 - `python-ml-lab`
 - `regression-diagnostics-lab`
 - `cv-tuning-lab`
+- `classification-threshold-lab`
 - `neural-network-lab`
 - `convolution-lab`
 - `transfer-rl-lab`
@@ -295,6 +327,7 @@ examples/t3_l2_eda.py
 examples/t4_l2_ml_tasks.py
 examples/t4_l3_regression_workflow.py
 examples/t4_l4_cv_tuning_workflow.py
+examples/t4_l5_classification_workflow.py
 ```
 
 Для 4.2 використовується схема:
@@ -308,6 +341,10 @@ examples/t4_l4_cv_tuning_workflow.py
 Для 4.4:
 
 `isolate test → define scoring/search space → Stratified CV → GridSearchCV → freeze candidate → one final test → error analysis`.
+
+Для 4.5:
+
+`class semantics → train/validation/test → probability model → threshold grid on validation → FP/FN cost → freeze operating point → one final test`.
 
 ## Methodological rules
 
@@ -331,6 +368,8 @@ Regression model selection не робиться за train score або пов�
 
 Hyperparameter tuning не використовує held-out test як feedback loop. Якщо test переглядається після кожної комбінації, він фактично стає validation set і фінальна оцінка перестає бути незалежною.
 
+Classification threshold tuning також не використовує held-out test. Model probability score оцінюється окремо від decision threshold; operating point обирається на validation/out-of-fold evidence з урахуванням class balance, precision/recall та ціни FP/FN.
+
 Для DL-project:
 
 `problem contract → provenance → baseline → controlled experiments → independent evaluation → failure modes → reproducibility → limitations / next step`
@@ -343,7 +382,7 @@ Hyperparameter tuning не використовує held-out test як feedback 
 
 ## CI
 
-`Interactive static checks` перевіряє JS, JSON, catalog/matrix/routes/sources, Theme 4.10 package, 10 visual assets 4.1, а також headless-запуск runnable Python examples 3.1, 3.2, 4.2, 4.3 і 4.4 та очікувані PNG/CSV outputs.
+`Interactive static checks` перевіряє JS, JSON, catalog/matrix/routes/sources, Theme 4.10 package, 10 visual assets 4.1, а також headless-запуск runnable Python examples 3.1, 3.2, 4.2, 4.3, 4.4 і 4.5 та очікувані PNG/CSV outputs.
 
 ## Документація
 
@@ -352,7 +391,7 @@ Hyperparameter tuning не використовує held-out test як feedback 
 - `../docs/THEME1_INTERACTIVE_TRACK.md` — Theme 1;
 - `../docs/THEME2_INTERACTIVE_TRACK.md` — Theme 2;
 - `../docs/THEME3_INTERACTIVE_TRACK.md` — Theme 3;
-- `../docs/THEME4_INTERACTIVE_TRACK.md` — Theme 4, включно з 4.1–4.4 і 4.10;
+- `../docs/THEME4_INTERACTIVE_TRACK.md` — Theme 4, включно з 4.1–4.5 і 4.10;
 - `../docs/THEME5_INTERACTIVE_TRACK.md` — Theme 5.
 
 ## Правило reusable engine
@@ -361,7 +400,7 @@ Hyperparameter tuning не використовує held-out test як feedback 
 
 `HTML shell + reusable JS component + JSON lesson config = interactive lesson`
 
-Унікальна поведінка додається як reusable component лише тоді, коли вона представляє повторно застосовну педагогічну взаємодію. `python-ml-lab`, `regression-diagnostics-lab` і `cv-tuning-lab` є такими компонентами.
+Унікальна поведінка додається як reusable component лише тоді, коли вона представляє повторно застосовну педагогічну взаємодію. `python-ml-lab`, `regression-diagnostics-lab`, `cv-tuning-lab` і `classification-threshold-lab` є такими компонентами.
 
 ## Дані
 
