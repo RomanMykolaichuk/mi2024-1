@@ -20,6 +20,7 @@ import { mount as mountMetricTradeoffLab } from '../components/metric-tradeoff-l
 import { mount as mountPythonMlLab } from '../components/python-ml-lab.js';
 import { mount as mountRegressionDiagnosticsLab } from '../components/regression-diagnostics-lab.js';
 import { mount as mountCvTuningLab } from '../components/cv-tuning-lab.js';
+import { mount as mountClassificationThresholdLab } from '../components/classification-threshold-lab.js';
 import { mount as mountNeuralNetworkLab } from '../components/neural-network-lab.js';
 import { mount as mountConvolutionLab } from '../components/convolution-lab.js';
 import { mount as mountTransferRlLab } from '../components/transfer-rl-lab.js';
@@ -63,6 +64,7 @@ export const registry = {
   'python-ml-lab': mountPythonMlLab,
   'regression-diagnostics-lab': mountRegressionDiagnosticsLab,
   'cv-tuning-lab': mountCvTuningLab,
+  'classification-threshold-lab': mountClassificationThresholdLab,
   'neural-network-lab': mountNeuralNetworkLab,
   'convolution-lab': mountConvolutionLab,
   'transfer-rl-lab': mountTransferRlLab,
