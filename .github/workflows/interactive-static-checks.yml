@@ -273,6 +273,7 @@ jobs:
           python interactive/examples/t3_l1_preparation.py
           python interactive/examples/t3_l2_eda.py
           python interactive/examples/t4_l2_ml_tasks.py --task all
+          python interactive/examples/t4_l3_regression_workflow.py --max-depth 5
 
           python - <<'PY'
           from pathlib import Path
@@ -284,9 +285,13 @@ jobs:
               Path('interactive/examples/t4_l2_ml_output/regression.png'),
               Path('interactive/examples/t4_l2_ml_output/classification.png'),
               Path('interactive/examples/t4_l2_ml_output/clustering.png'),
+              Path('interactive/examples/t4_l3_regression_output/actual_vs_predicted.png'),
+              Path('interactive/examples/t4_l3_regression_output/residuals.png'),
+              Path('interactive/examples/t4_l3_regression_output/complexity_curve.png'),
+              Path('interactive/examples/t4_l3_regression_output/model_comparison.csv'),
           ]
           for path in expected:
               if not path.is_file() or path.stat().st_size == 0:
-                  raise SystemExit(f'Missing or empty generated plot: {path}')
-              print(f'OK generated plot: {path}')
+                  raise SystemExit(f'Missing or empty generated artifact: {path}')
+              print(f'OK generated artifact: {path}')
           PY
