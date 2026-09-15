@@ -73,7 +73,7 @@ shared reusable components
 
 `theme4-page.js` формує breadcrumb, track navigation, hero, `lesson-roadmap`, scenario, pipeline, component sections, analyst note, self-check і source links, після чого запускає загальний `app.js`.
 
-Для **4.1** shared shell додатково вміє показувати велику visual lecture з 10 інфографік. Для **4.2** він рендерить `python-ml-lab`, що пов'язує Python-код, інтерактивний параметр, SVG-графік і метрики. Для **4.3** той самий shell використовує reusable `regression-diagnostics-lab`: model selection, Ridge alpha / tree max_depth, actual-vs-predicted, residuals, complexity curve та code preview.
+Для **4.1** shared shell додатково вміє показувати велику visual lecture з 10 інфографік. Для **4.2** він рендерить `python-ml-lab`, що пов'язує Python-код, інтерактивний параметр, SVG-графік і метрики. Для **4.3** той самий shell використовує reusable `regression-diagnostics-lab`: model selection, Ridge alpha / tree max_depth, actual-vs-predicted, residuals, complexity curve та code preview. Для **4.4** використовується reusable `cv-tuning-lab`: train/CV curve, folds/scoring controls, candidate freeze і test gate, який не дозволяє використовувати held-out test як tuning feedback.
 
 Це не SPA framework: сторінка залишається static HTML + browser JavaScript.
 
@@ -151,6 +151,7 @@ Component не повинен залежати від ID конкретної л
 - `metric-tradeoff-lab`
 - `python-ml-lab`
 - `regression-diagnostics-lab`
+- `cv-tuning-lab`
 - `neural-network-lab`
 - `convolution-lab`
 - `transfer-rl-lab`
@@ -175,6 +176,7 @@ interactive/examples/t3_l1_preparation.py
 interactive/examples/t3_l2_eda.py
 interactive/examples/t4_l2_ml_tasks.py
 interactive/examples/t4_l3_regression_workflow.py
+interactive/examples/t4_l4_cv_tuning_workflow.py
 ```
 
 Для 4.2 модель така:
@@ -213,13 +215,35 @@ runnable scikit-learn comparison
 model judgement in target units
 ```
 
+Для 4.4 evaluation protocol стає окремим training interaction:
+
+```text
+stratified train/test split
+    ↓
+hold test closed
+    ↓
+define scoring + search space
+    ↓
+StratifiedKFold inside training pool
+    ↓
+GridSearchCV / candidate comparison
+    ↓
+freeze candidate
+    ↓
+reveal held-out test once
+    ↓
+confusion matrix + limitations
+```
+
 Web-графік є швидкою навчальною реконструкцією; script є відтворюваним reference implementation.
 
 ## 8. State management
 
 У v1 немає global state manager. Стан належить компоненту.
 
-Це навмисно: лекційні інтерактиви незалежні й малі. Якщо з'явиться комплексний тренажер із картою, timeline, багатьма об'єктами та shared state, його можна винести в окремий application layer або використати framework лише для цього складного компонента.
+`cv-tuning-lab` є прикладом локального pedagogical state: після freeze candidate test може бути відкритий, але будь-яка зміна tuning choices автоматично invalidates цей стан і знову приховує test. Це не потребує global state manager.
+
+Якщо з'явиться комплексний тренажер із картою, timeline, багатьма об'єктами та shared state, його можна винести в окремий application layer або використати framework лише для цього складного компонента.
 
 ## 9. Lesson JSON
 
@@ -254,7 +278,7 @@ Query route типу `theme4.html?lesson=t4-l1` також залишаєтьс�
 
 Виняток дозволяється для повних code labs, де додатковий час утворюється виконанням та інтерпретацією коду, а не пасивним текстом. Поточний приклад — **Theme 3.1 і 3.2 по 90 хв**.
 
-Theme 4 наразі зберігає контракт 30–45 хв для всіх 14 lesson JSON. Заняття 4.2 і 4.3 використовують верхню частину діапазону через interactive code/diagnostics practice.
+Theme 4 наразі зберігає контракт 30–45 хв для всіх 14 lesson JSON. Заняття 4.2–4.4 використовують верхню частину діапазону через interactive code/diagnostics/tuning practice.
 
 ## 12. CI contracts
 
@@ -267,8 +291,8 @@ Theme 4 наразі зберігає контракт 30–45 хв для вс�
 - Theme 4 timebox та офіційний контракт 4.10;
 - 10 visual assets заняття 4.1;
 - JSON/Python syntax для primary package 4.10;
-- реальний headless-запуск runnable Python examples 3.1, 3.2, 4.2 і 4.3;
-- створення очікуваних PNG/CSV artifacts для 3.2, 4.2 та 4.3.
+- реальний headless-запуск runnable Python examples 3.1, 3.2, 4.2, 4.3 і 4.4;
+- створення очікуваних PNG/CSV artifacts для 3.2, 4.2, 4.3 та 4.4.
 
 CI не підмінює browser/manual QA, але ловить структурні та reproducibility-помилки до merge.
 
