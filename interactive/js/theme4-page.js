@@ -1,4 +1,4 @@
-const esc = value => String(value ?? '').replace(/[&<>'"]/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[char]));
+const esc = value => String(value ?? '').replace(/[&<>'"]/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;', '"':'&quot;'}[char]));
 const lessonId = new URLSearchParams(window.location.search).get('lesson') || 't4-l1';
 const allowed = new Set(['t4-l1','t4-l2','t4-l3','t4-l4','t4-l5','t4-l6','t4-l7','t4-l8','t4-l9','t4-l10','t4-l11','t4-l12','t4-l13','t4-l14']);
 const root = document.querySelector('[data-role="lesson-root"]');
@@ -31,6 +31,7 @@ function renderPage(lesson, source) {
       <p class="hero__lead">${esc(lesson.lead)}</p>
     </header>
     <section class="section-shell"><div class="section-heading"><p class="eyebrow">LEARNING ROUTE</p><h2>Маршрут заняття</h2></div><div data-component="lesson-roadmap" data-source="${source}" data-select="roadmap"></div></section>
+    ${lesson.infographics?.length ? renderInfographics(lesson) : ''}
     ${lesson.scenario ? `<section class="section-shell"><div class="section-heading"><p class="eyebrow">ANALYTICAL SCENARIO</p><h2>${esc(lesson.scenario.title)}</h2><p>${esc(lesson.scenario.description)}</p></div>${lesson.scenario.facts?.length ? `<div class="metric-grid">${lesson.scenario.facts.map(item => `<div class="metric"><span class="metric__value metric__value--small">${esc(item.value)}</span><span class="metric__label">${esc(item.label)}</span></div>`).join('')}</div>` : ''}${lesson.scenario.question ? `<div class="analytics-callout"><strong>Питання:</strong> ${esc(lesson.scenario.question)}</div>` : ''}</section>` : ''}
     ${lesson.pipeline ? `<section class="section-shell"><div class="section-heading"><p class="eyebrow">ANALYTICS PIPELINE</p><h2>Місце методу в аналітичному процесі</h2></div><div data-component="analytics-pipeline" data-source="${source}" data-select="pipeline"></div></section>` : ''}
     ${(lesson.sections ?? []).map((section,index) => renderSection(section,index,source)).join('')}
@@ -38,6 +39,24 @@ function renderPage(lesson, source) {
     ${lesson.quiz ? `<section class="section-shell"><div class="section-heading"><p class="eyebrow">SELF-CHECK</p><h2>${esc(lesson.quizTitle ?? 'Перевірте розуміння')}</h2></div><div data-component="knowledge-check" data-source="${source}" data-select="quiz"></div>${lesson.reflection ? `<div class="analytics-callout"><strong>Рефлексія:</strong> ${esc(lesson.reflection)}</div>` : ''}</section>` : ''}
     ${lesson.sources?.length ? `<section class="section-shell"><div class="section-heading"><p class="eyebrow">SOURCE MATERIALS</p><h2>Матеріали репозиторію</h2></div><div class="source-links">${lesson.sources.map(item => `<a href="${esc(item.href)}">${esc(item.label)}</a>`).join('')}</div>${lesson.sourceNote ? `<p class="microcopy">${esc(lesson.sourceNote)}</p>` : ''}</section>` : ''}
   `;
+}
+
+function renderInfographics(lesson) {
+  const cards = lesson.infographics.map((item,index) => `
+    <article class="infographic-card" id="infographic-${esc(item.number ?? index + 1)}">
+      <div class="infographic-card__meta"><span>${esc(item.number ?? String(index + 1).padStart(2,'0'))}</span><strong>${esc(item.title)}</strong></div>
+      <a class="infographic-card__image" href="${esc(item.src)}" target="_blank" rel="noopener" aria-label="Відкрити рисунок: ${esc(item.title)}">
+        <img src="${esc(item.src)}" alt="${esc(item.title)}" loading="${index < 2 ? 'eager' : 'lazy'}">
+      </a>
+      ${item.description ? `<p>${esc(item.description)}</p>` : ''}
+    </article>
+  `).join('');
+
+  return `<section class="section-shell infographic-lecture">
+    <div class="section-heading"><p class="eyebrow">VISUAL LECTURE · 10 INFOGRAPHICS</p><h2>${esc(lesson.infographicsTitle ?? 'Візуальна лекція')}</h2>${lesson.infographicsLead ? `<p>${esc(lesson.infographicsLead)}</p>` : ''}</div>
+    <nav class="infographic-jump" aria-label="Навігація між інфографіками">${lesson.infographics.map((item,index) => `<a href="#infographic-${esc(item.number ?? index + 1)}">${esc(item.number ?? index + 1)}</a>`).join('')}</nav>
+    <div class="infographic-grid">${cards}</div>
+  </section>`;
 }
 
 function renderSection(section,index,source) {
