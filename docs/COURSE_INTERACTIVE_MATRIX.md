@@ -6,7 +6,9 @@
 
 `технологія → місце у військовій аналітиці → дія слухача → наслідок → аналітичний висновок`
 
-Цільова тривалість нового web-заняття — **30–45 хв активної роботи**. Theme 1, Theme 2 (2.1–2.3), Theme 4 і Theme 5 використовують data-driven shared shells; 2.4–2.5 та Theme 3 зберігають свої наявні сторінки.
+Базова цільова тривалість web-заняття — **30–45 хв активної роботи**. Для повних code labs допускається розширений формат до **90 хв**, якщо додатковий час формується виконанням та інтерпретацією коду. Поточні extended lessons: **3.1 і 3.2**.
+
+Theme 1, Theme 2 (2.1–2.3), Theme 4 і Theme 5 використовують data-driven shared shells; 2.4–2.5 та Theme 3 зберігають свої наявні сторінки.
 
 ## Матриця
 
@@ -22,13 +24,13 @@
 | 2.3 | `practice 2.3/task.ipynb` · **Збір даних для інформаційно-аналітичного забезпечення (ІАЗ) ОУВ** · `verified-from-task` | collection | Web/Excel/Form/XML practical missions | **implemented** |
 | 2.4 | `gl2.4` · **Методи зберігання даних ІАЗ ОУВ** | storage | Storage Architecture + normalization + SQL | **implemented** |
 | 2.5 | `practice2.5` · relational DB / SQL practice | storage/analysis | Schema Builder + SQL Mission Lab | **implemented** |
-| 3.1 | `Theme3/aLection1` · data preparation methodology · `verified` | preparation | Data Quality + trade-offs + EDA | **implemented** |
-| 3.2 | `Theme3/Group lesson 2` · **Попередній аналіз даних** | preparation | EDA Explorer + workflow mission | **implemented** |
+| 3.1 | `Theme3/aLection1` · data preparation methodology · `verified` | preparation | 90-min Data Quality + trade-offs + runnable Python preprocessing | **implemented** |
+| 3.2 | `Theme3/Group lesson 2` · **Попередній аналіз даних** | preparation | 90-min EDA Explorer + 5 Python labs + runnable matplotlib EDA | **implemented** |
 | 3.3 | `Theme3/Practice 3` · Kaggle EDA task | preparation | Practical EDA mission | **implemented** |
 | 3.4 | `Theme3/Group lesson 4` · preparation for modeling | preparation | Transformation + leakage lab | **implemented** |
 | 3.5 | `Theme3/Practice5` · model-ready practice | model-readiness | Baseline + readiness scorecard | **implemented** |
-| 4.1 | `Theme4/aLection1` · modern analysis methods | analysis | Method Selector | **implemented** |
-| 4.2 | `Theme4/Group lesson 2` · AI methods | analysis | ML task selector | **implemented** |
+| 4.1 | `Theme4/aLection1` · **Огляд сучасних методів аналізу даних в інтересах ІАЗ ОУВ** | analysis | Visual lecture: 10 infographics + Method Selector | **implemented** |
+| 4.2 | `Theme4/Group lesson 2/content1.ipynb` · AI methods | analysis | ML task selector + `python-ml-lab`: regression/classification/clustering + runnable scikit-learn/matplotlib | **implemented** |
 | 4.3 | `Theme4/practice3` · regression | analysis | Regression metrics/complexity | **implemented** |
 | 4.4 | `Theme4/Group lesson 4` · accuracy/hyperparameters | evaluation | Metric/tuning trade-offs | **implemented** |
 | 4.5 | `Theme4/practice5` · classification | evaluation | Threshold / precision / recall / F1 | **implemented** |
@@ -68,19 +70,36 @@
 `data-quality-lab`, `eda-explorer`, `transformation-lab`, `split-leakage-lab`, `readiness-scorecard`
 
 ### Theme 4 — analysis / AI
-`method-selector`, `metric-tradeoff-lab`, `neural-network-lab`, `convolution-lab`, `transfer-rl-lab`, `text-analysis-lab`; 4.10 додатково повторно використовує core `workflow-mission-lab`, `decision-tradeoff` та shared `readiness-scorecard`.
+`method-selector`, `metric-tradeoff-lab`, `python-ml-lab`, `neural-network-lab`, `convolution-lab`, `transfer-rl-lab`, `text-analysis-lab`; 4.10 додатково повторно використовує core `workflow-mission-lab`, `decision-tradeoff` та shared `readiness-scorecard`.
 
 ### Theme 5 — visualization
 `visual-encoding-lab`, `dashboard-builder`, `design-critique-lab`, `audience-adaptation-lab`, `visualization-mission-lab`, `insight-brief-lab`
 
+## Runnable teaching examples
+
+CI та документація відстежують три поточні reference scripts:
+
+```text
+interactive/examples/t3_l1_preparation.py
+interactive/examples/t3_l2_eda.py
+interactive/examples/t4_l2_ml_tasks.py
+```
+
+4.2 використовує synthetic data і три постановки:
+
+- regression — `LinearRegression`, noise → fitted line / MAE / R²;
+- classification — `LogisticRegression`, threshold → precision / recall / class boundary;
+- clustering — `KMeans`, k → clusters / centroids / inertia.
+
 ## Методичні контролі
 
-- Web-заняття: **30–45 хв активної роботи**.
+- Базове web-заняття: **30–45 хв активної роботи**; full code lab може бути **до 90 хв**.
 - Collection: source/provenance/timestamp/schema/validation не губляться під час transformation.
 - **Record identity ≠ event identity**: deduplication не повинна знищувати evidence незалежного підтвердження.
-- Browser simulation не підміняє live scraping, реальний PostgreSQL, Jupyter, Apps Script або зовнішні API.
+- Browser simulation не підміняє live scraping, реальний PostgreSQL, Jupyter, Apps Script, зовнішні API або runnable ML code.
 - Scaling/imputation/feature selection, що навчаються з даних, fit-яться лише на train після split.
 - Held-out test не використовується для model/hyperparameter selection.
+- ML task type визначається target/labels і аналітичним питанням до вибору алгоритму.
 - DL project має baseline, clean evaluation, error analysis, reproducibility та limitations; high training score не є самодостатнім результатом.
 - Груповий DL project має один shared problem/experiment protocol, review history та integrated final run.
 - GenAI output відокремлюється від source evidence та проходить human review.
