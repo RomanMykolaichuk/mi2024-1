@@ -6,8 +6,8 @@
 
 Ролі шарів:
 
-- **interactive page** — формує розуміння технології;
-- **Jupyter notebook** — показує реалізацію та обчислення;
+- **interactive page** — формує розуміння технології, дає what-if/decision practice і швидкий feedback;
+- **runnable Python / Jupyter notebook** — показує реальну реалізацію, обчислення та відтворюваний experiment;
 - **group lesson** — дає спільну аналітичну задачу;
 - **practical** — забезпечує самостійне виконання.
 
@@ -19,8 +19,8 @@ HTML5
   + Vanilla JavaScript ES6+
   + ES Modules
   + JSON
-  + optional Plotly.js / Leaflet
-  + GitHub Pages
+  + Python examples / Jupyter where needed
+  + GitHub Pages / local static server
 ```
 
 У v1 немає обов'язкового framework або build step.
@@ -51,15 +51,15 @@ JSON configuration / scenario
 
 Один reusable component використовується в різних заняттях, а конкретний зміст задається JSON.
 
-## 4. Два способи page composition
+## 4. Способи page composition
 
 ### 4.1 Explicit HTML composition
 
-Підходить, коли заняття має унікальну структуру. Theme 2–3 переважно використовують окремі HTML-сторінки з явними `[data-component]` placeholders.
+Підходить, коли заняття має унікальну структуру. Theme 2–3 частково використовують окремі HTML-сторінки з явними `[data-component]` placeholders.
 
 ### 4.2 Data-driven shared shell
 
-Коли велика серія занять має однакову педагогічну рамку, не потрібно дублювати HTML. Theme 4 використовує:
+Коли серія занять має однакову педагогічну рамку, HTML не дублюється. Theme 4 використовує:
 
 ```text
 lessons/theme4.html?lesson=t4-lN
@@ -73,13 +73,15 @@ shared reusable components
 
 `theme4-page.js` формує breadcrumb, track navigation, hero, `lesson-roadmap`, scenario, pipeline, component sections, analyst note, self-check і source links, після чого запускає загальний `app.js`.
 
-Це не SPA framework: сторінка залишається звичайним static HTML + browser JavaScript.
+Для **4.1** shared shell додатково вміє показувати велику visual lecture з 10 інфографік. Для **4.2** він рендерить звичайну component section, у якій reusable `python-ml-lab` пов'язує Python-код, інтерактивний параметр, SVG-графік і метрики.
+
+Це не SPA framework: сторінка залишається static HTML + browser JavaScript.
 
 ## 5. Reusable engine
 
 ### `js/app.js`
 
-Bootstrap-файл. Знаходить `[data-component]`, отримує конфігурацію та передає відповідному component mount.
+Bootstrap-файл. Знаходить `[data-component]`, отримує конфігурацію та передає її відповідному component mount.
 
 ### `js/core/registry.js`
 
@@ -116,6 +118,19 @@ Component не повинен залежати від ID конкретної л
 - `workflow-mission-lab`
 - `knowledge-check`
 
+### Methodology / project foundations
+- `iaz-lifecycle-lab`
+- `effectiveness-scorecard`
+- `dev-workflow-explorer`
+- `system-architecture-lab`
+- `integration-flow-lab`
+
+### Collection / provenance
+- `collection-method-selector`
+- `provenance-lab`
+- `format-exchange-lab`
+- `collection-mission-lab`
+
 ### Storage / SQL
 - `storage-model-explorer`
 - `schema-normalization-lab`
@@ -134,20 +149,57 @@ Component не повинен залежати від ID конкретної л
 ### Analysis / AI
 - `method-selector`
 - `metric-tradeoff-lab`
+- `python-ml-lab`
 - `neural-network-lab`
 - `convolution-lab`
 - `transfer-rl-lab`
 - `text-analysis-lab`
 
-Майбутні кандидати: `map-explorer`, `timeline-explorer`, `network-explorer`, `visual-encoding-lab`, `dashboard-builder`, `decision-brief`.
+### Visualization / analytical communication
+- `visual-encoding-lab`
+- `dashboard-builder`
+- `design-critique-lab`
+- `audience-adaptation-lab`
+- `visualization-mission-lab`
+- `insight-brief-lab`
 
-## 7. State management
+## 7. Browser simulation vs runnable code
+
+Browser interaction не підмінює реальне навчання моделі. Якщо заняття містить runnable example, web-layer має явно показати цей зв'язок.
+
+Поточні приклади:
+
+```text
+interactive/examples/t3_l1_preparation.py
+interactive/examples/t3_l2_eda.py
+interactive/examples/t4_l2_ml_tasks.py
+```
+
+Для 4.2 модель така:
+
+```text
+ML task formulation
+    ↓
+Python code (scikit-learn)
+    ↓
+change one meaningful parameter
+    ↓
+interactive chart / metrics
+    ↓
+runnable script reproduces the example
+    ↓
+analytical interpretation
+```
+
+Web-графік є швидкою навчальною реконструкцією; script є відтворюваним reference implementation.
+
+## 8. State management
 
 У v1 немає global state manager. Стан належить компоненту.
 
-Це навмисно: лекційні інтерактиви незалежні й малі. Якщо з'явиться комплексний тренажер із картою, timeline, багатьма об'єктами та спільним state, його можна винести в окремий application layer або, за потреби, використати framework лише для цього складного компонента.
+Це навмисно: лекційні інтерактиви незалежні й малі. Якщо з'явиться комплексний тренажер із картою, timeline, багатьма об'єктами та shared state, його можна винести в окремий application layer або використати framework лише для цього складного компонента.
 
-## 8. Lesson JSON
+## 9. Lesson JSON
 
 JSON є декларативним описом заняття. Рекомендовані поля:
 
@@ -157,13 +209,14 @@ JSON є декларативним описом заняття. Рекоменд
 - `pipeline`;
 - component configs;
 - `sections` для data-driven shell;
+- visual assets, якщо вони є частиною lesson contract;
 - `analystNote`;
 - `quiz` і reflection;
 - `sources`.
 
 JSON не повинен містити чутливі або службові реальні дані.
 
-## 9. URL та portable deployment
+## 10. URL та portable deployment
 
 Використовуються relative URLs. Це дозволяє однаково працювати:
 
@@ -173,18 +226,31 @@ JSON не повинен містити чутливі або службові �
 
 Query route типу `theme4.html?lesson=t4-l1` також залишається статичним: server віддає один HTML-файл, а browser обирає lesson JSON.
 
-## 10. CI contracts
+## 11. Норматив тривалості
 
-Static checks перевіряють:
+Базовий формат web-заняття — **30–45 хв активної роботи**.
+
+Виняток дозволяється для повних code labs, де додатковий час утворюється виконанням та інтерпретацією коду, а не пасивним текстом. Поточний приклад — **Theme 3.1 і 3.2 по 90 хв**.
+
+Theme 4 наразі зберігає контракт 30–45 хв для всіх 14 lesson JSON.
+
+## 12. CI contracts
+
+`Interactive static checks` перевіряє:
 
 - JavaScript syntax;
 - JSON validity;
-- catalog links і data-driven query routes;
-- для Theme 4 — 13 підтверджених lesson JSON та timebox 30–45 хв.
+- кількість lesson configs і status catalog/matrix;
+- catalog links, data-driven query routes і локальні source links;
+- Theme 4 timebox та офіційний контракт 4.10;
+- 10 visual assets заняття 4.1;
+- JSON/Python syntax для primary package 4.10;
+- реальний headless-запуск runnable Python examples 3.1, 3.2 і 4.2;
+- створення очікуваних PNG-графіків для 3.2 та 4.2.
 
-CI не підмінює browser/manual QA, але ловить структурні помилки до merge.
+CI не підмінює browser/manual QA, але ловить структурні та reproducibility-помилки до merge.
 
-## 11. Accessibility і progressive enhancement
+## 13. Accessibility і progressive enhancement
 
 Компоненти повинні:
 
@@ -194,7 +260,7 @@ CI не підмінює browser/manual QA, але ловить структур
 - підтримувати клавіатуру для основних дій;
 - показувати зрозуміле повідомлення про помилку замість порожнього блоку.
 
-## 12. Правило масштабування
+## 14. Правило масштабування
 
 Не створювати `lecture1.js`, `lecture2.js`, `lecture3.js` з копіями логіки.
 
@@ -206,6 +272,8 @@ shared page shell (коли доречно)
 reusable components
         +
 JSON конкретного заняття
+        +
+runnable code / visual assets, коли цього потребує педагогічна задача
         =
 новий інтерактив
 ```
