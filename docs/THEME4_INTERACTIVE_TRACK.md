@@ -12,11 +12,12 @@ Web-шар не замінює Jupyter/Python. Його функція — сф�
 
 **Theme 4 — 14/14 implemented.**
 
-У вересні 2026 додатково посилено перші три заняття:
+У вересні 2026 додатково посилено перші чотири заняття:
 
 - **4.1** — visual lecture з 10 інфографік + Method Selector;
 - **4.2** — інтерактивний Python ML Lab для regression, classification і clustering + runnable `scikit-learn`/`matplotlib` script;
-- **4.3** — Regression Diagnostics Lab: Linear/Ridge/Decision Tree, actual-vs-predicted, residuals, complexity curve + runnable comparison script.
+- **4.3** — Regression Diagnostics Lab: Linear/Ridge/Decision Tree, actual-vs-predicted, residuals, complexity curve + runnable comparison script;
+- **4.4** — CV Tuning Lab: train/CV curves, scoring/folds, GridSearchCV workflow, freeze candidate + held-out test gate + runnable tuning script.
 
 4.10 залишається повністю закритим primary source package для deep-learning project practice.
 
@@ -27,7 +28,7 @@ Web-шар не замінює Jupyter/Python. Його функція — сф�
 | 4.1 | `Theme4/aLection1` | Огляд сучасних методів аналізу даних | 10-image visual lecture + Method Selector | implemented |
 | 4.2 | `Theme4/Group lesson 2/content1.ipynb` | Використання методів ШІ | ML task selector + Python regression/classification/clustering lab + ML workflow | implemented |
 | 4.3 | `Theme4/practice3/task.ipynb` | Regression practical | baseline + Ridge/Tree + diagnostics + complexity + runnable workflow | implemented |
-| 4.4 | `Theme4/Group lesson 4/content1.ipynb` | Accuracy + hyperparameters | CV/test roles + tuning | implemented |
+| 4.4 | `Theme4/Group lesson 4/content1.ipynb` | Accuracy + hyperparameters | train/CV/test roles + scoring + GridSearchCV + test isolation + runnable workflow | implemented |
 | 4.5 | `Theme4/practice5/task.ipynb` | Classification practical | threshold + precision/recall/F1 | implemented |
 | 4.6 | `Theme4/aLection6` | Neural networks | architecture capacity + regularization | implemented |
 | 4.7 | `Theme4/Group lesson 7/content.ipynb` | Deep learning foundations | leakage-safe DL experiment design | implemented |
@@ -228,6 +229,79 @@ Test не використовується для багаторазового �
 
 Timebox: **40–45 хв**.
 
+## 4.4 — Cross-Validation & Hyperparameter Tuning Lab
+
+Route:
+
+```text
+interactive/lessons/theme4.html?lesson=t4-l4
+```
+
+Lesson config:
+
+```text
+interactive/data/lessons/t4-l4.json
+```
+
+Runnable reference:
+
+```text
+interactive/examples/t4_l4_cv_tuning_workflow.py
+```
+
+Запуск:
+
+```bash
+python interactive/examples/t4_l4_cv_tuning_workflow.py --scoring f1_macro --cv 5
+```
+
+### Інтерактивний workflow
+
+Reusable `cv-tuning-lab` тренує саме evaluation discipline:
+
+- slider `max_depth` — модельна складність;
+- selector `CV folds` — 3/5/7 folds;
+- selector `scoring` — `accuracy` або `f1_macro`;
+- train score, CV mean, CV std і train/CV gap;
+- train/CV complexity curve;
+- best CV candidate marker;
+- **held-out test gate** — test не відображається, доки candidate не зафіксовано;
+- будь-яка зміна tuning choices після відкриття test invalidates freeze і знову приховує test.
+
+### Runnable GridSearchCV
+
+Python reference:
+
+1. генерує synthetic imbalanced classification dataset;
+2. виконує stratified train/test split;
+3. залишає test поза tuning;
+4. використовує `StratifiedKFold` усередині training pool;
+5. будує depth curve через `cross_validate`;
+6. запускає `GridSearchCV(RandomForestClassifier)` для `max_depth × min_samples_leaf`;
+7. refit-ить best estimator на training pool;
+8. лише після цього оцінює frozen candidate на held-out test.
+
+Artifacts:
+
+```text
+interactive/examples/t4_l4_cv_tuning_output/
+├── cv_depth_curve.png
+├── gridsearch_heatmap.png
+├── test_confusion_matrix.png
+├── gridsearch_results.csv
+└── summary.csv
+```
+
+Педагогічний принцип:
+
+`isolate test → define metric/search space → CV inside training pool → compare candidates → freeze pipeline → open test once → analyze errors`.
+
+### Виправлення методичної пастки primary materials
+
+Primary materials правильно описують train/validation/test, metrics, CV і GridSearchCV. Водночас старий `content1.ipynb` має приклад `cross_val_score(model, X, y, cv=5)` на всьому dataset уже після створення test split. Для демонстрації CV це припустимий standalone example, але **не для tuning protocol із незалежним held-out test**, бо test samples знову потрапляють у CV pool. Web/Python 4.4 навмисно використовує CV лише на `X_train/y_train`.
+
+Timebox: **40–45 хв**.
+
 ## 4.10 — primary content
 
 Каталог:
@@ -283,6 +357,7 @@ interactive/lessons/theme4.html?lesson=t4-lN
 - `metric-tradeoff-lab` — classification/regression/tuning metrics;
 - `python-ml-lab` — regression/classification/clustering: Python code + parameter + graph + metrics;
 - `regression-diagnostics-lab` — model comparison + alpha/max_depth + actual-vs-predicted + residuals + complexity;
+- `cv-tuning-lab` — CV folds/scoring + train/CV curve + candidate freeze + held-out test gate;
 - `neural-network-lab` — architecture capacity/regularization preview;
 - `convolution-lab` — local convolution / feature map;
 - `transfer-rl-lab` — Transfer Learning + abstract RL;
@@ -315,6 +390,14 @@ Test не використовується як leaderboard для architecture/
 
 Низький train error сам по собі не є критерієм якості. MAE/RMSE треба інтерпретувати в одиницях target, а R² — лише разом із error diagnostics.
 
+### Evaluation/tuning evidence chain
+
+Для 4.4 мінімальна evidence chain:
+
+`held-out test isolation → scoring rationale → search space → CV mean/std → best_params → frozen candidate → one final test → confusion matrix / limitations`.
+
+GridSearchCV має бачити лише training pool. Mean CV score без variability і без rationale для metric не є достатнім evidence. При imbalance accuracy може бути непридатною основною метрикою.
+
 ### Browser simulation vs model evidence
 
 Інтерактивний browser chart використовується для швидкого what-if reasoning. Там, де є runnable Python reference, остаточний навчальний зв'язок має бути:
@@ -332,19 +415,21 @@ Model artifact без provenance, baseline, protocol, metrics, failure modes, li
 ## Technical-debt corrections, що вже враховані web-шаром
 
 - 4.3: вихідний notebook змішує House Prices / `SalePrice` narrative з фактичним `Student_Performance.csv`; web-layer не маскує цю неузгодженість і використовує окремий synthetic runnable reference;
+- 4.4: старий `content1.ipynb` показує `cross_val_score` на всьому `X/y` після train/test split; strengthened tuning workflow не повертає held-out test у CV pool;
 - 4.7: не використовується removed `load_boston`; preprocessing fit виконується після split; не дублюється помилкова metric naming;
 - 4.12–4.13: не дублюється історичний `pretrained=True` API як актуальна рекомендація;
 - 4.14: коротке джерело розширено лише в межах підтверджених text/GenAI тем із provenance/human-review controls.
 
 ## Норматив часу
 
-Кожний Theme 4 lesson JSON має declared duration **30–45 хв** і щонайменше 5 active blocks. 4.1, 4.2 та 4.3 використовують верхню частину цього діапазону через visual/code/diagnostics practice.
+Кожний Theme 4 lesson JSON має declared duration **30–45 хв** і щонайменше 5 active blocks. 4.1–4.4 використовують верхню частину цього діапазону через visual/code/diagnostics/tuning practice.
 
 ## Безпека даних
 
 - Web-layer використовує synthetic/open teaching examples;
 - `t4_l2_ml_tasks.py` генерує synthetic ML datasets локально;
 - `t4_l3_regression_workflow.py` генерує synthetic regression dataset локально;
+- `t4_l4_cv_tuning_workflow.py` генерує synthetic imbalanced classification dataset локально;
 - `sample.ipynb` 4.10 генерує synthetic image data локально;
 - real sensitive data, credentials, tokens і closed model artifacts не повинні потрапляти до public GitHub або сторонніх сервісів;
 - model output завжди потребує validation та human interpretation.
@@ -360,8 +445,9 @@ CI має перевіряти:
 5. 10/10 visual assets 4.1;
 6. runnable `t4_l2_ml_tasks.py` і три generated PNG;
 7. runnable `t4_l3_regression_workflow.py`, три diagnostics PNG і model-comparison CSV;
-8. primary source package 4.10 та Python syntax його sample notebook;
-9. відсутність legacy `source-gap` для 4.10.
+8. runnable `t4_l4_cv_tuning_workflow.py`, CV curve, GridSearch heatmap, final confusion matrix і CSV summaries;
+9. primary source package 4.10 та Python syntax його sample notebook;
+10. відсутність legacy `source-gap` для 4.10.
 
 ## Definition of Done Theme 4
 
@@ -373,10 +459,11 @@ Theme 4 завершена, якщо:
 4. 4.1 має перевірюваний комплект 10 visual assets;
 5. 4.2 має task selector + `python-ml-lab` + runnable reference;
 6. 4.3 має `regression-diagnostics-lab` + runnable baseline/model-comparison/diagnostics reference;
-7. всі lesson JSON валідні;
-8. всі source links існують;
-9. catalog routes ведуть на shell + lesson JSON;
-10. JavaScript проходить `node --check`;
-11. 4.10 має власний primary source package;
-12. source evidence, model result та analytical interpretation розділені;
-13. CI перевіряє structural integrity і runnable teaching examples.
+7. 4.4 має `cv-tuning-lab` + runnable StratifiedKFold/GridSearchCV reference + held-out test discipline;
+8. всі lesson JSON валідні;
+9. всі source links існують;
+10. catalog routes ведуть на shell + lesson JSON;
+11. JavaScript проходить `node --check`;
+12. 4.10 має власний primary source package;
+13. source evidence, model result та analytical interpretation розділені;
+14. CI перевіряє structural integrity і runnable teaching examples.
