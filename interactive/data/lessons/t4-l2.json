@@ -1,18 +1,204 @@
 {
-  "id":"t4-l2","number":"4.2","title":"Використання методів штучного інтелекту для аналізу даних","type":"group","typeLabel":"групове заняття","lead":"ШІ в аналізі даних починається не з алгоритму, а з коректної постановки задачі: classification, regression, clustering або робота з неструктурованими даними.",
-  "roadmap":{"duration":{"min":35,"max":45},"outcomes":["розрізняти classification, regression і clustering","будувати базовий ML workflow без підглядання у test","інтерпретувати confusion matrix як структуру помилок"],"blocks":[{"label":"Scenario","minutes":4,"title":"Визначити тип задачі","description":"Перекласти аналітичне питання у ML-постановку."},{"label":"Concept","minutes":6,"title":"AI/ML workflow","description":"Дані → ознаки → модель → оцінювання → застосування."},{"label":"Lab","minutes":9,"title":"Task Type Selector","description":"Обрати метод для різних target і типів даних."},{"label":"Mission","minutes":9,"title":"Зібрати чесний pipeline","description":"Пройти split, training, prediction та evaluation."},{"label":"Debrief","minutes":6,"title":"Розібрати помилки","description":"Зрозуміти false positive/false negative і обмеження accuracy."},{"label":"Check","minutes":5,"title":"Самоперевірка","description":"Закріпити ML-постановку та workflow."}]},
-  "scenario":{"title":"Чотири запити до одного аналітичного відділу","description":"Вхідні дані можуть мати числову ціль, категоріальну мітку, не мати міток взагалі або бути текстом. Команда має правильно визначити клас задачі до вибору моделі.","facts":[{"value":"numeric","label":"регресійна ціль"},{"value":"class","label":"класифікаційна мітка"},{"value":"no labels","label":"кластеризація"},{"value":"text","label":"NLP representation"}],"question":"Яка постановка задачі відповідає конкретному типу target та evidence?"},
-  "pipeline":{"active":"analysis","stages":[{"id":"sources","label":"Джерела","description":"Вхідні спостереження.","output":"raw data"},{"id":"collection","label":"Збір","description":"Отримання даних.","output":"dataset"},{"id":"storage","label":"Зберігання","description":"Керований доступ.","output":"stored data"},{"id":"preparation","label":"Підготовка","description":"Split, features, preprocessing.","output":"train/test"},{"id":"analysis","label":"AI / ML","description":"Навчання моделі для заданої постановки.","output":"predictions / clusters"},{"id":"visualization","label":"Оцінювання","description":"Метрики та structure of errors.","output":"evidence"},{"id":"decision","label":"Інтерпретація","description":"Використання результату з людським контролем.","output":"аналітичний висновок"}]},
-  "methodSelector":{"cases":[
-    {"id":"reg","short":"Regression","title":"Прогноз числової величини","context":"Target — кількість хвилин затримки доставки ресурсу.","constraints":["numeric target","labeled history"],"options":[{"label":"Regression","feedback":"Числова ціль формує регресійну задачу."},{"label":"Clustering","feedback":"Clustering не навчається прогнозувати заданий target."}],"answer":0,"takeaway":"Numeric target → regression."},
-    {"id":"cls","short":"Classification","title":"Визначити категорію повідомлення","context":"Кожен навчальний запис має одну з трьох міток пріоритету.","constraints":["categorical target","supervised"],"options":[{"label":"Classification","feedback":"Модель прогнозує дискретний клас."},{"label":"Regression","feedback":"Кодування класів числами не перетворює задачу на регресію."}],"answer":0,"takeaway":"Categorical target → classification."},
-    {"id":"cluster","short":"Clustering","title":"Знайти невідомі групи","context":"Є ознаки поведінки, але немає заздалегідь заданих класів.","constraints":["no labels","exploratory"],"options":[{"label":"Clustering","feedback":"Unsupervised grouping відповідає постановці."},{"label":"Logistic regression","feedback":"Немає target, на якому навчати supervised classifier."}],"answer":0,"takeaway":"No labels + grouping question → clustering."},
-    {"id":"text","short":"Text","title":"Автоматично структурувати тексти","context":"Вхід — короткі неструктуровані повідомлення.","constraints":["unstructured","language","human validation"],"options":[{"label":"NLP representation + downstream task","feedback":"Спочатку текст перетворюють у representation, далі вирішують classification/extraction/summarization."},{"label":"Сирий текст у LinearRegression","feedback":"Потрібна відповідна репрезентація та постановка задачі."}],"answer":0,"takeaway":"Data representation є частиною ML workflow."}
-  ]},
-  "mission":{"intro":"Зберіть мінімальний supervised ML pipeline так, щоб оцінка залишалась незалежною.","steps":[{"id":"question","title":"Визначити target і metric","task":"Запишіть, що саме прогнозуємо і якою метрикою оцінюємо.","evidence":"target + metric + failure cost","feedback":"Постановка задачі зафіксована до model.fit()."},{"id":"split","title":"Ізолювати test","task":"Розділіть дані до data-driven preprocessing.","evidence":"train/test strategy","feedback":"Test не бере участі у навчанні."},{"id":"prep","title":"Fit preprocessing на train","task":"Encoding/scaling/imputation навчаються лише на train.","evidence":"pipeline description","feedback":"Параметри preprocessing не бачать test."},{"id":"baseline","title":"Навчити baseline","task":"Виберіть просту модель як контрольну точку.","evidence":"model + parameters","feedback":"Baseline дає сенс подальшим покращенням."},{"id":"predict","title":"Отримати predictions","task":"Застосуйте trained pipeline до test.","evidence":"predictions without refit","feedback":"Test використовується лише для незалежної перевірки."},{"id":"evaluate","title":"Оцінити структуру помилок","task":"Для classification перегляньте confusion matrix, а не лише accuracy.","evidence":"metric + error types","feedback":"Метрика інтерпретована через реальні типи помилок."}],"complete":"Pipeline завершено: наступне питання — чи відповідають метрики вартості помилок у задачі?"},
-  "sections":[{"eyebrow":"1 · TASK TYPE","title":"Від питання до типу ML-задачі","description":"Чотири сценарії показують, чому classification, regression і clustering не взаємозамінні.","component":"method-selector","select":"methodSelector"},{"eyebrow":"2 · ML WORKFLOW","title":"Зберіть pipeline без leakage","description":"Позначайте етап виконаним лише коли можете назвати evidence для нього.","component":"workflow-mission-lab","select":"mission"}],
-  "analystNote":{"title":"ML-метрика має описувати не лише «скільки правильно», а й «як саме помиляється»","text":"У задачах з нерівною ціною помилок accuracy може бути недостатньою. Аналітик повинен пов’язати тип помилки з наслідком і лише потім визначати metric/threshold."},
-  "quiz":{"questions":[{"prompt":"Коли доречна regression?","options":["Коли target числовий","Коли немає target","Для будь-якого тексту"],"answer":0},{"prompt":"Що робити з test set під час hyperparameter tuning?","options":["Регулярно дивитися на нього","Тримати ізольованим до фінальної оцінки","Навчати preprocessing на test"],"answer":1},{"prompt":"Навіщо baseline model?","options":["Щоб мати контрольну точку","Щоб уникнути split","Щоб завжди отримати 100%"],"answer":0},{"prompt":"Що додає confusion matrix?","options":["Типи помилок між класами","Нові training data","Автоматичний причинний висновок"],"answer":0}],"feedback":{"4":"Готово до практики regression/classification.","3":"Добре; повторіть isolation of test.","2":"Перегляньте ML workflow.","1":"Поверніться до Task Type Selector.","0":"Почніть з target і постановки задачі."}},
-  "reflection":"Наведіть один приклад, де accuracy висока, але модель непридатна через критичні false negatives.",
-  "sources":[{"label":"content1.ipynb","href":"../../Theme4/Group%20lesson%202/content1.ipynb"},{"label":"sample.ipynb","href":"../../Theme4/Group%20lesson%202/sample.ipynb"}]
+  "id": "t4-l2",
+  "number": "4.2",
+  "title": "Використання методів штучного інтелекту для аналізу даних",
+  "type": "group",
+  "typeLabel": "групове заняття",
+  "lead": "ШІ в аналізі даних починається не з алгоритму, а з коректної постановки задачі: classification, regression, clustering або робота з неструктурованими даними. Після вибору постановки слухач одразу переходить до відтворюваного Python-прикладу та інтерпретації графіка.",
+  "roadmap": {
+    "duration": {"min": 40, "max": 45},
+    "outcomes": [
+      "розрізняти classification, regression і clustering",
+      "читати базовий Python workflow для трьох типів ML-задач",
+      "пояснювати, як параметр або властивість даних змінює графік і метрики",
+      "будувати базовий ML workflow без підглядання у test"
+    ],
+    "blocks": [
+      {"label": "Scenario", "minutes": 3, "title": "Визначити тип задачі", "description": "Перекласти аналітичне питання у ML-постановку."},
+      {"label": "Concept", "minutes": 4, "title": "AI/ML workflow", "description": "Дані → ознаки → модель → оцінювання → застосування."},
+      {"label": "Selector", "minutes": 5, "title": "Task Type Selector", "description": "Обрати regression, classification або clustering за типом target."},
+      {"label": "Python lab", "minutes": 15, "title": "Три задачі — три графіки", "description": "Змінювати noise, threshold і k та зіставляти код, метрики й графік."},
+      {"label": "Mission", "minutes": 7, "title": "Зібрати чесний pipeline", "description": "Пройти split, training, prediction та evaluation."},
+      {"label": "Debrief", "minutes": 5, "title": "Розібрати помилки", "description": "Зрозуміти похибку регресії, FP/FN і обмеження clustering."},
+      {"label": "Check", "minutes": 4, "title": "Самоперевірка", "description": "Закріпити ML-постановку, код і workflow."}
+    ]
+  },
+  "scenario": {
+    "title": "Чотири запити до одного аналітичного відділу",
+    "description": "Вхідні дані можуть мати числову ціль, категоріальну мітку, не мати міток взагалі або бути текстом. Команда має правильно визначити клас задачі до вибору моделі.",
+    "facts": [
+      {"value": "numeric", "label": "регресійна ціль"},
+      {"value": "class", "label": "класифікаційна мітка"},
+      {"value": "no labels", "label": "кластеризація"},
+      {"value": "text", "label": "NLP representation"}
+    ],
+    "question": "Яка постановка задачі відповідає конкретному типу target та evidence?"
+  },
+  "pipeline": {
+    "active": "analysis",
+    "stages": [
+      {"id": "sources", "label": "Джерела", "description": "Вхідні спостереження.", "output": "raw data"},
+      {"id": "collection", "label": "Збір", "description": "Отримання даних.", "output": "dataset"},
+      {"id": "storage", "label": "Зберігання", "description": "Керований доступ.", "output": "stored data"},
+      {"id": "preparation", "label": "Підготовка", "description": "Split, features, preprocessing.", "output": "train/test"},
+      {"id": "analysis", "label": "AI / ML", "description": "Навчання моделі для заданої постановки.", "output": "predictions / clusters"},
+      {"id": "visualization", "label": "Оцінювання", "description": "Метрики та structure of errors.", "output": "evidence"},
+      {"id": "decision", "label": "Інтерпретація", "description": "Використання результату з людським контролем.", "output": "аналітичний висновок"}
+    ]
+  },
+  "methodSelector": {
+    "cases": [
+      {
+        "id": "reg",
+        "short": "Regression",
+        "title": "Прогноз числової величини",
+        "context": "Target — кількість хвилин затримки доставки ресурсу.",
+        "constraints": ["numeric target", "labeled history"],
+        "options": [
+          {"label": "Regression", "feedback": "Числова ціль формує регресійну задачу."},
+          {"label": "Clustering", "feedback": "Clustering не навчається прогнозувати заданий target."}
+        ],
+        "answer": 0,
+        "takeaway": "Numeric target → regression."
+      },
+      {
+        "id": "cls",
+        "short": "Classification",
+        "title": "Визначити категорію повідомлення",
+        "context": "Кожен навчальний запис має одну з трьох міток пріоритету.",
+        "constraints": ["categorical target", "supervised"],
+        "options": [
+          {"label": "Classification", "feedback": "Модель прогнозує дискретний клас."},
+          {"label": "Regression", "feedback": "Кодування класів числами не перетворює задачу на регресію."}
+        ],
+        "answer": 0,
+        "takeaway": "Categorical target → classification."
+      },
+      {
+        "id": "cluster",
+        "short": "Clustering",
+        "title": "Знайти невідомі групи",
+        "context": "Є ознаки поведінки, але немає заздалегідь заданих класів.",
+        "constraints": ["no labels", "exploratory"],
+        "options": [
+          {"label": "Clustering", "feedback": "Unsupervised grouping відповідає постановці."},
+          {"label": "Logistic regression", "feedback": "Немає target, на якому навчати supervised classifier."}
+        ],
+        "answer": 0,
+        "takeaway": "No labels + grouping question → clustering."
+      },
+      {
+        "id": "text",
+        "short": "Text",
+        "title": "Автоматично структурувати тексти",
+        "context": "Вхід — короткі неструктуровані повідомлення.",
+        "constraints": ["unstructured", "language", "human validation"],
+        "options": [
+          {"label": "NLP representation + downstream task", "feedback": "Спочатку текст перетворюють у representation, далі вирішують classification/extraction/summarization."},
+          {"label": "Сирий текст у LinearRegression", "feedback": "Потрібна відповідна репрезентація та постановка задачі."}
+        ],
+        "answer": 0,
+        "takeaway": "Data representation є частиною ML workflow."
+      }
+    ]
+  },
+  "pythonMlLab": {
+    "runCommand": "python interactive/examples/t4_l2_ml_tasks.py --task all",
+    "note": "Web-графік є миттєвою інтерактивною реконструкцією навчального сценарію. Python-код праворуч і окремий script у репозиторії запускають реальні scikit-learn/matplotlib приклади на synthetic data.",
+    "examples": [
+      {
+        "kind": "regression",
+        "short": "Регресія",
+        "title": "Прогноз числової величини: LinearRegression",
+        "context": "Змініть рівень шуму у synthetic data. Спостерігайте, як зростає MAE та зменшується R², хоча лінійний тренд лишається тим самим.",
+        "chartTitle": "Спостереження + fitted line",
+        "chartHint": "noise → MAE / R²",
+        "randomState": 42,
+        "parameter": {"label": "noise", "min": 2, "max": 38, "step": 2, "value": 14, "hint": "Більший noise означає більшу невизначеність у target; це не те саме, що погана модель."}
+      },
+      {
+        "kind": "classification",
+        "short": "Класифікація",
+        "title": "Клас за ймовірністю: LogisticRegression + threshold",
+        "context": "Змініть decision threshold. Графік показує, як зміщується межа рішення, а метрики демонструють trade-off між precision і recall.",
+        "chartTitle": "Класи + decision boundary",
+        "chartHint": "threshold → FP / FN",
+        "randomState": 42,
+        "parameter": {"label": "decision threshold", "min": 25, "max": 80, "step": 5, "value": 50, "hint": "0.5 — лише стартове значення. Робочий threshold залежить від ціни false positive і false negative."}
+      },
+      {
+        "kind": "clustering",
+        "short": "Кластеризація",
+        "title": "Пошук груп без labels: KMeans",
+        "context": "Змініть кількість кластерів k. Порівняйте, коли природні групи зливаються, відповідають структурі або штучно дробляться.",
+        "chartTitle": "KMeans clusters + centroids",
+        "chartHint": "k → inertia / structure",
+        "randomState": 42,
+        "parameter": {"label": "n_clusters (k)", "min": 2, "max": 5, "step": 1, "value": 3, "hint": "Менша inertia сама по собі не доводить правильність k: потрібні elbow/silhouette та змістовна інтерпретація."}
+      }
+    ]
+  },
+  "mission": {
+    "intro": "Зберіть мінімальний supervised ML pipeline так, щоб оцінка залишалась незалежною.",
+    "steps": [
+      {"id": "question", "title": "Визначити target і metric", "task": "Запишіть, що саме прогнозуємо і якою метрикою оцінюємо.", "evidence": "target + metric + failure cost", "feedback": "Постановка задачі зафіксована до model.fit()."},
+      {"id": "split", "title": "Ізолювати test", "task": "Розділіть дані до data-driven preprocessing.", "evidence": "train/test strategy", "feedback": "Test не бере участі у навчанні."},
+      {"id": "prep", "title": "Fit preprocessing на train", "task": "Encoding/scaling/imputation навчаються лише на train.", "evidence": "pipeline description", "feedback": "Параметри preprocessing не бачать test."},
+      {"id": "baseline", "title": "Навчити baseline", "task": "Виберіть просту модель як контрольну точку.", "evidence": "model + parameters", "feedback": "Baseline дає сенс подальшим покращенням."},
+      {"id": "predict", "title": "Отримати predictions", "task": "Застосуйте trained pipeline до test.", "evidence": "predictions without refit", "feedback": "Test використовується лише для незалежної перевірки."},
+      {"id": "evaluate", "title": "Оцінити структуру помилок", "task": "Для classification перегляньте confusion matrix, а не лише accuracy.", "evidence": "metric + error types", "feedback": "Метрика інтерпретована через реальні типи помилок."}
+    ],
+    "complete": "Pipeline завершено: наступне питання — чи відповідають метрики вартості помилок у задачі?"
+  },
+  "sections": [
+    {
+      "eyebrow": "1 · TASK TYPE",
+      "title": "Від питання до типу ML-задачі",
+      "description": "Чотири сценарії показують, чому classification, regression і clustering не взаємозамінні.",
+      "component": "method-selector",
+      "select": "methodSelector"
+    },
+    {
+      "eyebrow": "2 · PYTHON ML LAB",
+      "title": "Регресія, класифікація та кластеризація: код → параметр → графік → метрика",
+      "description": "Перемикайте три задачі. Для кожної змініть один ключовий параметр, прочитайте Python-код і поясніть, чому змінилися графік та метрики.",
+      "component": "python-ml-lab",
+      "select": "pythonMlLab",
+      "after": "Міні-завдання: для кожної вкладки сформулюйте одним реченням: що є X, що є target/labels, що повертає модель і яка метрика або діагностика відповідає цій постановці."
+    },
+    {
+      "eyebrow": "3 · ML WORKFLOW",
+      "title": "Зберіть pipeline без leakage",
+      "description": "Позначайте етап виконаним лише коли можете назвати evidence для нього.",
+      "component": "workflow-mission-lab",
+      "select": "mission"
+    }
+  ],
+  "analystNote": {
+    "title": "Однакове слово «модель» приховує різні типи результату",
+    "text": "Regression повертає числовий прогноз і потребує аналізу похибки; classification повертає клас/ймовірність і потребує контролю FP/FN та threshold; clustering не має заданого target і потребує перевірки стабільності та змістовності груп. Графік допомагає побачити структуру, але не замінює незалежну оцінку й предметну інтерпретацію."
+  },
+  "quiz": {
+    "questions": [
+      {"prompt": "Коли доречна regression?", "options": ["Коли target числовий", "Коли немає target", "Для будь-якого тексту"], "answer": 0},
+      {"prompt": "Що змінює decision threshold у classification?", "options": ["Баланс FP/FN та precision/recall", "Кількість ознак у dataset", "Сам тип задачі"], "answer": 0},
+      {"prompt": "Чому не можна обрати k у KMeans лише за найменшою inertia?", "options": ["Inertia зазвичай зменшується зі зростанням k", "KMeans не має centroids", "Clustering завжди потребує target"], "answer": 0},
+      {"prompt": "Що робити з test set під час hyperparameter tuning?", "options": ["Регулярно дивитися на нього", "Тримати ізольованим до фінальної оцінки", "Навчати preprocessing на test"], "answer": 1},
+      {"prompt": "Навіщо baseline model?", "options": ["Щоб мати контрольну точку", "Щоб уникнути split", "Щоб завжди отримати 100%"], "answer": 0}
+    ],
+    "feedback": {
+      "5": "Готово до практичних занять з regression/classification і подальшого ML workflow.",
+      "4": "Добре; зверніть увагу на різницю між supervised та unsupervised evaluation.",
+      "3": "Повторіть threshold, k та isolation of test.",
+      "2": "Поверніться до Python ML Lab і Task Type Selector.",
+      "1": "Почніть з target і постановки задачі.",
+      "0": "Почніть з target і постановки задачі."
+    }
+  },
+  "reflection": "Для одного військово-аналітичного набору даних сформулюйте три різні питання: одне для regression, одне для classification і одне для clustering. Поясніть, який результат поверне кожна модель.",
+  "sources": [
+    {"label": "content1.ipynb", "href": "../../Theme4/Group%20lesson%202/content1.ipynb"},
+    {"label": "sample.ipynb", "href": "../../Theme4/Group%20lesson%202/sample.ipynb"},
+    {"label": "t4_l2_ml_tasks.py", "href": "../examples/t4_l2_ml_tasks.py"}
+  ]
 }
