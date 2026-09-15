@@ -12,12 +12,13 @@ Web-шар не замінює Jupyter/Python. Його функція — сф�
 
 **Theme 4 — 14/14 implemented.**
 
-У вересні 2026 додатково посилено перші чотири заняття:
+У вересні 2026 додатково посилено перші п’ять занять:
 
 - **4.1** — visual lecture з 10 інфографік + Method Selector;
-- **4.2** — інтерактивний Python ML Lab для regression, classification і clustering + runnable `scikit-learn`/`matplotlib` script;
-- **4.3** — Regression Diagnostics Lab: Linear/Ridge/Decision Tree, actual-vs-predicted, residuals, complexity curve + runnable comparison script;
-- **4.4** — CV Tuning Lab: train/CV curves, scoring/folds, GridSearchCV workflow, freeze candidate + held-out test gate + runnable tuning script.
+- **4.2** — Python ML Lab для regression, classification і clustering + runnable `scikit-learn`/`matplotlib` reference;
+- **4.3** — Regression Diagnostics Lab: Linear/Ridge/Decision Tree, actual-vs-predicted, residuals, complexity curve + runnable comparison;
+- **4.4** — CV Tuning Lab: train/CV curves, scoring/folds, GridSearchCV workflow, freeze candidate + held-out test gate;
+- **4.5** — Classification Threshold Lab: probability → threshold → confusion matrix → precision/recall/F1 → FP/FN cost → freeze operating point → held-out test.
 
 4.10 залишається повністю закритим primary source package для deep-learning project practice.
 
@@ -26,10 +27,10 @@ Web-шар не замінює Jupyter/Python. Його функція — сф�
 | ID | Первинне джерело | Підтверджений зміст | Web-акцент | Статус |
 |---|---|---|---|---|
 | 4.1 | `Theme4/aLection1` | Огляд сучасних методів аналізу даних | 10-image visual lecture + Method Selector | implemented |
-| 4.2 | `Theme4/Group lesson 2/content1.ipynb` | Використання методів ШІ | ML task selector + Python regression/classification/clustering lab + ML workflow | implemented |
-| 4.3 | `Theme4/practice3/task.ipynb` | Regression practical | baseline + Ridge/Tree + diagnostics + complexity + runnable workflow | implemented |
-| 4.4 | `Theme4/Group lesson 4/content1.ipynb` | Accuracy + hyperparameters | train/CV/test roles + scoring + GridSearchCV + test isolation + runnable workflow | implemented |
-| 4.5 | `Theme4/practice5/task.ipynb` | Classification practical | threshold + precision/recall/F1 | implemented |
+| 4.2 | `Theme4/Group lesson 2/content1.ipynb` | Використання методів ШІ | ML task selector + Python regression/classification/clustering lab | implemented |
+| 4.3 | `Theme4/practice3/task.ipynb` | Regression practical | baseline + Ridge/Tree + diagnostics + runnable workflow | implemented |
+| 4.4 | `Theme4/Group lesson 4/content1.ipynb` | Accuracy + hyperparameters | CV/test roles + scoring + GridSearchCV + test isolation | implemented |
+| 4.5 | `Theme4/practice5/task.ipynb` | Classification practical | validation threshold + confusion matrix + precision/recall/F1 + FP/FN cost + final test | implemented |
 | 4.6 | `Theme4/aLection6` | Neural networks | architecture capacity + regularization | implemented |
 | 4.7 | `Theme4/Group lesson 7/content.ipynb` | Deep learning foundations | leakage-safe DL experiment design | implemented |
 | 4.8 | `Theme4/practice8/practical_task_regression_classification.ipynb` | TensorFlow regression/classification | output/loss/metric mapping | implemented |
@@ -42,17 +43,8 @@ Web-шар не замінює Jupyter/Python. Його функція — сф�
 
 ## 4.1 — visual lecture
 
-Route:
-
-```text
-interactive/lessons/theme4.html?lesson=t4-l1
-```
-
-Lesson config:
-
-```text
-interactive/data/lessons/t4-l1.json
-```
+Route: `interactive/lessons/theme4.html?lesson=t4-l1`  
+Config: `interactive/data/lessons/t4-l1.json`
 
 Visual assets:
 
@@ -70,146 +62,55 @@ Theme4/aLection1/infographics2/
 └── 10_future_ai_methods.png
 ```
 
-Послідовність visual lecture:
+Sequence:
 
-`місце Theme 4 → логіка теми → taxonomy → statistics → time series → geospatial/fusion → clustering/anomaly/network → DL/CV → NLP/LLM/RAG → future AI`
-
-Після візуальної частини `method-selector` переводить огляд у рішення: слухач має співвіднести **аналітичне питання + тип даних + потрібний output** із придатною родиною методів.
+`місце Theme 4 → логіка теми → taxonomy → statistics → time series → geospatial/fusion → clustering/anomaly/network → DL/CV → NLP/LLM/RAG → future AI → method selection`
 
 Timebox: **40–45 хв**.
 
 ## 4.2 — Python ML Lab
 
-Route:
-
-```text
-interactive/lessons/theme4.html?lesson=t4-l2
-```
-
-Lesson config:
-
-```text
-interactive/data/lessons/t4-l2.json
-```
-
-Runnable reference:
-
-```text
-interactive/examples/t4_l2_ml_tasks.py
-```
-
-Запуск усіх трьох задач:
+Route: `interactive/lessons/theme4.html?lesson=t4-l2`  
+Config: `interactive/data/lessons/t4-l2.json`  
+Runnable: `interactive/examples/t4_l2_ml_tasks.py`
 
 ```bash
 python interactive/examples/t4_l2_ml_tasks.py --task all
 ```
 
-Окремі приклади:
+Три постановки:
 
-```bash
-python interactive/examples/t4_l2_ml_tasks.py --task regression --noise 25
-python interactive/examples/t4_l2_ml_tasks.py --task classification --threshold 0.65
-python interactive/examples/t4_l2_ml_tasks.py --task clustering --k 4
-```
+- regression — `LinearRegression`, noise → fitted line / MAE / R²;
+- classification — `LogisticRegression`, threshold → precision/recall / decision boundary;
+- clustering — `KMeans`, k → clusters / centroids / inertia.
 
-### Regression
+Педагогічний маршрут:
 
-- formulation: numeric target;
-- model: `LinearRegression`;
-- interactive parameter: synthetic `noise`;
-- visual evidence: observations + fitted line;
-- metrics: MAE, R² і fitted slope.
-
-Навчальний сенс: погіршення signal-to-noise змінює якість прогнозу; fitted line сама по собі не є доказом хорошої generalization.
-
-### Classification
-
-- formulation: categorical target;
-- model: `LogisticRegression`;
-- interactive parameter: decision `threshold`;
-- visual evidence: predicted classes / decision boundary;
-- metrics: accuracy, precision, recall, FP/FN.
-
-Навчальний сенс: threshold є аналітичним рішенням і повинен відповідати вартості FP/FN, а не автоматично дорівнювати `0.5`.
-
-### Clustering
-
-- formulation: no labels + grouping question;
-- model: `KMeans`;
-- interactive parameter: `k`;
-- visual evidence: assigned clusters + centroids;
-- diagnostic: inertia і sizes of clusters.
-
-Навчальний сенс: clustering не відкриває «істинні класи» автоматично; `k` і інтерпретація груп потребують domain validation.
-
-### Педагогічний маршрут 4.2
-
-```text
-ML task formulation
-    ↓
-Task Type Selector
-    ↓
-Python code
-    ↓
-change one meaningful parameter
-    ↓
-graph + metrics
-    ↓
-leakage-safe ML workflow
-    ↓
-analytical interpretation
-```
+`ML task formulation → Python code → meaningful parameter → graph/metrics → leakage-safe workflow → runnable reproduction → interpretation`.
 
 Timebox: **40–45 хв**.
 
 ## 4.3 — Regression Diagnostics Lab
 
-Route:
-
-```text
-interactive/lessons/theme4.html?lesson=t4-l3
-```
-
-Lesson config:
-
-```text
-interactive/data/lessons/t4-l3.json
-```
-
-Runnable reference:
-
-```text
-interactive/examples/t4_l3_regression_workflow.py
-```
-
-Запуск:
+Route: `interactive/lessons/theme4.html?lesson=t4-l3`  
+Config: `interactive/data/lessons/t4-l3.json`  
+Runnable: `interactive/examples/t4_l3_regression_workflow.py`
 
 ```bash
 python interactive/examples/t4_l3_regression_workflow.py --max-depth 5
 ```
 
-### Моделі
+Reusable `regression-diagnostics-lab`:
 
-- `LinearRegression` — baseline без tuning;
-- `Ridge` — regularized linear alternative, параметр `alpha`;
-- `DecisionTreeRegressor` — nonlinear/high-capacity alternative, параметр `max_depth`.
+- `LinearRegression` baseline;
+- `Ridge` + `alpha`;
+- `DecisionTreeRegressor` + `max_depth`;
+- train/test MAE, test RMSE, R²;
+- Actual vs predicted;
+- Residuals;
+- Complexity curve.
 
-### Діагностика
-
-Reusable `regression-diagnostics-lab` має три views:
-
-1. **Actual vs predicted** — близькість прогнозів до ідеальної діагоналі;
-2. **Residuals** — структура помилок, систематичний bias і великі residuals;
-3. **Complexity curve** — train/test MAE залежно від `max_depth`.
-
-Metrics у web-layer:
-
-- Train MAE;
-- Test MAE;
-- Test RMSE;
-- R².
-
-Runnable script реально навчає три scikit-learn models на synthetic 5-feature dataset і зберігає:
+Outputs:
 
 ```text
 interactive/examples/t4_l3_regression_output/
@@ -219,69 +120,35 @@ interactive/examples/t4_l3_regression_output/
 └── model_comparison.csv
 ```
 
-Педагогічний принцип:
+Principle:
 
-`numeric target → linear baseline → alternative models → parameter/complexity → diagnostics → validation/CV judgement → final held-out test → conclusion in target units`
-
-Test не використовується для багаторазового вибору `max_depth`; у реальній роботі hyperparameter tuning робиться на validation/CV, після чого кандидат фіксується і лише тоді оцінюється на held-out test.
-
-Важливий висновок: **складніша модель не має переваги автоматично**. Якщо Linear Regression дає кращий test MAE і прийнятні residuals, дерево не виправдане лише через більшу гнучкість.
+`numeric target → baseline → alternatives → complexity → diagnostics → validation/CV judgement → frozen candidate → held-out test → interpretation`.
 
 Timebox: **40–45 хв**.
 
 ## 4.4 — Cross-Validation & Hyperparameter Tuning Lab
 
-Route:
-
-```text
-interactive/lessons/theme4.html?lesson=t4-l4
-```
-
-Lesson config:
-
-```text
-interactive/data/lessons/t4-l4.json
-```
-
-Runnable reference:
-
-```text
-interactive/examples/t4_l4_cv_tuning_workflow.py
-```
-
-Запуск:
+Route: `interactive/lessons/theme4.html?lesson=t4-l4`  
+Config: `interactive/data/lessons/t4-l4.json`  
+Runnable: `interactive/examples/t4_l4_cv_tuning_workflow.py`
 
 ```bash
 python interactive/examples/t4_l4_cv_tuning_workflow.py --scoring f1_macro --cv 5
 ```
 
-### Інтерактивний workflow
+Reusable `cv-tuning-lab`:
 
-Reusable `cv-tuning-lab` тренує саме evaluation discipline:
-
-- slider `max_depth` — модельна складність;
-- selector `CV folds` — 3/5/7 folds;
-- selector `scoring` — `accuracy` або `f1_macro`;
-- train score, CV mean, CV std і train/CV gap;
-- train/CV complexity curve;
+- `max_depth` slider;
+- 3/5/7-fold CV;
+- `accuracy` / `f1_macro` scoring;
+- train score, CV mean/std, train/CV gap;
 - best CV candidate marker;
-- **held-out test gate** — test не відображається, доки candidate не зафіксовано;
-- будь-яка зміна tuning choices після відкриття test invalidates freeze і знову приховує test.
+- held-out test gate;
+- будь-яка зміна tuning choices invalidates freeze і знову приховує test.
 
-### Runnable GridSearchCV
+Runnable reference використовує synthetic imbalanced data, `StratifiedKFold`, `cross_validate`, `GridSearchCV(RandomForestClassifier)` і відкриває test лише після freeze candidate.
 
-Python reference:
-
-1. генерує synthetic imbalanced classification dataset;
-2. виконує stratified train/test split;
-3. залишає test поза tuning;
-4. використовує `StratifiedKFold` усередині training pool;
-5. будує depth curve через `cross_validate`;
-6. запускає `GridSearchCV(RandomForestClassifier)` для `max_depth × min_samples_leaf`;
-7. refit-ить best estimator на training pool;
-8. лише після цього оцінює frozen candidate на held-out test.
-
-Artifacts:
+Outputs:
 
 ```text
 interactive/examples/t4_l4_cv_tuning_output/
@@ -292,19 +159,80 @@ interactive/examples/t4_l4_cv_tuning_output/
 └── summary.csv
 ```
 
+### Методична корекція primary materials
+
+У старому `content1.ipynb` є standalone приклад `cross_val_score(model, X, y, cv=5)` на всьому dataset уже після створення test split. Для tuning protocol із незалежним test це неприйнятно, бо test samples повертаються в CV pool. Strengthened 4.4 використовує CV лише всередині training pool.
+
+Timebox: **40–45 хв**.
+
+## 4.5 — Classification Threshold Lab
+
+Route: `interactive/lessons/theme4.html?lesson=t4-l5`  
+Config: `interactive/data/lessons/t4-l5.json`  
+Runnable: `interactive/examples/t4_l5_classification_workflow.py`
+
+```bash
+python interactive/examples/t4_l5_classification_workflow.py --fn-cost 8 --fp-cost 1
+```
+
+### Інтерактивний workflow
+
+Reusable `classification-threshold-lab` показує, що classification decision має два шари:
+
+`model probability score → operating threshold → class/action`.
+
+Слухач може:
+
+- змінювати threshold `0.20–0.80`;
+- змінювати відносну ціну FN `1×–12×` FP;
+- бачити validation curves precision / recall / F1;
+- читати TP, FP, FN, TN;
+- порівнювати accuracy, precision, recall і F1;
+- бачити weighted validation cost `FP×cost_FP + FN×cost_FN`;
+- порівнювати поточний operating point із validation cost optimum;
+- зафіксувати threshold і лише після цього відкрити held-out test;
+- автоматично втратити попередній test result, якщо threshold або cost assumptions змінено.
+
+### Runnable Logistic Regression
+
+Python reference:
+
+1. генерує synthetic imbalanced classification dataset;
+2. робить stratified `train / validation / test` split;
+3. fit-ить `StandardScaler + LogisticRegression` лише на train;
+4. отримує probability scores для validation;
+5. перевіряє threshold grid `0.20–0.80`;
+6. для кожного threshold рахує confusion matrix, precision, recall, F1 і weighted cost;
+7. обирає threshold за minimum validation cost, tie-break — F1/recall;
+8. freeze-ить operating point;
+9. лише після цього один раз оцінює held-out test.
+
+Outputs:
+
+```text
+interactive/examples/t4_l5_classification_output/
+├── validation_threshold_tradeoff.png
+├── validation_cost_curve.png
+├── test_confusion_matrix.png
+├── threshold_table.csv
+└── summary.csv
+```
+
 Педагогічний принцип:
 
-`isolate test → define metric/search space → CV inside training pool → compare candidates → freeze pipeline → open test once → analyze errors`.
+`positive-class semantics → class balance → train/validation/test → probability model → threshold selection on validation → FP/FN consequence → freeze operating point → held-out test → analytical conclusion`.
 
-### Виправлення методичної пастки primary materials
+Важливо: F1-optimal threshold і cost-optimal threshold можуть бути різними. Threshold не є властивістю моделі «назавжди» — він залежить від decision objective та operational constraints.
 
-Primary materials правильно описують train/validation/test, metrics, CV і GridSearchCV. Водночас старий `content1.ipynb` має приклад `cross_val_score(model, X, y, cv=5)` на всьому dataset уже після створення test split. Для демонстрації CV це припустимий standalone example, але **не для tuning protocol із незалежним held-out test**, бо test samples знову потрапляють у CV pool. Web/Python 4.4 навмисно використовує CV лише на `X_train/y_train`.
+### Методична корекція primary practical
+
+Primary `task.ipynb` правильно вимагає class balance, accuracy/precision/recall/F1, confusion matrix і ROC curve, але його базовий приклад використовує `model.predict(X_test)` з implicit threshold `0.5`. Strengthened 4.5 не підбирає threshold на held-out test: operating point обирається на validation evidence, а test використовується тільки для фінальної оцінки frozen policy.
 
 Timebox: **40–45 хв**.
 
 ## 4.10 — primary content
 
-Каталог:
+Primary package:
 
 ```text
 Theme4/Practice 10/
@@ -314,25 +242,11 @@ Theme4/Practice 10/
 └── sample.ipynb
 ```
 
-### `content.ipynb`
+`content.ipynb` формує methodology: `problem → data/provenance → split → baseline → DL model → training/regularization → validation → error analysis → reproducible artifact → conclusion`.
 
-Методичний content layer:
+`task.ipynb` містить individual/group format, 6 variants, mandatory baseline, не менше 3 controlled experiments, experiment table, peer-review checklist, criteria 100 балів і required deliverables.
 
-`problem → data/provenance → split → baseline → DL model → training/regularization → validation → error analysis → reproducible artifact → analytical conclusion`
-
-Окремо розкрито project contract, train/validation/test, leakage, model-family selection, overfitting/regularization, baseline vs DL, final evaluation, error analysis, group roles, Git/PR/review discipline і review checklist.
-
-### `task.ipynb`
-
-Практичне завдання містить individual/group format, 6 variants, mandatory baseline, не менше 3 controlled experiments, experiment table, peer-review checklist, criteria 100 балів і required deliverables.
-
-### `sample.ipynb`
-
-Повністю локальний CNN-приклад на synthetic 16×16 grayscale images трьох класів:
-
-`synthetic data → split → linear/softmax baseline → CNN → early stopping → final test → confusion matrix → failure examples`
-
-Notebook не використовує real operational data.
+`sample.ipynb` локально генерує synthetic 16×16 grayscale images і демонструє `baseline → CNN → early stopping → final test → confusion matrix → failure examples`.
 
 ## Data-driven page shell
 
@@ -342,23 +256,17 @@ Theme 4 використовує один shell:
 interactive/lessons/theme4.html?lesson=t4-lN
 ```
 
-`interactive/js/theme4-page.js`:
-
-1. читає `lesson` із query string;
-2. whitelist містить 4.1–4.14;
-3. завантажує `interactive/data/lessons/<lesson-id>.json`;
-4. формує breadcrumb, navigation, hero, roadmap, scenario, pipeline, component sections, analyst note, quiz і source links;
-5. для lesson з `infographics` рендерить visual lecture viewer;
-6. запускає загальний `interactive/js/app.js`.
+`interactive/js/theme4-page.js` читає query parameter, завантажує lesson JSON, будує hero/roadmap/scenario/pipeline/sections/note/quiz/sources і запускає загальний reusable engine. Для 4.1 shell додатково рендерить visual lecture viewer.
 
 ## Reusable components Theme 4
 
 - `method-selector` — method/task matching;
-- `metric-tradeoff-lab` — classification/regression/tuning metrics;
+- `metric-tradeoff-lab` — базові metric trade-offs;
 - `python-ml-lab` — regression/classification/clustering: Python code + parameter + graph + metrics;
-- `regression-diagnostics-lab` — model comparison + alpha/max_depth + actual-vs-predicted + residuals + complexity;
-- `cv-tuning-lab` — CV folds/scoring + train/CV curve + candidate freeze + held-out test gate;
-- `neural-network-lab` — architecture capacity/regularization preview;
+- `regression-diagnostics-lab` — model comparison + residuals + complexity;
+- `cv-tuning-lab` — CV folds/scoring + train/CV curve + freeze + test gate;
+- `classification-threshold-lab` — threshold + FP/FN cost + validation curves + confusion matrix + freeze + test gate;
+- `neural-network-lab` — architecture capacity/regularization;
 - `convolution-lab` — local convolution / feature map;
 - `transfer-rl-lab` — Transfer Learning + abstract RL;
 - `text-analysis-lab` — synthetic text pipeline + provenance;
@@ -368,39 +276,31 @@ interactive/lessons/theme4.html?lesson=t4-lN
 
 ### Task formulation before algorithm
 
-```text
-question + target/labels + data representation → ML task type → model family → evaluation
-```
-
-Regression, classification і clustering не є взаємозамінними лише тому, що всі вони використовують ML libraries.
+`question + target/labels + data representation → ML task type → model family → evaluation`.
 
 ### Split / leakage discipline
 
-```text
-split → fit preprocessing on train → train/tune on train+validation → freeze candidate → final test → error analysis
-```
+`split → fit preprocessing on train → train/tune on train+validation/CV → freeze candidate/policy → final test → error analysis`.
 
-Test не використовується як leaderboard для architecture/hyperparameter selection.
+Held-out test не використовується як leaderboard для architecture, hyperparameter або threshold selection.
 
-### Regression evidence chain
-
-Для 4.3 мінімальна evidence chain:
+### Regression evidence chain — 4.3
 
 `baseline → same split → error metrics → residuals → complexity/validation evidence → final test → domain interpretation`.
 
-Низький train error сам по собі не є критерієм якості. MAE/RMSE треба інтерпретувати в одиницях target, а R² — лише разом із error diagnostics.
+### Evaluation/tuning evidence chain — 4.4
 
-### Evaluation/tuning evidence chain
+`test isolation → scoring rationale → search space → CV mean/std → best_params → freeze → one final test → limitations`.
 
-Для 4.4 мінімальна evidence chain:
+### Classification operating-point evidence chain — 4.5
 
-`held-out test isolation → scoring rationale → search space → CV mean/std → best_params → frozen candidate → one final test → confusion matrix / limitations`.
+`class semantics → class balance → probability model → validation threshold table → confusion matrix → precision/recall/F1 → FP/FN cost → freeze threshold → one final test`.
 
-GridSearchCV має бачити лише training pool. Mean CV score без variability і без rationale для metric не є достатнім evidence. При imbalance accuracy може бути непридатною основною метрикою.
+Accuracy не є достатньою основною метрикою при imbalance. Threshold `0.5` не є універсально правильним. Зміна FP/FN consequence може змінити operating point без перенавчання моделі.
 
 ### Browser simulation vs model evidence
 
-Інтерактивний browser chart використовується для швидкого what-if reasoning. Там, де є runnable Python reference, остаточний навчальний зв'язок має бути:
+Browser chart — швидка навчальна реконструкція. Там, де є runnable reference, остаточний зв’язок:
 
 `web intuition → real code → reproducible result → analytical conclusion`.
 
@@ -408,31 +308,28 @@ GridSearchCV має бачити лише training pool. Mean CV score без va
 
 Model artifact без provenance, baseline, protocol, metrics, failure modes, limitations і run instructions не вважається достатнім project result.
 
-### Групова робота
+## Technical-debt corrections, що враховані web-шаром
 
-Група має один problem contract і один experiment protocol. Roles розподіляють ownership, але final result повинен бути інтегрованим і відтворюваним.
-
-## Technical-debt corrections, що вже враховані web-шаром
-
-- 4.3: вихідний notebook змішує House Prices / `SalePrice` narrative з фактичним `Student_Performance.csv`; web-layer не маскує цю неузгодженість і використовує окремий synthetic runnable reference;
-- 4.4: старий `content1.ipynb` показує `cross_val_score` на всьому `X/y` після train/test split; strengthened tuning workflow не повертає held-out test у CV pool;
-- 4.7: не використовується removed `load_boston`; preprocessing fit виконується після split; не дублюється помилкова metric naming;
+- 4.3: source notebook змішує House Prices / `SalePrice` narrative з `Student_Performance.csv`; web-layer використовує окремий coherent synthetic reference;
+- 4.4: historical CV example не використовується як tuning protocol із незалежним test;
+- 4.5: implicit `model.predict()` threshold `0.5` не подається як універсальний operating point; threshold selection винесено на validation evidence;
+- 4.7: не використовується removed `load_boston`; preprocessing fit після split;
 - 4.12–4.13: не дублюється історичний `pretrained=True` API як актуальна рекомендація;
-- 4.14: коротке джерело розширено лише в межах підтверджених text/GenAI тем із provenance/human-review controls.
+- 4.14: GenAI synthesis відокремлюється від source evidence та human review.
 
 ## Норматив часу
 
-Кожний Theme 4 lesson JSON має declared duration **30–45 хв** і щонайменше 5 active blocks. 4.1–4.4 використовують верхню частину цього діапазону через visual/code/diagnostics/tuning practice.
+Кожний Theme 4 lesson JSON має declared duration **30–45 хв** і щонайменше 5 active blocks. 4.1–4.5 використовують верхню частину діапазону через visual/code/diagnostics/tuning/threshold practice.
 
 ## Безпека даних
 
 - Web-layer використовує synthetic/open teaching examples;
-- `t4_l2_ml_tasks.py` генерує synthetic ML datasets локально;
-- `t4_l3_regression_workflow.py` генерує synthetic regression dataset локально;
-- `t4_l4_cv_tuning_workflow.py` генерує synthetic imbalanced classification dataset локально;
-- `sample.ipynb` 4.10 генерує synthetic image data локально;
-- real sensitive data, credentials, tokens і closed model artifacts не повинні потрапляти до public GitHub або сторонніх сервісів;
-- model output завжди потребує validation та human interpretation.
+- `t4_l2_ml_tasks.py` генерує synthetic ML datasets;
+- `t4_l3_regression_workflow.py` генерує synthetic regression data;
+- `t4_l4_cv_tuning_workflow.py` генерує synthetic imbalanced classification data;
+- `t4_l5_classification_workflow.py` генерує synthetic imbalanced classification data;
+- `sample.ipynb` 4.10 генерує synthetic image data;
+- real sensitive data, credentials, tokens і closed model artifacts не повинні потрапляти до public GitHub або сторонніх сервісів.
 
 ## CI contracts Theme 4
 
@@ -444,10 +341,11 @@ CI має перевіряти:
 4. declared/planned timebox 30–45 хв;
 5. 10/10 visual assets 4.1;
 6. runnable `t4_l2_ml_tasks.py` і три generated PNG;
-7. runnable `t4_l3_regression_workflow.py`, три diagnostics PNG і model-comparison CSV;
-8. runnable `t4_l4_cv_tuning_workflow.py`, CV curve, GridSearch heatmap, final confusion matrix і CSV summaries;
-9. primary source package 4.10 та Python syntax його sample notebook;
-10. відсутність legacy `source-gap` для 4.10.
+7. runnable `t4_l3_regression_workflow.py`, three diagnostics PNG + model comparison CSV;
+8. runnable `t4_l4_cv_tuning_workflow.py`, CV curve, GridSearch heatmap, final confusion matrix + CSV summaries;
+9. runnable `t4_l5_classification_workflow.py`, validation trade-off/cost plots, final confusion matrix + threshold/summary CSV;
+10. primary source package 4.10 та Python syntax його sample notebook;
+11. відсутність legacy `source-gap` для 4.10.
 
 ## Definition of Done Theme 4
 
@@ -456,14 +354,15 @@ Theme 4 завершена, якщо:
 1. усі **14/14** занять доступні з grouped catalog;
 2. кожне заняття має roadmap 30–45 хв;
 3. кожне має substantive interactive / mission / decision activity;
-4. 4.1 має перевірюваний комплект 10 visual assets;
-5. 4.2 має task selector + `python-ml-lab` + runnable reference;
-6. 4.3 має `regression-diagnostics-lab` + runnable baseline/model-comparison/diagnostics reference;
-7. 4.4 має `cv-tuning-lab` + runnable StratifiedKFold/GridSearchCV reference + held-out test discipline;
-8. всі lesson JSON валідні;
-9. всі source links існують;
-10. catalog routes ведуть на shell + lesson JSON;
-11. JavaScript проходить `node --check`;
-12. 4.10 має власний primary source package;
-13. source evidence, model result та analytical interpretation розділені;
-14. CI перевіряє structural integrity і runnable teaching examples.
+4. 4.1 має 10 visual assets;
+5. 4.2 має `python-ml-lab` + runnable reference;
+6. 4.3 має `regression-diagnostics-lab` + runnable diagnostics;
+7. 4.4 має `cv-tuning-lab` + runnable GridSearchCV + held-out test discipline;
+8. 4.5 має `classification-threshold-lab` + validation-only threshold selection + held-out test discipline;
+9. усі lesson JSON валідні;
+10. source links існують;
+11. catalog routes ведуть на shell + lesson JSON;
+12. JavaScript проходить `node --check`;
+13. 4.10 має primary source package;
+14. source evidence, model result та analytical interpretation розділені;
+15. CI перевіряє structural integrity і runnable teaching examples.
