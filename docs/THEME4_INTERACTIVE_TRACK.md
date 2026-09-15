@@ -12,10 +12,11 @@ Web-шар не замінює Jupyter/Python. Його функція — сф�
 
 **Theme 4 — 14/14 implemented.**
 
-У вересні 2026 додатково посилено два перші заняття:
+У вересні 2026 додатково посилено перші три заняття:
 
 - **4.1** — visual lecture з 10 інфографік + Method Selector;
-- **4.2** — інтерактивний Python ML Lab для regression, classification і clustering + runnable `scikit-learn`/`matplotlib` script.
+- **4.2** — інтерактивний Python ML Lab для regression, classification і clustering + runnable `scikit-learn`/`matplotlib` script;
+- **4.3** — Regression Diagnostics Lab: Linear/Ridge/Decision Tree, actual-vs-predicted, residuals, complexity curve + runnable comparison script.
 
 4.10 залишається повністю закритим primary source package для deep-learning project practice.
 
@@ -25,7 +26,7 @@ Web-шар не замінює Jupyter/Python. Його функція — сф�
 |---|---|---|---|---|
 | 4.1 | `Theme4/aLection1` | Огляд сучасних методів аналізу даних | 10-image visual lecture + Method Selector | implemented |
 | 4.2 | `Theme4/Group lesson 2/content1.ipynb` | Використання методів ШІ | ML task selector + Python regression/classification/clustering lab + ML workflow | implemented |
-| 4.3 | `Theme4/practice3/task.ipynb` | Regression practical | metrics + complexity + mission | implemented |
+| 4.3 | `Theme4/practice3/task.ipynb` | Regression practical | baseline + Ridge/Tree + diagnostics + complexity + runnable workflow | implemented |
 | 4.4 | `Theme4/Group lesson 4/content1.ipynb` | Accuracy + hyperparameters | CV/test roles + tuning | implemented |
 | 4.5 | `Theme4/practice5/task.ipynb` | Classification practical | threshold + precision/recall/F1 | implemented |
 | 4.6 | `Theme4/aLection6` | Neural networks | architecture capacity + regularization | implemented |
@@ -160,6 +161,73 @@ analytical interpretation
 
 Timebox: **40–45 хв**.
 
+## 4.3 — Regression Diagnostics Lab
+
+Route:
+
+```text
+interactive/lessons/theme4.html?lesson=t4-l3
+```
+
+Lesson config:
+
+```text
+interactive/data/lessons/t4-l3.json
+```
+
+Runnable reference:
+
+```text
+interactive/examples/t4_l3_regression_workflow.py
+```
+
+Запуск:
+
+```bash
+python interactive/examples/t4_l3_regression_workflow.py --max-depth 5
+```
+
+### Моделі
+
+- `LinearRegression` — baseline без tuning;
+- `Ridge` — regularized linear alternative, параметр `alpha`;
+- `DecisionTreeRegressor` — nonlinear/high-capacity alternative, параметр `max_depth`.
+
+### Діагностика
+
+Reusable `regression-diagnostics-lab` має три views:
+
+1. **Actual vs predicted** — близькість прогнозів до ідеальної діагоналі;
+2. **Residuals** — структура помилок, систематичний bias і великі residuals;
+3. **Complexity curve** — train/test MAE залежно від `max_depth`.
+
+Metrics у web-layer:
+
+- Train MAE;
+- Test MAE;
+- Test RMSE;
+- R².
+
+Runnable script реально навчає три scikit-learn models на synthetic 5-feature dataset і зберігає:
+
+```text
+interactive/examples/t4_l3_regression_output/
+├── actual_vs_predicted.png
+├── residuals.png
+├── complexity_curve.png
+└── model_comparison.csv
+```
+
+Педагогічний принцип:
+
+`numeric target → linear baseline → alternative models → parameter/complexity → diagnostics → validation/CV judgement → final held-out test → conclusion in target units`
+
+Test не використовується для багаторазового вибору `max_depth`; у реальній роботі hyperparameter tuning робиться на validation/CV, після чого кандидат фіксується і лише тоді оцінюється на held-out test.
+
+Важливий висновок: **складніша модель не має переваги автоматично**. Якщо Linear Regression дає кращий test MAE і прийнятні residuals, дерево не виправдане лише через більшу гнучкість.
+
+Timebox: **40–45 хв**.
+
 ## 4.10 — primary content
 
 Каталог:
@@ -214,6 +282,7 @@ interactive/lessons/theme4.html?lesson=t4-lN
 - `method-selector` — method/task matching;
 - `metric-tradeoff-lab` — classification/regression/tuning metrics;
 - `python-ml-lab` — regression/classification/clustering: Python code + parameter + graph + metrics;
+- `regression-diagnostics-lab` — model comparison + alpha/max_depth + actual-vs-predicted + residuals + complexity;
 - `neural-network-lab` — architecture capacity/regularization preview;
 - `convolution-lab` — local convolution / feature map;
 - `transfer-rl-lab` — Transfer Learning + abstract RL;
@@ -238,6 +307,14 @@ split → fit preprocessing on train → train/tune on train+validation → free
 
 Test не використовується як leaderboard для architecture/hyperparameter selection.
 
+### Regression evidence chain
+
+Для 4.3 мінімальна evidence chain:
+
+`baseline → same split → error metrics → residuals → complexity/validation evidence → final test → domain interpretation`.
+
+Низький train error сам по собі не є критерієм якості. MAE/RMSE треба інтерпретувати в одиницях target, а R² — лише разом із error diagnostics.
+
 ### Browser simulation vs model evidence
 
 Інтерактивний browser chart використовується для швидкого what-if reasoning. Там, де є runnable Python reference, остаточний навчальний зв'язок має бути:
@@ -254,19 +331,20 @@ Model artifact без provenance, baseline, protocol, metrics, failure modes, li
 
 ## Technical-debt corrections, що вже враховані web-шаром
 
-- 4.3: не переноситься невідповідність House Prices narrative / фактичного dataset;
+- 4.3: вихідний notebook змішує House Prices / `SalePrice` narrative з фактичним `Student_Performance.csv`; web-layer не маскує цю неузгодженість і використовує окремий synthetic runnable reference;
 - 4.7: не використовується removed `load_boston`; preprocessing fit виконується після split; не дублюється помилкова metric naming;
 - 4.12–4.13: не дублюється історичний `pretrained=True` API як актуальна рекомендація;
 - 4.14: коротке джерело розширено лише в межах підтверджених text/GenAI тем із provenance/human-review controls.
 
 ## Норматив часу
 
-Кожний Theme 4 lesson JSON має declared duration **30–45 хв** і щонайменше 5 active blocks. 4.1 та 4.2 зараз використовують верхню частину цього діапазону через visual/code practice.
+Кожний Theme 4 lesson JSON має declared duration **30–45 хв** і щонайменше 5 active blocks. 4.1, 4.2 та 4.3 використовують верхню частину цього діапазону через visual/code/diagnostics practice.
 
 ## Безпека даних
 
 - Web-layer використовує synthetic/open teaching examples;
 - `t4_l2_ml_tasks.py` генерує synthetic ML datasets локально;
+- `t4_l3_regression_workflow.py` генерує synthetic regression dataset локально;
 - `sample.ipynb` 4.10 генерує synthetic image data локально;
 - real sensitive data, credentials, tokens і closed model artifacts не повинні потрапляти до public GitHub або сторонніх сервісів;
 - model output завжди потребує validation та human interpretation.
@@ -281,8 +359,9 @@ CI має перевіряти:
 4. declared/planned timebox 30–45 хв;
 5. 10/10 visual assets 4.1;
 6. runnable `t4_l2_ml_tasks.py` і три generated PNG;
-7. primary source package 4.10 та Python syntax його sample notebook;
-8. відсутність legacy `source-gap` для 4.10.
+7. runnable `t4_l3_regression_workflow.py`, три diagnostics PNG і model-comparison CSV;
+8. primary source package 4.10 та Python syntax його sample notebook;
+9. відсутність legacy `source-gap` для 4.10.
 
 ## Definition of Done Theme 4
 
@@ -293,10 +372,11 @@ Theme 4 завершена, якщо:
 3. кожне має substantive interactive / mission / decision activity;
 4. 4.1 має перевірюваний комплект 10 visual assets;
 5. 4.2 має task selector + `python-ml-lab` + runnable reference;
-6. всі lesson JSON валідні;
-7. всі source links існують;
-8. catalog routes ведуть на shell + lesson JSON;
-9. JavaScript проходить `node --check`;
-10. 4.10 має власний primary source package;
-11. source evidence, model result та analytical interpretation розділені;
-12. CI перевіряє structural integrity і runnable teaching examples.
+6. 4.3 має `regression-diagnostics-lab` + runnable baseline/model-comparison/diagnostics reference;
+7. всі lesson JSON валідні;
+8. всі source links існують;
+9. catalog routes ведуть на shell + lesson JSON;
+10. JavaScript проходить `node --check`;
+11. 4.10 має власний primary source package;
+12. source evidence, model result та analytical interpretation розділені;
+13. CI перевіряє structural integrity і runnable teaching examples.
