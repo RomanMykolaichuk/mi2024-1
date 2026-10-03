@@ -12,6 +12,16 @@ export function mount(element, config = {}) {
   let pooling = 'max';
   let flattened = false;
   let temperature = 1;
+  const builder = {
+    inputSize: 64,
+    conv1Filters: 16,
+    conv1Kernel: 3,
+    pool1: true,
+    conv2Filters: 32,
+    conv2Kernel: 3,
+    pool2: true,
+    denseUnits: 64,
+  };
 
   element.innerHTML = `
     <div class="cnn-forward-lab">
@@ -51,6 +61,69 @@ export function mount(element, config = {}) {
           <div class="analytics-callout"><strong>Softmax:</strong> перетворює logits на додатні значення, сума яких дорівнює 1. Це зручно читати як розподіл імовірностей між класами, але не як гарантію правильності.</div>
         </section>
       </div>
+
+      <section class="cnn-panel cnn-builder" aria-labelledby="cnn-builder-title">
+        <div class="cnn-builder__intro">
+          <div>
+            <p class="eyebrow">ДОДАТКОВА ПРАКТИКА · ЗБЕРИ CNN САМ</p>
+            <h3 id="cnn-builder-title">Змініть архітектуру та простежте, як змінюються tensor shape і кількість параметрів</h3>
+            <p class="microcopy">У конструкторі використовується padding="same", тому Conv2D не змінює ширину та висоту. MaxPooling2D(2) зменшує їх приблизно вдвічі. Формули параметрів наведені під схемою.</p>
+          </div>
+          <div class="cnn-builder__mission"><span>Міні-завдання</span><strong>Спробуйте отримати модель &lt; 300 тис. параметрів</strong><small>і залишити два згорткові блоки.</small></div>
+        </div>
+
+        <div class="cnn-builder__controls">
+          <label>Розмір входу
+            <select data-builder="inputSize">
+              <option value="32">32×32×3</option>
+              <option value="64" selected>64×64×3</option>
+              <option value="128">128×128×3</option>
+            </select>
+          </label>
+          <label>Conv1 filters
+            <select data-builder="conv1Filters">
+              <option value="8">8</option><option value="16" selected>16</option><option value="32">32</option><option value="64">64</option>
+            </select>
+          </label>
+          <label>Conv1 kernel
+            <select data-builder="conv1Kernel">
+              <option value="3" selected>3×3</option><option value="5">5×5</option>
+            </select>
+          </label>
+          <label class="cnn-builder__check"><input type="checkbox" data-builder="pool1" checked> MaxPooling після Conv1</label>
+          <label>Conv2 filters
+            <select data-builder="conv2Filters">
+              <option value="16">16</option><option value="32" selected>32</option><option value="64">64</option><option value="128">128</option>
+            </select>
+          </label>
+          <label>Conv2 kernel
+            <select data-builder="conv2Kernel">
+              <option value="3" selected>3×3</option><option value="5">5×5</option>
+            </select>
+          </label>
+          <label class="cnn-builder__check"><input type="checkbox" data-builder="pool2" checked> MaxPooling після Conv2</label>
+          <label>Dense neurons
+            <select data-builder="denseUnits">
+              <option value="16">16</option><option value="32">32</option><option value="64" selected>64</option><option value="128">128</option>
+            </select>
+          </label>
+        </div>
+
+        <div class="cnn-builder__summary">
+          <div><span>Параметри</span><strong data-role="builder-total"></strong></div>
+          <div><span>Flatten vector</span><strong data-role="builder-flatten"></strong></div>
+          <div><span>Класів</span><strong>${classes.length}</strong></div>
+          <div data-role="builder-target"></div>
+        </div>
+
+        <div class="cnn-builder__architecture" data-role="builder-architecture" aria-live="polite"></div>
+        <div class="cnn-builder__details" data-role="builder-details"></div>
+
+        <div class="cnn-builder__code-wrap">
+          <div><p class="eyebrow">KERAS SEQUENTIAL</p><h4>Та сама архітектура у коді</h4></div>
+          <pre class="cnn-builder__code"><code data-role="builder-code"></code></pre>
+        </div>
+      </section>
     </div>`;
 
   const featureNode = element.querySelector('[data-role="feature-map"]');
@@ -64,6 +137,12 @@ export function mount(element, config = {}) {
   const temperatureInput = element.querySelector('[data-role="temperature"]');
   const temperatureValue = element.querySelector('[data-role="temperature-value"]');
   const probabilitiesNode = element.querySelector('[data-role="probabilities"]');
+  const builderTotal = element.querySelector('[data-role="builder-total"]');
+  const builderFlatten = element.querySelector('[data-role="builder-flatten"]');
+  const builderTarget = element.querySelector('[data-role="builder-target"]');
+  const builderArchitecture = element.querySelector('[data-role="builder-architecture"]');
+  const builderDetails = element.querySelector('[data-role="builder-details"]');
+  const builderCode = element.querySelector('[data-role="builder-code"]');
 
   featureNode.innerHTML = renderMatrix(featureMap);
   logitsNode.innerHTML = logits.map((value,index) => `<span><small>${esc(classes[index] ?? `клас ${index + 1}`)}</small><strong>${Number(value).toFixed(1)}</strong></span>`).join('');
@@ -97,6 +176,37 @@ export function mount(element, config = {}) {
       </div>`).join('');
   }
 
+  function renderBuilder() {
+    const model = calculateArchitecture(builder, classes.length);
+    builderTotal.textContent = formatInteger(model.totalParams);
+    builderFlatten.textContent = formatInteger(model.flattenSize);
+    const targetReached = model.totalParams < 300000;
+    builderTarget.className = `cnn-builder__target ${targetReached ? 'is-reached' : ''}`;
+    builderTarget.innerHTML = `<span>Міні-завдання</span><strong>${targetReached ? '✓ < 300 тис.' : 'Ще > 300 тис.'}</strong>`;
+
+    builderArchitecture.innerHTML = model.layers.map((layer,index) => `
+      <div class="cnn-layer-card ${layer.kind === 'pool' ? 'is-pool' : ''} ${layer.kind === 'dense' ? 'is-dense' : ''}">
+        <small>${index + 1}</small>
+        <strong>${esc(layer.name)}</strong>
+        <span>${esc(layer.shape)}</span>
+        <em>${formatInteger(layer.params)} params</em>
+      </div>${index < model.layers.length - 1 ? '<div class="cnn-layer-arrow">→</div>' : ''}`).join('');
+
+    const denseShare = model.totalParams ? model.denseParams / model.totalParams : 0;
+    const warning = denseShare > .8
+      ? '<strong>Зверніть увагу:</strong> понад 80% параметрів зосереджено у Dense-частині після Flatten. Спробуйте додати pooling, зменшити input або Dense neurons і подивіться, як різко зміниться розмір моделі.'
+      : '<strong>Баланс параметрів:</strong> Dense-частина вже не домінує настільки різко. Порівняйте цей варіант із конфігурацією без pooling.';
+
+    builderDetails.innerHTML = `
+      <div><strong>Conv1:</strong> (${builder.conv1Kernel}×${builder.conv1Kernel}×3 + 1) × ${builder.conv1Filters} = ${formatInteger(model.conv1Params)}</div>
+      <div><strong>Conv2:</strong> (${builder.conv2Kernel}×${builder.conv2Kernel}×${builder.conv1Filters} + 1) × ${builder.conv2Filters} = ${formatInteger(model.conv2Params)}</div>
+      <div><strong>Dense:</strong> (${formatInteger(model.flattenSize)} + 1) × ${builder.denseUnits} = ${formatInteger(model.dense1Params)}</div>
+      <div><strong>Output:</strong> (${builder.denseUnits} + 1) × ${classes.length} = ${formatInteger(model.outputParams)}</div>
+      <div class="analytics-callout">${warning}</div>`;
+
+    builderCode.textContent = kerasCode(builder, classes.length);
+  }
+
   toggle.querySelectorAll('[data-mode]').forEach(button => button.addEventListener('click', () => {
     pooling = button.dataset.mode;
     toggle.querySelectorAll('[data-mode]').forEach(item => item.classList.toggle('is-active', item === button));
@@ -113,9 +223,80 @@ export function mount(element, config = {}) {
     renderProbabilities();
   });
 
+  element.querySelectorAll('[data-builder]').forEach(control => control.addEventListener('change', () => {
+    const key = control.dataset.builder;
+    builder[key] = control.type === 'checkbox' ? control.checked : Number(control.value);
+    renderBuilder();
+  }));
+
   renderPooling();
   renderFlatten();
   renderProbabilities();
+  renderBuilder();
+}
+
+function calculateArchitecture(builder, classCount) {
+  let height = builder.inputSize;
+  let width = builder.inputSize;
+  let channels = 3;
+  const layers = [{name:'Input',shape:`${height}×${width}×${channels}`,params:0,kind:'input'}];
+
+  const conv1Params = (builder.conv1Kernel * builder.conv1Kernel * channels + 1) * builder.conv1Filters;
+  channels = builder.conv1Filters;
+  layers.push({name:`Conv2D ${channels} · ${builder.conv1Kernel}×${builder.conv1Kernel}`,shape:`${height}×${width}×${channels}`,params:conv1Params,kind:'conv'});
+  if (builder.pool1) {
+    height = Math.floor(height / 2);
+    width = Math.floor(width / 2);
+    layers.push({name:'MaxPool 2×2',shape:`${height}×${width}×${channels}`,params:0,kind:'pool'});
+  }
+
+  const conv2Params = (builder.conv2Kernel * builder.conv2Kernel * channels + 1) * builder.conv2Filters;
+  channels = builder.conv2Filters;
+  layers.push({name:`Conv2D ${channels} · ${builder.conv2Kernel}×${builder.conv2Kernel}`,shape:`${height}×${width}×${channels}`,params:conv2Params,kind:'conv'});
+  if (builder.pool2) {
+    height = Math.floor(height / 2);
+    width = Math.floor(width / 2);
+    layers.push({name:'MaxPool 2×2',shape:`${height}×${width}×${channels}`,params:0,kind:'pool'});
+  }
+
+  const flattenSize = height * width * channels;
+  layers.push({name:'Flatten',shape:`${formatInteger(flattenSize)}`,params:0,kind:'flatten'});
+  const dense1Params = (flattenSize + 1) * builder.denseUnits;
+  layers.push({name:`Dense ${builder.denseUnits}`,shape:`${builder.denseUnits}`,params:dense1Params,kind:'dense'});
+  const outputParams = (builder.denseUnits + 1) * classCount;
+  layers.push({name:`Softmax ${classCount}`,shape:`${classCount}`,params:outputParams,kind:'dense'});
+
+  const denseParams = dense1Params + outputParams;
+  return {
+    layers,
+    flattenSize,
+    conv1Params,
+    conv2Params,
+    dense1Params,
+    outputParams,
+    denseParams,
+    totalParams: conv1Params + conv2Params + denseParams,
+  };
+}
+
+function kerasCode(builder, classCount) {
+  const lines = [
+    'model = keras.Sequential([',
+    `    layers.Rescaling(1./255, input_shape=(${builder.inputSize}, ${builder.inputSize}, 3)),`,
+    `    layers.Conv2D(${builder.conv1Filters}, ${builder.conv1Kernel}, padding="same", activation="relu"),`,
+  ];
+  if (builder.pool1) lines.push('    layers.MaxPooling2D(2),');
+  lines.push(`    layers.Conv2D(${builder.conv2Filters}, ${builder.conv2Kernel}, padding="same", activation="relu"),`);
+  if (builder.pool2) lines.push('    layers.MaxPooling2D(2),');
+  lines.push(
+    '    layers.Flatten(),',
+    `    layers.Dense(${builder.denseUnits}, activation="relu"),`,
+    `    layers.Dense(${classCount}, activation="softmax"),`,
+    '])',
+    '',
+    'model.summary()',
+  );
+  return lines.join('\n');
 }
 
 function pool2x2(matrix, mode) {
@@ -146,4 +327,8 @@ function renderMatrix(matrix, hot = false) {
 
 function format(value) {
   return Number.isInteger(Number(value)) ? String(Number(value)) : Number(value).toFixed(2);
+}
+
+function formatInteger(value) {
+  return new Intl.NumberFormat('uk-UA').format(Number(value));
 }
