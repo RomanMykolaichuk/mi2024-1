@@ -24,6 +24,7 @@ import { mount as mountClassificationThresholdLab } from '../components/classifi
 import { mount as mountNeuralNetworkLab } from '../components/neural-network-lab.js';
 import { mount as mountConvolutionLab } from '../components/convolution-lab.js';
 import { mount as mountCnnForwardLab } from '../components/cnn-forward-lab.js';
+import { mount as mountCnnFeatureMapLab } from '../components/cnn-feature-map-lab.js';
 import { mount as mountCnnTrainingLab } from '../components/cnn-training-lab.js';
 import { mount as mountTransferRlLab } from '../components/transfer-rl-lab.js';
 import { mount as mountTextAnalysisLab } from '../components/text-analysis-lab.js';
@@ -70,6 +71,7 @@ export const registry = {
   'neural-network-lab': mountNeuralNetworkLab,
   'convolution-lab': mountConvolutionLab,
   'cnn-forward-lab': mountCnnForwardLab,
+  'cnn-feature-map-lab': mountCnnFeatureMapLab,
   'cnn-training-lab': mountCnnTrainingLab,
   'transfer-rl-lab': mountTransferRlLab,
   'text-analysis-lab': mountTextAnalysisLab,
