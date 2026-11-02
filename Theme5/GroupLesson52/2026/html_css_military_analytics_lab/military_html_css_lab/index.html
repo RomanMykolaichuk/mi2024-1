@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="uk">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark light">
+  <meta name="description" content="Інтерактивна навчальна платформа: HTML і CSS для візуалізації військової аналітики. Семантична розмітка, Grid, Flexbox, графіки, таблиці, теплові карти та адаптивний дизайн.">
+  <title>HTML + CSS · Візуалізація військової аналітики</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="app.js" defer></script>
+</head>
+<body data-theme="dark">
+  <a class="skip-link" href="#main">Перейти до основного вмісту</a>
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar" aria-label="Навігація навчальним модулем">
+      <a class="brand" href="#home" aria-label="На початок навчального модуля">
+        <span class="brand-mark" aria-hidden="true"><span class="brand-grid">▦</span></span>
+        <span><strong>DATA<span class="accent">/</span>VIS</strong><small>MILITARY ANALYTICS LAB</small></span>
+      </a>
+      <div class="sidebar-intro"><span class="live-dot"></span> НАВЧАЛЬНИЙ МОДУЛЬ <span class="intro-index">05 / UI</span></div>
+      <nav aria-label="Розділи">
+        <p class="nav-heading">ОГЛЯД</p>
+        <a class="nav-link is-active" href="#home"><span class="nav-number">00</span> Головна <span class="nav-glyph">⌂</span></a>
+        <a class="nav-link" href="#dashboard"><span class="nav-number">01</span> Аналітичний дашборд <span class="nav-glyph">◫</span></a>
+        <p class="nav-heading">HTML + CSS: ПРАКТИКА</p>
+        <a class="nav-link" href="#semantics"><span class="nav-number">02</span> Семантика HTML <span class="nav-glyph">⌘</span></a>
+        <a class="nav-link" href="#layout"><span class="nav-number">03</span> Flexbox і Grid <span class="nav-glyph">▦</span></a>
+        <a class="nav-link" href="#charts"><span class="nav-number">04</span> Графіки засобами CSS <span class="nav-glyph">▥</span></a>
+        <a class="nav-link" href="#tables"><span class="nav-number">05</span> Таблиці та індикатори <span class="nav-glyph">☷</span></a>
+        <a class="nav-link" href="#heatmap"><span class="nav-number">06</span> Теплова карта і події <span class="nav-glyph">▩</span></a>
+        <a class="nav-link" href="#lab"><span class="nav-number">07</span> CSS-лабораторія <span class="nav-glyph">⚙</span></a>
+        <a class="nav-link" href="#responsive"><span class="nav-number">08</span> Адаптивність і доступність <span class="nav-glyph">▣</span></a>
+        <a class="nav-link" href="#conclusion"><span class="nav-number">09</span> Практичне завдання <span class="nav-glyph">✓</span></a>
+      </nav>
+      <div class="sidebar-bottom">
+        <div class="mini-progress"><div class="mini-progress-top"><span>ПРОГРЕС ПЕРЕГЛЯДУ</span><output id="progress-count">0/10</output></div><div class="progress-track"><div id="progress-fill" class="progress-fill" style="width:0%"></div></div></div>
+        <p>Локальна демонстрація · Без зовнішніх залежностей</p>
+      </div>
+    </aside>
+    <button class="nav-scrim" type="button" aria-label="Закрити меню" id="nav-scrim" hidden></button>
+    <div class="page-shell">
+      <header class="topbar">
+        <div class="topbar-left"><button class="menu-button" id="menu-toggle" type="button" aria-controls="sidebar" aria-expanded="false" aria-label="Відкрити меню">☰</button><span class="breadcrumb">НАВЧАННЯ <span>/</span> ВІЗУАЛІЗАЦІЯ <span>/</span> HTML + CSS</span></div>
+        <div class="topbar-actions"><span class="demo-pill"><span class="live-dot"></span> SYNTHETIC DATA</span><button class="icon-button" id="theme-toggle" type="button" title="Перемкнути світлу або темну тему" aria-label="Перемкнути тему"><span id="theme-icon">☼</span></button><button class="button button-ghost top-print" id="print-button" type="button">⎙ <span>Друк / PDF</span></button></div>
+      </header>
+      <main id="main">
+        <section class="hero section-anchor" id="home" aria-labelledby="hero-title">
+          <div class="hero-content"><div class="eyebrow"><span class="eyebrow-line"></span> ІНТЕРАКТИВНИЙ НАВЧАЛЬНИЙ МОДУЛЬ · 90 ХВ</div>
+            <h1 id="hero-title">HTML <span class="hero-plus">+</span> CSS<br><span class="hero-outline">для військової аналітики</span></h1>
+            <p class="hero-lead">Як перетворити дані з донесень, журналів і таблиць на зрозумілий інформаційний екран — <strong>без графічних бібліотек і складного фреймворку.</strong></p>
+            <div class="hero-actions"><a href="#dashboard" class="button button-primary">Відкрити живий дашборд <span aria-hidden="true">↗</span></a><a href="#semantics" class="button button-outline">Розпочати з основ →</a></div>
+            <div class="hero-foot"><span>HTML — структура</span><span>CSS — представлення</span><span>JavaScript — інтерактивність</span></div>
+          </div>
+          <div class="hero-visual" aria-hidden="true"><div class="scope-header"><span>ANALYTICS DISPLAY / DEMO</span><span class="scope-corners">● ● ●</span></div><div class="scope-top"><div class="scope-card"><small>Готовність звітів</small><strong>92.6<span>%</span></strong><div class="scope-meter"><i style="width:92.6%"></i></div></div><div class="scope-card"><small>Оброблено</small><strong>1 248</strong><div class="scope-bars"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div></div></div><div class="scope-main"><div class="scope-grid"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div><div class="scope-radar"></div><div class="scope-crosshair">+</div><div class="scope-caption">СИТУАЦІЙНИЙ ОГЛЯД · СХЕМА</div></div><div class="scope-footer">SCENARIO: TRAINING <span>● SYSTEM NOMINAL</span></div></div>
+        </section>
+
+        <section class="intro-strip" aria-label="Головні технології"><div><span class="tech-num">01</span><strong>HTML5</strong><small>Смислова структура і дані</small></div><div><span class="tech-num">02</span><strong>CSS3</strong><small>Компонування та графіки</small></div><div><span class="tech-num">03</span><strong>Responsive</strong><small>Один інтерфейс — різні екрани</small></div><div><span class="tech-num">04</span><strong>Vanilla JS</strong><small>Фільтрація та взаємодія</small></div></section>
+
+        <section class="lesson section-anchor" id="dashboard" aria-labelledby="dashboard-title">
+          <div class="section-head"><div class="section-label">01 <span></span> ДЕМОНСТРАЦІЯ</div><h2 id="dashboard-title">Аналітичний дашборд <span>у дії</span></h2><p>Умовні показники інформаційно-аналітичної діяльності. Змінюйте сценарій і період, натискайте елементи графіка та досліджуйте таблицю. Це результат спільної роботи HTML, CSS і JavaScript.</p></div>
+          <div class="dashboard demo-surface" id="analytics-dashboard">
+            <div class="dashboard-toolbar"><div class="dashboard-ident"><span class="dashboard-square">▦</span><div><strong>СИТУАЦІЙНА ПАНЕЛЬ</strong><small>Умовний навчальний набір / неоперативні дані</small></div></div><div class="toolbar-controls"><label for="scenario-select">Сценарій</label><select id="scenario-select"><option value="logistics">Забезпечення</option><option value="communications">Зв'язок</option><option value="information">Інформаційні потоки</option></select><label for="period-select">Період</label><select id="period-select"><option value="7">7 діб</option><option value="14">14 діб</option></select></div></div>
+            <div class="kpi-grid" id="kpi-grid" aria-live="polite"></div>
+            <div class="dashboard-columns"><article class="panel panel-trend"><header class="panel-head"><div><span class="panel-kicker">ТЕНДЕНЦІЯ</span><h3>Динаміка виконання плану</h3></div><span class="hint-chip">CSS · height: var()</span></header><div class="chart-legend"><span class="legend-dot green-dot"></span> Виконання, % <span class="chart-note" id="trend-highlight">Наведіть або натисніть стовпчик</span></div><div class="bar-plot" id="trend-plot" role="group" aria-label="Стовпчикова діаграма щоденного виконання плану"></div><div class="axis-bottom"><span>0%</span><span>50%</span><span>100%</span></div></article>
+              <article class="panel panel-donut"><header class="panel-head"><div><span class="panel-kicker">СТРУКТУРА</span><h3>Розподіл повідомлень</h3></div><span class="hint-chip">conic-gradient()</span></header><div class="donut-wrap"><div class="donut" id="donut-chart" role="img" aria-label="Структура за категоріями"><div class="donut-hole"><span>ВСЬОГО</span><strong id="donut-total">1 248</strong><small>записів</small></div></div><div class="donut-legend" id="donut-legend"></div></div><div class="panel-footnote">Сегменти малює CSS, дані підставляє JavaScript.</div></article></div>
+            <div class="dashboard-bottom"><article class="panel"><header class="panel-head"><div><span class="panel-kicker">ОПЕРАТИВНИЙ ОГЛЯД</span><h3>Умовні сектори контролю</h3></div><a class="tiny-link" href="#heatmap">Як це зроблено ↗</a></header><div class="dashboard-heatmap" id="dashboard-heatmap" role="group" aria-label="Умовна теплова карта секторів"></div><div class="heat-caption"><span>НИЗЬКА ІНТЕНСИВНІСТЬ</span><div class="heat-legend"><i class="heat-0"></i><i class="heat-1"></i><i class="heat-2"></i><i class="heat-3"></i><i class="heat-4"></i></div><span>ВИСОКА</span></div><p class="sector-detail" id="sector-detail" aria-live="polite">Оберіть сектор, щоб переглянути умовний показник.</p></article>
+              <article class="panel"><header class="panel-head"><div><span class="panel-kicker">ЖУРНАЛ</span><h3>Останні події</h3></div><span class="hint-chip">&lt;ol&gt; + ::before</span></header><ol class="timeline" id="event-timeline"></ol></article></div>
+            <div class="dashboard-disclaimer"><span>ⓘ</span> Усі назви, кількісні дані, події та сектори згенеровані для навчального прикладу. Тут немає реальної географії, військових позицій або оперативної інформації.</div>
+          </div>
+          <div class="insight-row"><div class="insight-icon">i</div><p><strong>Головна ідея:</strong> HTML визначає, <em>що</em> показати; CSS — <em>як</em> це виглядає; JavaScript — <em>що змінюється</em> після дії користувача. Самі графіки, картки та індикатори тут намальовані CSS, без Chart.js, Canvas чи SVG-графіків.</p></div>
+        </section>
+
+        <section class="lesson section-anchor" id="semantics" aria-labelledby="semantics-title"><div class="section-head"><div class="section-label">02 <span></span> ОСНОВА</div><h2 id="semantics-title">HTML: від набору цифр <span>до структури</span></h2><p>Семантичні теги роблять дані зрозумілими не лише людині, а й браузеру та допоміжним технологіям. Розмітка описує логічні блоки панелі — незалежно від їхнього зовнішнього вигляду.</p></div>
+          <div class="two-col lesson-grid"><div class="teaching-card"><h3>Анатомія аналітичної сторінки</h3><p class="muted">Одна сторінка = декілька вкладених смислових блоків.</p><div class="html-tree"><div class="tree-main"><span class="tag">&lt;main&gt;</span> Основний вміст<div class="tree-child"><span class="tag">&lt;section&gt;</span> Дашборд<div class="tree-child"><span class="tag">&lt;article&gt;</span> Показник KPI</div><div class="tree-child"><span class="tag">&lt;article&gt;</span> Графік</div><div class="tree-child"><span class="tag">&lt;table&gt;</span> Дані звітів</div></div><div class="tree-child"><span class="tag">&lt;section&gt;</span> Навчальні пояснення</div></div></div><div class="semantic-note"><b>Навіщо це аналітику?</b> Зрозуміла структура, пошук, доступність, підтримка та простіше підключення даних.</div></div>
+          <div class="teaching-card code-card"><div class="code-head"><span>SEMANTIC.HTML</span><button type="button" class="copy-button" data-copy="code-semantic">Копіювати ↗</button></div><pre id="code-semantic"><code>&lt;main&gt;
+  &lt;section aria-labelledby="status-title"&gt;
+    &lt;h2 id="status-title"&gt;Стан забезпечення&lt;/h2&gt;
+    &lt;article class="kpi"&gt;
+      &lt;h3&gt;Виконання плану&lt;/h3&gt;
+      &lt;output&gt;84%&lt;/output&gt;
+      &lt;progress value="84" max="100"&gt;84%&lt;/progress&gt;
+    &lt;/article&gt;
+  &lt;/section&gt;
+&lt;/main&gt;</code></pre><p class="code-explain">Теги <code>&lt;section&gt;</code> і <code>&lt;article&gt;</code> позначають незалежні частини; <code>&lt;output&gt;</code> — результат обчислення; <code>&lt;progress&gt;</code> — міру виконання завдання.</p></div></div>
+        </section>
+
+        <section class="lesson section-anchor" id="layout" aria-labelledby="layout-title"><div class="section-head"><div class="section-label">03 <span></span> КОМПОНУВАННЯ</div><h2 id="layout-title">Flexbox чи Grid? <span>Спробуйте обидва</span></h2><p><strong>Flexbox</strong> розподіляє елементи в одному напрямку (рядок або колонка). <strong>CSS Grid</strong> задає сітку рядків і стовпців. Обидва способи можна поєднувати в одному дашборді.</p></div>
+          <div class="teaching-card layout-interactive"><div class="inline-head"><div><h3>Інтерактивна схема компонування</h3><p class="muted">Змінюйте спосіб розташування одного й того самого HTML.</p></div><div class="segmented" role="group" aria-label="Спосіб компонування"><button type="button" class="is-current" data-layout="grid" aria-pressed="true">CSS Grid</button><button type="button" data-layout="flex" aria-pressed="false">Flexbox</button></div></div><div class="layout-showcase"><div class="layout-demo is-grid" id="layout-demo"><div class="layout-tile"><span>01</span><strong>KPI</strong><small>Показник</small></div><div class="layout-tile"><span>02</span><strong>BAR</strong><small>Діаграма</small></div><div class="layout-tile"><span>03</span><strong>FEED</strong><small>Події</small></div><div class="layout-tile"><span>04</span><strong>DATA</strong><small>Таблиця</small></div></div></div><div class="layout-code-row"><pre id="layout-css-code"><code>.dashboard {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}</code></pre><div class="layout-advice" id="layout-advice"><strong>Grid — двовимірна система.</strong><p>Зручний для карток KPI, панелей аналітики та симетричних розкладок. Властивість <code>gap</code> задає проміжки між елементами.</p></div></div></div>
+          <div class="concept-grid"><article><span>display: flex</span><h3>Рядки інструментів</h3><p>Фільтри, заголовок із кнопками, навігація, вирівнювання елементів.</p></article><article><span>display: grid</span><h3>Сітка дашборду</h3><p>Картки, графіки, таблиці, панелі різної ширини.</p></article><article><span>minmax() + auto-fit</span><h3>Автоматична адаптація</h3><p>Кількість стовпців змінюється залежно від доступної ширини.</p></article></div>
+        </section>
+
+        <section class="lesson section-anchor" id="charts" aria-labelledby="charts-title"><div class="section-head"><div class="section-label">04 <span></span> ВІЗУАЛЬНІ КОМПОНЕНТИ</div><h2 id="charts-title">Графіки, які <span>створює CSS</span></h2><p>Для простих аналітичних завдань достатньо стандартних елементів HTML, псевдоелементів і фонових градієнтів. Нижче — три прийоми з прикладами коду.</p></div>
+          <div class="charts-teach-grid"><article class="teaching-card chart-tile"><div class="tile-tag">МЕТОД 01 · ВИСОТА</div><h3>Стовпчикова діаграма</h3><div class="micro-bar-chart" aria-label="Приклад: 45, 70, 56, 88, 66 відсотків"><div style="--h:45%"><span></span><small>Пн</small></div><div style="--h:70%"><span></span><small>Вт</small></div><div style="--h:56%"><span></span><small>Ср</small></div><div style="--h:88%"><span></span><small>Чт</small></div><div style="--h:66%"><span></span><small>Пт</small></div></div><pre id="code-bars"><code>.bar { height: var(--value); }
+.chart { display: flex; align-items: end; }</code></pre><p>Висота стовпчика відображає значення. Для динаміки JavaScript змінює CSS-змінну.</p><button class="text-copy" data-copy="code-bars" type="button">Копіювати CSS ⧉</button></article>
+            <article class="teaching-card chart-tile"><div class="tile-tag">МЕТОД 02 · ГРАДІЄНТ</div><h3>Кільцева діаграма</h3><div class="micro-donut" role="img" aria-label="Приклад: зелений 55%, жовтий 30%, синій 15%"><div><strong>55%</strong><small>Сегмент A</small></div></div><pre id="code-donut"><code>.donut {
+  background: conic-gradient(
+    #a8c88d 0 55%,
+    #e3bd72 55% 85%,
+    #76bcd1 85% 100%
+  );
+  border-radius: 50%;
+}</code></pre><p><code>conic-gradient()</code> задає частки кола; центральний отвір створює внутрішній круг.</p><button class="text-copy" data-copy="code-donut" type="button">Копіювати CSS ⧉</button></article>
+            <article class="teaching-card chart-tile"><div class="tile-tag">МЕТОД 03 · ЗАПОВНЕННЯ</div><h3>Шкала виконання</h3><div class="micro-progress"><div><span>Зібрано звітів</span><strong>78%</strong></div><div class="meter"><span style="width:78%"></span></div><div><span>Якість даних</span><strong>94%</strong></div><div class="meter blue"><span style="width:94%"></span></div><div><span>Виконання плану</span><strong>61%</strong></div><div class="meter amber"><span style="width:61%"></span></div></div><pre id="code-progress"><code>.track { background: #26353c; }
+.fill {
+  width: var(--percent);
+  background: #a8c88d;
+}</code></pre><p>Зручно відображати готовність, ресурси чи повноту обробки інформації.</p><button class="text-copy" data-copy="code-progress" type="button">Копіювати CSS ⧉</button></article></div>
+          <div class="insight-row"><div class="insight-icon">!</div><p><strong>Межі CSS-графіків:</strong> підходять для KPI, простих стовпчиків і секторів. Для складних часових рядів, масштабування, багатьох тисяч точок, карт із географічними координатами та статистичних графіків доцільно використовувати SVG/Canvas або профільні бібліотеки.</p></div>
+        </section>
+
+        <section class="lesson section-anchor" id="tables" aria-labelledby="tables-title"><div class="section-head"><div class="section-label">05 <span></span> РОБОТА З ДАНИМИ</div><h2 id="tables-title">Аналітична таблиця <span>як інструмент</span></h2><p>HTML-таблиця забезпечує природні заголовки колонок і доступність. CSS додає читабельність, індикатори та стани; JavaScript — пошук, фільтрацію, сортування й експорт.</p></div>
+          <div class="teaching-card table-module"><div class="table-top"><div><h3>Журнал умовних аналітичних повідомлень</h3><p class="muted">8 тестових записів, створених виключно для демонстрації.</p></div><button id="csv-export" type="button" class="button button-outline button-small">⇩ Експорт CSV</button></div><div class="filter-row"><label class="search-field" for="table-search"><span aria-hidden="true">⌕</span><input id="table-search" type="search" placeholder="Пошук за кодом, категорією або сектором"></label><label class="filter-label" for="table-status">Статус <select id="table-status"><option value="all">Усі</option><option value="ok">Завершено</option><option value="work">У роботі</option><option value="risk">Потребує уваги</option></select></label></div><div class="table-scroll"><table id="reports-table"><caption class="sr-only">Умовний журнал: код, час, категорія, сектор, повнота, статус</caption><thead><tr><th scope="col"><button data-sort="code" type="button">Код ↕</button></th><th scope="col"><button data-sort="time" type="button">Дата ↕</button></th><th scope="col"><button data-sort="category" type="button">Категорія ↕</button></th><th scope="col">Сектор</th><th scope="col"><button data-sort="completeness" type="button">Повнота ↕</button></th><th scope="col">Статус</th></tr></thead><tbody id="reports-body"></tbody></table></div><div class="table-footer"><span id="table-count" aria-live="polite">Відображено 8 записів</span><span>Локальний набір · Без запитів до сервера</span></div></div>
+          <div class="code-tip"><div><span class="tile-tag">КЛЮЧОВІ ПРИЙОМИ</span><h3>Структура + оформлення</h3><p><code>&lt;thead&gt;</code>, <code>&lt;tbody&gt;</code>, <code>&lt;th scope="col"&gt;</code> — структура даних. <code>position: sticky</code>, <code>:hover</code>, <code>overflow-x: auto</code> — читабельність і адаптивність.</p></div><pre id="code-table"><code>.table-scroll { overflow-x: auto; }
+th { position: sticky; top: 0; }
+tbody tr:hover { background: #24343b; }</code></pre><button class="copy-button" type="button" data-copy="code-table">Копіювати CSS ↗</button></div>
+        </section>
+
+        <section class="lesson section-anchor" id="heatmap" aria-labelledby="heatmap-title"><div class="section-head"><div class="section-label">06 <span></span> ПРОСТОРОВІ ТА ЧАСОВІ ПАТЕРНИ</div><h2 id="heatmap-title">Теплова карта та <span>стрічка подій</span></h2><p>Для оглядового аналізу CSS Grid може створити умовну матрицю секторів; псевдоелементи <code>::before</code> — часову вісь. Ці прийоми ефективні для агрегованих, негеоприв'язаних даних.</p></div>
+          <div class="two-col"><article class="teaching-card"><div class="tile-tag">GRID + КЛАС ІНТЕНСИВНОСТІ</div><h3>Матриця інформаційного навантаження</h3><div class="concept-heatmap" role="img" aria-label="Матриця чотири на шість умовних клітинок різної інтенсивності"><span class="heat-1">A1</span><span class="heat-2">A2</span><span class="heat-1">A3</span><span class="heat-3">A4</span><span class="heat-2">A5</span><span class="heat-0">A6</span><span class="heat-0">B1</span><span class="heat-2">B2</span><span class="heat-4">B3</span><span class="heat-3">B4</span><span class="heat-1">B5</span><span class="heat-0">B6</span><span class="heat-1">C1</span><span class="heat-3">C2</span><span class="heat-4">C3</span><span class="heat-2">C4</span><span class="heat-0">C5</span><span class="heat-1">C6</span><span class="heat-0">D1</span><span class="heat-1">D2</span><span class="heat-2">D3</span><span class="heat-1">D4</span><span class="heat-3">D5</span><span class="heat-0">D6</span></div><pre id="code-heat"><code>.heatmap {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 6px;
+}
+.heat-4 { background: #bd7868; }</code></pre><button class="text-copy" data-copy="code-heat" type="button">Копіювати CSS ⧉</button></article>
+          <article class="teaching-card"><div class="tile-tag">LIST + ПСЕВДОЕЛЕМЕНТИ</div><h3>Хронологія обробки</h3><ol class="teaching-timeline"><li><time>08:10</time><div><strong>Отримано повідомлення</strong><small>Реєстрація умовного запису</small></div></li><li><time>08:35</time><div><strong>Перевірено формат</strong><small>Автоматична перевірка полів</small></div></li><li><time>09:00</time><div><strong>Зведення сформовано</strong><small>Оновлення показників панелі</small></div></li><li><time>09:15</time><div><strong>Аналітичний огляд</strong><small>Фінальна перевірка користувачем</small></div></li></ol><pre id="code-time"><code>ol.timeline li::before {
+  content: "";
+  border-radius: 50%;
+  background: #a8c88d;
+}</code></pre><button class="text-copy" data-copy="code-time" type="button">Копіювати CSS ⧉</button></article></div>
+        </section>
+
+        <section class="lesson section-anchor" id="lab" aria-labelledby="lab-title"><div class="section-head"><div class="section-label">07 <span></span> ПРАКТИЧНА ЛАБОРАТОРІЯ</div><h2 id="lab-title">Змініть CSS — <span>побачте результат</span></h2><p>CSS custom properties дають змогу швидко змінювати дизайн усіх компонентів. Керуйте проміжками, закругленням, кольором, шириною стовпців і числом колонок — без редагування файлів.</p></div>
+          <div class="lab-shell"><div class="lab-controls"><div class="lab-header"><span>CONTROL PANEL</span><button type="button" id="lab-reset">↺ Скинути</button></div><label for="lab-gap"><span>Проміжок між картками <output id="gap-out">16 px</output></span><input id="lab-gap" type="range" min="4" max="32" value="16"></label><label for="lab-radius"><span>Радіус кутів <output id="radius-out">14 px</output></span><input id="lab-radius" type="range" min="0" max="28" value="14"></label><label for="lab-cols"><span>Колонок у сітці <output id="cols-out">2</output></span><input id="lab-cols" type="range" min="1" max="3" value="2" step="1"></label><label for="lab-height"><span>Масштаб висоти стовпчиків <output id="height-out">80%</output></span><input id="lab-height" type="range" min="20" max="100" value="80" step="5"></label><div class="color-label">Колір акценту</div><div class="swatches" role="group" aria-label="Колір акценту"><button type="button" class="swatch is-current" data-accent="#a8c88d" style="--swatch:#a8c88d" aria-label="Оливковий" aria-pressed="true"></button><button type="button" class="swatch" data-accent="#76bcd1" style="--swatch:#76bcd1" aria-label="Блакитний" aria-pressed="false"></button><button type="button" class="swatch" data-accent="#e3bd72" style="--swatch:#e3bd72" aria-label="Золотий" aria-pressed="false"></button><button type="button" class="swatch" data-accent="#c58d9b" style="--swatch:#c58d9b" aria-label="Рожевий" aria-pressed="false"></button></div><p class="control-hint">Ці налаштування впливають тільки на демонстраційний блок праворуч.</p></div>
+          <div class="lab-display"><div class="lab-display-top"><span>LIVE CSS PREVIEW</span><span class="live-dot"></span></div><div class="lab-preview" id="lab-preview" style="--demo-gap:16px;--demo-radius:14px;--demo-cols:2;--demo-scale:.8;--demo-accent:#a8c88d"><article><small>ВИКОНАННЯ</small><strong>84%</strong><div class="lab-meter"><span></span></div></article><article><small>ГОТОВНІСТЬ</small><strong>92%</strong><div class="lab-meter"><span style="width:92%"></span></div></article><article><small>ЯКІСТЬ</small><strong>76%</strong><div class="lab-meter"><span style="width:76%"></span></div></article><article class="lab-chart-card"><small>ГІСТОГРАМА</small><div class="lab-bars"><i style="--bh:52%"></i><i style="--bh:87%"></i><i style="--bh:63%"></i><i style="--bh:100%"></i><i style="--bh:72%"></i></div></article></div><div class="live-code"><div class="live-code-head">ЗГЕНЕРОВАНИЙ CSS <button type="button" class="copy-button" id="copy-lab">Копіювати ↗</button></div><pre id="lab-css-output">.preview { --gap: 16px; --radius: 14px; --columns: 2; --height: 80%; --accent: #a8c88d; }</pre></div></div></div>
+        </section>
+
+        <section class="lesson section-anchor" id="responsive" aria-labelledby="responsive-title"><div class="section-head"><div class="section-label">08 <span></span> ІНТЕРФЕЙС ДЛЯ РІЗНИХ ЕКРАНІВ</div><h2 id="responsive-title">Адаптивність, <span>доступність, друк</span></h2><p>Військовий аналітик може переглядати звіт на великому моніторі, ноутбуку чи телефоні. CSS медіазапити та контейнерні запити змінюють компонування без дублювання HTML.</p></div>
+          <div class="teaching-card device-module"><div class="inline-head"><div><h3>Перевірка адаптивної картки</h3><p class="muted">Перемикайте ширину прикладу.</p></div><div class="segmented" role="group" aria-label="Тип екрана"><button type="button" class="is-current" data-device="desktop" aria-pressed="true">Монітор</button><button type="button" data-device="tablet" aria-pressed="false">Планшет</button><button type="button" data-device="mobile" aria-pressed="false">Телефон</button></div></div><div class="device-stage"><div class="device-canvas desktop" id="device-canvas"><div class="device-inner"><div class="device-top"><strong>ОГЛЯД СТАНУ</strong><span>● Умовні дані</span></div><div class="device-cards"><div><small>Виконано</small><b>84%</b></div><div><small>Оброблено</small><b>128</b></div><div><small>Ризики</small><b>03</b></div></div><div class="device-row"><div class="device-chart"><i style="height:40%"></i><i style="height:69%"></i><i style="height:52%"></i><i style="height:84%"></i><i style="height:63%"></i><i style="height:90%"></i></div><div class="device-text"><span></span><span></span><span></span><span></span></div></div></div></div></div><div class="device-width">Ширина контейнера: <output id="device-width">720 px</output></div></div>
+          <div class="two-col short-col"><div class="teaching-card"><h3>Адаптивні правила</h3><pre id="code-responsive"><code>@media (max-width: 768px) {
+  .dashboard { grid-template-columns: 1fr; }
+}
+@container (max-width: 400px) {
+  .cards { grid-template-columns: 1fr; }
+}</code></pre><button class="text-copy" data-copy="code-responsive" type="button">Копіювати CSS ⧉</button></div><div class="teaching-card"><h3>Перевірте доступність</h3><ul class="checklist"><li>Смислові <code>&lt;h1&gt;…&lt;h3&gt;</code> і заголовки таблиць</li><li>Фокус клавіатури і підписи кнопок</li><li>Значення не передаються лише кольором</li><li>Контраст, читабельні числа та масштаб</li><li><code>prefers-reduced-motion</code> і стилі друку</li></ul></div></div>
+        </section>
+
+        <section class="lesson section-anchor final-lesson" id="conclusion" aria-labelledby="conclusion-title"><div class="section-head"><div class="section-label">09 <span></span> ПІДСУМОК</div><h2 id="conclusion-title">Від прототипу <span>до власної панелі</span></h2><p>HTML і CSS — не лише оформлення вебсайту. Це практичні інструменти подання даних для інформаційно-аналітичної діяльності.</p></div><div class="assignment"><div><span class="assignment-badge">ПРАКТИЧНЕ ЗАВДАННЯ · 20–30 ХВ</span><h3>Створіть свій мінідашборд</h3><p>На основі цього проєкту зробіть екран аналітика з 4 KPI, таблицею, гістограмою та статусними індикаторами. Оберіть нейтральну предметну область: документообіг, облік ресурсів або інформаційні потоки.</p><ol><li>Замініть умовні дані в <code>app.js</code>.</li><li>Налаштуйте палітру та сітку в <code>styles.css</code>.</li><li>Додайте один новий HTML-компонент.</li><li>Перевірте мобільну версію та клавіатурну навігацію.</li></ol><div class="assignment-actions"><button class="button button-primary" id="copy-checklist" type="button">Скопіювати завдання ⧉</button><a class="button button-outline" href="#home">Повернутись на початок ↑</a></div></div><div class="assignment-art" aria-hidden="true"><div class="file-stack"><div><span>01</span> index.html <b>STRUCTURE</b></div><div><span>02</span> styles.css <b>DESIGN</b></div><div><span>03</span> app.js <b>INTERACTION</b></div><div><span>04</span> README.md <b>GUIDE</b></div></div><div class="assignment-symbol">&lt;/&gt;</div></div></div>
+          <footer class="page-footer"><span>DATA/VIS LAB · HTML + CSS FOR ANALYTICS</span><span>Умовні навчальні дані · Автономна вебсторінка · 2026</span></footer>
+        </section>
+      </main>
+    </div>
+  </div>
+  <div class="toast" role="status" aria-live="polite" id="toast"></div>
+</body>
+</html>
