@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="uk">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#0b1422">
+  <meta name="description" content="Навчальний інтерактив: вибір графіків Chart.js і військових умовних знаків milsymbol на OpenStreetMap.">
+  <title>Тема 5 · Заняття 4 — Підбір візуальних елементів</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css">
+  <link rel="stylesheet" href="assets/styles.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/milsymbol@3.0.4/dist/milsymbol.js"></script>
+  <script defer src="assets/app.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand" aria-label="Навчальний модуль">
+      <span class="brand-mark" aria-hidden="true">M<span>5</span></span>
+      <div><div class="eyebrow">ІНФОРМАЦІЙНО-АНАЛІТИЧНІ ТЕХНОЛОГІЇ</div><div class="brand-title">Лабораторія візуальних елементів</div></div>
+    </div>
+    <span class="header-chip"><span class="status-dot"></span> Інтерактивне заняття · 5.4</span>
+  </header>
+
+  <main class="page">
+    <section class="intro">
+      <div><div class="eyebrow gold">ТЕМА 5 · ЗАНЯТТЯ 4</div>
+        <h1>Підбір візуальних елементів <span>для візуалізації даних</span></h1>
+        <p>Два технічні інструменти — одна мета: обрати правильний спосіб подання інформації для прийняття рішень.</p>
+      </div>
+      <div class="intro-stat"><b>02</b><span>інтерактивні<br>лабораторії</span></div>
+    </section>
+
+    <nav class="tabs" role="tablist" aria-label="Лабораторії">
+      <button class="tab active" role="tab" id="tab-charts" aria-controls="panel-charts" aria-selected="true" data-tab="charts"><span class="tab-num">01</span><span><strong>Chart.js</strong><small>Графіки · порівняння · динаміка</small></span></button>
+      <button class="tab" role="tab" id="tab-map" aria-controls="panel-map" aria-selected="false" data-tab="map"><span class="tab-num">02</span><span><strong>milsymbol + OpenStreetMap</strong><small>Умовні знаки · координати · простір</small></span></button>
+    </nav>
+
+    <section id="panel-charts" class="tab-panel" role="tabpanel" aria-labelledby="tab-charts">
+      <div class="section-intro"><div><div class="section-kicker">ЛАБОРАТОРІЯ 01</div><h2>Обираємо форму для числових даних</h2><p>Порівняйте типи діаграм на одному наборі даних; змініть значення та побачте, як це впливає на зміст повідомлення.</p></div><span class="pill">Canvas API · Chart.js</span></div>
+      <div class="workspace chart-workspace">
+        <aside class="control-panel">
+          <div class="panel-heading"><span class="step">1</span><div><h3>Дані та тип діаграми</h3><p>Керуйте набором даних</p></div></div>
+          <div class="field"><label for="case-select">Сценарій військової аналітики</label><select id="case-select"><option value="tasks">Виконання завдань за добу</option><option value="equipment">Категорії техніки (навчальний приклад)</option><option value="response">Час обробки повідомлень</option><option value="resources">Розподіл ресурсів</option></select></div>
+          <div class="field"><label for="chart-type">Тип графіка</label><select id="chart-type"><option value="bar">Стовпчикова · bar</option><option value="line">Лінійна · line</option><option value="doughnut">Кільцева · doughnut</option><option value="pie">Секторна · pie</option><option value="radar">Пелюсткова · radar</option><option value="scatter">Точкова · scatter</option></select></div>
+          <div class="micro-heading">Властивості</div>
+          <label class="switch-row"><span><b>Легенда</b><small>Показати серії даних</small></span><input id="show-legend" type="checkbox" checked role="switch"></label>
+          <label class="switch-row"><span><b>Підписи значень по осі Y</b><small>Масштаб для кількісних графіків</small></span><input id="begin-zero" type="checkbox" checked role="switch"></label>
+          <label class="switch-row"><span><b>Накопичення (stacked)</b><small>Для стовпчикової діаграми</small></span><input id="stacked" type="checkbox" role="switch"></label>
+          <div class="micro-heading">Редактор даних</div>
+          <div class="small-help">Формат: <code>категорія; значення 1; значення 2</code>. Кожний рядок — окрема категорія. Другу серію можна пропустити.</div>
+          <label class="sr-only" for="data-editor">Редактор даних для діаграми</label>
+          <textarea id="data-editor" rows="7" spellcheck="false" placeholder="Пн; 12; 15"></textarea>
+          <div class="button-row"><button id="apply-data" class="btn primary">Побудувати</button><button id="reset-data" class="btn ghost">Повернути приклад</button></div>
+          <div id="chart-message" class="message" role="status" aria-live="polite"></div>
+        </aside>
+
+        <div class="visual-panel">
+          <div class="viz-header"><div><span class="eyebrow">РЕЗУЛЬТАТ ПОБУДОВИ</span><h3 id="chart-title">Виконання завдань за добу</h3><p id="chart-subtitle">Умовний навчальний набір даних</p></div><button id="save-chart" class="btn subtle" title="Зберегти діаграму у PNG">↓ PNG</button></div>
+          <div class="chart-frame"><canvas id="lesson-chart" role="img" aria-label="Інтерактивна діаграма Chart.js"></canvas><div id="chart-fallback" class="fallback hidden">Не завантажено Chart.js. Для роботи потрібен доступ до Інтернету.</div></div>
+          <div class="interpretation"><div class="hint-icon">?</div><div><b id="chart-advice-title">Чому стовпчикова?</b><p id="chart-advice">Стовпчики зручно використовувати для порівняння величин між категоріями.</p></div></div>
+          <div class="code-area"><div class="code-head"><span><span class="code-led"></span> КОД, ЯКИЙ СТВОРЮЄ ДІАГРАМУ</span><button id="copy-chart-code" class="text-btn">Копіювати код</button></div><pre><code id="chart-code"></code></pre></div>
+        </div>
+      </div>
+      <div class="learning-strip"><div class="question-title">МІНІЗАВДАННЯ · 3 ХВ</div><p>Оберіть <b>«Час обробки повідомлень»</b>, порівняйте лінійний і секторний графіки. Який краще показує зміну в часі? Далі змініть одне значення у редакторі та побудуйте графік повторно.</p></div>
+    </section>
+
+    <section id="panel-map" class="tab-panel hidden" role="tabpanel" aria-labelledby="tab-map">
+      <div class="section-intro"><div><div class="section-kicker">ЛАБОРАТОРІЯ 02</div><h2>Позначаємо об'єкти військовими знаками</h2><p>Формуйте SIDC-код, генеруйте знак за стандартом APP-6 / MIL-STD-2525 та додавайте його до карти клацанням.</p></div><span class="pill">SVG · Leaflet · OSM</span></div>
+      <div class="workspace map-workspace">
+        <aside class="control-panel map-controls">
+          <div class="panel-heading"><span class="step">1</span><div><h3>Конструктор умовного знака</h3><p>Функція · належність · масштаб</p></div></div>
+          <div class="field"><label for="unit-type">Тип об'єкта / підрозділу</label><select id="unit-type"><option value="infantry">Піхота</option><option value="armor">Бронетанкові підрозділи</option><option value="artillery">Польова артилерія</option><option value="airdef">Протиповітряна оборона</option><option value="hq">Штаб / пункт управління</option></select></div>
+          <div class="field-row"><div class="field"><label for="affiliation">Належність</label><select id="affiliation"><option value="F">Свої · F</option><option value="H">Противник · H</option><option value="N">Нейтральні · N</option><option value="U">Невідомі · U</option></select></div><div class="field"><label for="echelon">Рівень</label><select id="echelon"><option value="D">Взвод · D</option><option value="E">Рота · E</option><option value="F">Батальйон · F</option><option value="H">Бригада · H</option><option value="-">Без рівня</option></select></div></div>
+          <div class="field"><label for="symbol-name">Підпис об'єкта</label><input id="symbol-name" maxlength="64" value="Навчальний об'єкт 01" placeholder="Наприклад, Група Альфа"></div>
+          <div class="field"><label for="symbol-size">Розмір умовного знака <output id="symbol-size-output">38</output></label><input id="symbol-size" type="range" min="22" max="64" value="38" step="2"></div>
+          <div class="field"><label for="sidc-input">SIDC (можна змінити вручну)</label><div class="inline-field"><input id="sidc-input" spellcheck="false" maxlength="30" value="SFGPUCI----D---" aria-describedby="sidc-help"><button id="restore-sidc" class="tiny-btn" title="Згенерувати код із полів вище">↺</button></div><p id="sidc-help" class="small-help">Літерний SIDC (15 символів) або числовий SIDC (20/30 цифр). Для навчального конструктора використовується 15-символьний формат.</p></div>
+          <div class="symbol-preview"><div id="symbol-preview" aria-label="Попередній перегляд військового знака"></div><div class="preview-meta"><b id="preview-label">Піхота · свої · взвод</b><code id="preview-code">SFGPUCI----D---</code></div></div>
+          <div id="symbol-message" class="message" role="status" aria-live="polite"></div>
+          <div class="panel-heading secondary-heading"><span class="step">2</span><div><h3>Нанесення на карту</h3><p>Увімкніть режим і клацніть місце</p></div></div>
+          <button id="place-mode" class="btn primary wide" aria-pressed="false">＋ Розмістити знак на карті</button>
+          <button id="update-selected" class="btn ghost wide" disabled>Оновити вибраний об'єкт</button>
+          <div class="small-help">Вибраний знак можна перетягувати мишею. Для редагування натисніть його на карті або в списку.</div>
+        </aside>
+        <div class="visual-panel map-panel">
+          <div class="viz-header map-viz-header"><div><span class="eyebrow">КАРТОГРАФІЧНИЙ РЕДАКТОР</span><h3>Навчальна ситуаційна карта</h3><p>Всі приклади та координати умовні — не використовувати для оперативної роботи.</p></div><div class="map-actions"><button id="load-demo" class="btn subtle">Приклад × 3</button><button id="fit-map" class="btn subtle">Усі об'єкти</button></div></div>
+          <div class="map-box"><div id="map" aria-label="Інтерактивна карта OpenStreetMap"></div><div id="map-fallback" class="fallback hidden">Для карти потрібні Leaflet, milsymbol та інтернет-підключення.</div><div class="map-mode-indicator" id="mode-indicator">Режим перегляду</div></div>
+          <div class="map-bottom"><div class="map-readout"><span>Курсор: <b id="cursor-coordinates">—</b></span><span>Об'єктів: <b id="count-objects">0</b></span></div><div class="map-legend"><span><i class="legend-dot friend"></i> Свої</span><span><i class="legend-dot hostile"></i> Противник</span><span><i class="legend-dot neutral"></i> Нейтральні</span><span><i class="legend-dot unknown"></i> Невідомі</span></div></div>
+          <div class="objects-header"><h3>Об'єкти на карті</h3><span id="selection-status">Нічого не вибрано</span></div>
+          <div id="objects-list" class="objects-list"><div class="empty-list">Додайте перший знак або завантажте навчальний приклад.</div></div>
+          <div class="button-row map-exports"><button id="export-geojson" class="btn ghost">↓ Експорт GeoJSON</button><label class="btn ghost file-label" for="import-geojson">↑ Імпорт GeoJSON</label><input id="import-geojson" type="file" accept=".geojson,.json,application/geo+json,application/json"><button id="delete-selected" class="btn ghost danger" disabled>Видалити вибраний</button><button id="clear-all" class="btn ghost danger">Очистити</button></div>
+          <div class="code-area map-code"><div class="code-head"><span><span class="code-led"></span> ЗВ'ЯЗОК milsymbol І LEAFLET</span><button id="copy-map-code" class="text-btn">Копіювати код</button></div><pre><code id="map-code"></code></pre></div>
+        </div>
+      </div>
+      <div class="learning-strip"><div class="question-title">МІНІЗАВДАННЯ · 5 ХВ</div><p>Створіть три умовні об'єкти: свої — піхота, противник — бронетанковий підрозділ, нейтральні — штаб. Перевірте зміну форми та кольору знаків, перемістіть один об'єкт, а потім експортуйте GeoJSON. Поясніть, чим <b>тип знака</b> відрізняється від його <b>географічної позиції</b>.</p></div>
+    </section>
+
+    <footer><span>Навчальна демонстрація · Тема 5 / Заняття 4</span><span>Chart.js · milsymbol · Leaflet · © OpenStreetMap contributors</span></footer>
+  </main>
+</body>
+</html>
